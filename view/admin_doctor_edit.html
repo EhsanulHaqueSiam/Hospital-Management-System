@@ -7,7 +7,6 @@
 </head>
 
 <body>
-    <!-- Navbar -->
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
         <a href="dashboard_admin.html" class="navbar-link">Dashboard</a>
@@ -15,7 +14,6 @@
         <a href="../controller/logout.php" class="navbar-link">Logout</a>
     </div>
 
-    <!-- Edit Doctor Form -->
     <div class="main-container">
         <h2>Edit Doctor</h2>
 
@@ -38,8 +36,8 @@
                     </tr>
                     <tr>
                         <td>Full Name:</td>
-                        <td><input type="text" name="full_name" value="Dr. Md Ehsanul Haque" required>
-                        </td>
+                        <td><input type="text" name="full_name" value="Dr. Md Ehsanul Haque"
+                                onblur="validateDoctorNameBlur()" required></td>
                     </tr>
                     <tr>
                         <td></td>
@@ -47,7 +45,8 @@
                     </tr>
                     <tr>
                         <td>Email:</td>
-                        <td><input type="email" name="email" value="22-49370-3@student.aiub.edu" required></td>
+                        <td><input type="email" name="email" value="22-49370-3@student.aiub.edu"
+                                onblur="validateDoctorEmailBlur()" required></td>
                     </tr>
                     <tr>
                         <td></td>
@@ -55,12 +54,12 @@
                     </tr>
                     <tr>
                         <td>Phone:</td>
-                        <td><input type="tel" name="phone" value="01712378901" required></td>
+                        <td><input type="tel" name="phone" value="01712378901" onblur="validateDoctorPhoneBlur()"
+                                required></td>
                     </tr>
                     <tr>
                         <td></td>
-                        <td><span class="error-message" id="phone-error"></span><br><small>Format: 01XXXXXXXXX (11
-                                digits)</small></td>
+                        <td><span class="error-message" id="phone-error"></span></td>
                     </tr>
                     <tr>
                         <td>Department:</td>
@@ -77,7 +76,8 @@
                     </tr>
                     <tr>
                         <td>Specialization:</td>
-                        <td><input type="text" name="specialization" value="Cardiologist" required></td>
+                        <td><input type="text" name="specialization" value="Cardiologist"
+                                onblur="validateSpecializationBlur()" required></td>
                     </tr>
                     <tr>
                         <td></td>

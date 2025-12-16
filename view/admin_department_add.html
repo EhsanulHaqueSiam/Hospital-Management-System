@@ -7,7 +7,6 @@
 </head>
 
 <body>
-    <!-- Navbar -->
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
         <a href="dashboard_admin.html" class="navbar-link">Dashboard</a>
@@ -15,7 +14,6 @@
         <a href="../controller/logout.php" class="navbar-link">Logout</a>
     </div>
 
-    <!-- Add Department Form -->
     <div class="main-container">
         <h2>Add Department</h2>
 
@@ -27,11 +25,11 @@
                 <table>
                     <tr>
                         <td>Department Name:</td>
-                        <td><input type="text" name="department_name" value="" required></td>
+                        <td><input type="text" name="department_name" onblur="validateDeptNameBlur()" required></td>
                     </tr>
                     <tr>
                         <td></td>
-                        <td><span class="error-message" id="name-error"></span></td>
+                        <td><span class="error-message" id="department-name-error"></span></td>
                     </tr>
                     <tr>
                         <td>Description:</td>

@@ -7,7 +7,6 @@
 </head>
 
 <body>
-    <!-- Main Container -->
     <div class="main-container">
         <h2>Sign Up</h2>
 
@@ -19,8 +18,7 @@
                 <table>
                     <tr>
                         <td>Full Name:</td>
-                        <td><input type="text" name="full_name" value="" required>
-                        </td>
+                        <td><input type="text" name="full_name" onblur="validateNameBlur()" required></td>
                     </tr>
                     <tr>
                         <td></td>
@@ -28,26 +26,23 @@
                     </tr>
                     <tr>
                         <td>Email:</td>
-                        <td><input type="email" name="email" value="" required></td>
+                        <td><input type="email" name="email" onblur="validateEmailBlur()" required></td>
                     </tr>
                     <tr>
                         <td></td>
-                        <td><span class="error-message" id="email-error"></span>
-                        </td>
+                        <td><span class="error-message" id="email-error"></span></td>
                     </tr>
                     <tr>
                         <td>Phone:</td>
-                        <td><input type="tel" name="phone" value="" required></td>
+                        <td><input type="tel" name="phone" onblur="validatePhoneBlur()" required></td>
                     </tr>
                     <tr>
                         <td></td>
-                        <td><span class="error-message" id="phone-error"></span><br><small>Format: 01XXXXXXXXX (11
-                                digits)</small>
-                        </td>
+                        <td><span class="error-message" id="phone-error"></span></td>
                     </tr>
                     <tr>
                         <td>Username:</td>
-                        <td><input type="text" name="username" value="" required></td>
+                        <td><input type="text" name="username" onblur="validateUsernameBlur()" required></td>
                     </tr>
                     <tr>
                         <td></td>
@@ -55,7 +50,7 @@
                     </tr>
                     <tr>
                         <td>Password:</td>
-                        <td><input type="password" name="password" required></td>
+                        <td><input type="password" name="password" onblur="validatePasswordBlur()" required></td>
                     </tr>
                     <tr>
                         <td></td>
@@ -63,7 +58,8 @@
                     </tr>
                     <tr>
                         <td>Re-type Password:</td>
-                        <td><input type="password" name="confirm_password" required></td>
+                        <td><input type="password" name="confirm_password" onblur="validateConfirmPasswordBlur()"
+                                required></td>
                     </tr>
                     <tr>
                         <td></td>
