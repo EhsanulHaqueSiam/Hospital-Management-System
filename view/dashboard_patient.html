@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Patient Dashboard - Hospital Management System</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <span class="navbar-title">Hospital Management System</span>
+        <a href="dashboard_patient.html" class="navbar-link">Dashboard</a>
+        <a href="profile_view.html" class="navbar-link">My Profile</a>
+        <a href="../controller/logout.php" class="navbar-link">Logout</a>
+    </div>
+
+    <!-- Dashboard Content -->
+    <div class="main-container">
+        <h2>Patient Dashboard</h2>
+        <p>Welcome, Md Ehsanul Haque</p>
+
+        <!-- Stats -->
+        <fieldset>
+            <legend>Your Statistics</legend>
+            <table border="1" cellpadding="10">
+                <tr>
+                    <td align="center"><b>Upcoming Appointments</b><br><br>2</td>
+                    <td align="center"><b>Medical Records</b><br><br>8</td>
+                    <td align="center"><b>Pending Bills</b><br><br>$150</td>
+                </tr>
+            </table>
+        </fieldset>
+
+        <br>
+
+        <!-- Appointment History -->
+        <fieldset>
+            <legend>Appointment History</legend>
+            <table border="1" cellpadding="8" width="100%">
+                <tr>
+                    <th>Doctor</th>
+                    <th>Department</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                </tr>
+                <tr>
+                    <td>Dr. Md Ehsanul Haque</td>
+                    <td>General Medicine</td>
+                    <td>2024-12-16</td>
+                    <td>Completed</td>
+                </tr>
+            </table>
+        </fieldset>
+    </div>
+
+    <script src="../assets/js/dashboard.js"></script>
+</body>
+
+</html>

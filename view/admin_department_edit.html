@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Edit Department - Hospital Management System</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <span class="navbar-title">Hospital Management System</span>
+        <a href="dashboard_admin.html" class="navbar-link">Dashboard</a>
+        <a href="profile_view.html" class="navbar-link">My Profile</a>
+        <a href="../controller/logout.php" class="navbar-link">Logout</a>
+    </div>
+
+    <!-- Edit Department Form -->
+    <div class="main-container">
+        <h2>Edit Department</h2>
+
+        <span class="success-message"></span>
+
+        <form method="POST" action="../controller/edit_department.php" onsubmit="return validateDepartment()">
+            <input type="hidden" name="id" value="1">
+
+            <fieldset>
+                <legend>Department Information</legend>
+                <table>
+                    <tr>
+                        <td>Department ID:</td>
+                        <td><b>1</b></td>
+                    </tr>
+                    <tr>
+                        <td>Department Name:</td>
+                        <td><input type="text" name="department_name" value="Cardiology" required>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><span class="error-message" id="name-error"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Description:</td>
+                        <td><textarea name="description" rows="4" cols="40">Heart and cardiovascular care</textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <input type="submit" name="update_department" value="Update Department">
+                            <a href="admin_department_list.html"><button type="button">Cancel</button></a>
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+        </form>
+    </div>
+
+    <script src="../assets/js/admin.js"></script>
+</body>
+
+</html>

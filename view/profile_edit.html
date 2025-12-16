@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Edit Profile - Hospital Management System</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <span class="navbar-title">Hospital Management System</span>
+        <a href="dashboard_main.html" class="navbar-link">Dashboard</a>
+        <a href="profile_view.html" class="navbar-link">My Profile</a>
+        <a href="../controller/logout.php" class="navbar-link">Logout</a>
+    </div>
+
+    <!-- Edit Profile Form -->
+    <div class="main-container">
+        <h2>Edit Profile</h2>
+
+        <span class="success-message" id="success-message"></span>
+
+        <form method="POST" action="../controller/edit_profile.php" onsubmit="return validateEditProfile()">
+            <fieldset>
+                <legend>Update Information</legend>
+                <table>
+                    <tr>
+                        <td>Full Name:</td>
+                        <td><input type="text" name="full_name" value="Md Ehsanul Haque" required>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><span class="error-message" id="fullname-error"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Phone:</td>
+                        <td><input type="tel" name="phone" value="01712378901" required></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><span class="error-message" id="phone-error"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Address:</td>
+                        <td><input type="text" name="address" value="1 Kuratoli, Dhaka 1229"></td>
+                    </tr>
+
+                    <tr class="doctor-only-field">
+                        <td>Specialization:</td>
+                        <td><input type="text" name="specialization" value=""></td>
+                    </tr>
+                    <tr class="doctor-only-field">
+                        <td></td>
+                        <td><span class="error-message" id="specialization-error"></span></td>
+                    </tr>
+                    <tr class="doctor-only-field">
+                        <td>Bio:</td>
+                        <td><textarea name="bio" rows="4" cols="30"></textarea>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td></td>
+                        <td>
+                            <input type="submit" name="update_profile" value="Update Profile">
+                            <a href="profile_view.html"><button type="button">Cancel</button></a>
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+        </form>
+    </div>
+
+    <script src="../assets/js/profile.js"></script>
+</body>
+
+</html>

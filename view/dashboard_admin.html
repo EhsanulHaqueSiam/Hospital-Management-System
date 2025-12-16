@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Admin Dashboard - Hospital Management System</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <span class="navbar-title">Hospital Management System</span>
+        <a href="dashboard_admin.html" class="navbar-link">Dashboard</a>
+        <a href="profile_view.html" class="navbar-link">My Profile</a>
+        <a href="../controller/logout.php" class="navbar-link">Logout</a>
+    </div>
+
+    <!-- Dashboard Content -->
+    <div class="main-container">
+        <h2>Admin Dashboard</h2>
+        <p>Welcome, Md Ehsanul Haque</p>
+
+        <!-- Stats -->
+        <fieldset>
+            <legend>Hospital Statistics</legend>
+            <table border="1" cellpadding="10">
+                <tr>
+                    <td align="center"><b>Total Patients</b><br><br>150</td>
+                    <td align="center"><b>Total Doctors</b><br><br>25</td>
+                    <td align="center"><b>Today's Appointments</b><br><br>12</td>
+                    <td align="center"><b>Total Revenue</b><br><br>$45,000</td>
+                </tr>
+            </table>
+        </fieldset>
+
+        <br>
+
+        <!-- Quick Links -->
+        <fieldset>
+            <legend>Quick Actions</legend>
+            <a href="admin_department_list.html"><button>Manage Departments</button></a>
+            <a href="admin_doctor_list.html"><button>Manage Doctors</button></a>
+        </fieldset>
+
+        <br>
+
+        <!-- Recent Appointments -->
+        <fieldset>
+            <legend>Recent Appointments</legend>
+            <table border="1" cellpadding="8" width="100%">
+                <tr>
+                    <th>Patient</th>
+                    <th>Doctor</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                </tr>
+                <tr>
+                    <td>Md Ehsanul Haque</td>
+                    <td>Dr. Md Ehsanul Haque</td>
+                    <td>2024-12-16</td>
+                    <td>Confirmed</td>
+                </tr>
+            </table>
+        </fieldset>
+    </div>
+
+    <script src="../assets/js/dashboard.js"></script>
+</body>
+
+</html>

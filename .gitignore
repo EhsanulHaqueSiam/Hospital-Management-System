@@ -1,0 +1,28 @@
+# OS generated files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE and editors
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*~
+
+# Logs
+*.log
+
+# Environment/Config
+.env
+config.local.php
+
+# Uploads (keep folder, ignore user uploads)
+/assets/images/*
+!/assets/images/.gitkeep
+
+# Temp and backup files
+*.tmp
+*.bak
+*.backup

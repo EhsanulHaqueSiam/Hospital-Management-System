@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Doctor Dashboard - Hospital Management System</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <span class="navbar-title">Hospital Management System</span>
+        <a href="dashboard_doctor.html" class="navbar-link">Dashboard</a>
+        <a href="profile_view.html" class="navbar-link">My Profile</a>
+        <a href="../controller/logout.php" class="navbar-link">Logout</a>
+    </div>
+
+    <!-- Dashboard Content -->
+    <div class="main-container">
+        <h2>Doctor Dashboard</h2>
+        <p>Welcome, Dr. Md Ehsanul Haque</p>
+
+        <!-- Stats -->
+        <fieldset>
+            <legend>Your Statistics</legend>
+            <table border="1" cellpadding="10">
+                <tr>
+                    <td align="center"><b>Today's Appointments</b><br><br>5</td>
+                    <td align="center"><b>Total Patients</b><br><br>120</td>
+                    <td align="center"><b>Pending</b><br><br>3</td>
+                </tr>
+            </table>
+        </fieldset>
+
+        <br>
+
+        <!-- Today's Schedule -->
+        <fieldset>
+            <legend>Today's Schedule</legend>
+            <table border="1" cellpadding="8" width="100%">
+                <tr>
+                    <th>Time</th>
+                    <th>Patient</th>
+                    <th>Reason</th>
+                    <th>Status</th>
+                </tr>
+                <tr>
+                    <td>10:00 AM</td>
+                    <td>Md Ehsanul Haque</td>
+                    <td>General Checkup</td>
+                    <td>Confirmed</td>
+                </tr>
+            </table>
+        </fieldset>
+    </div>
+
+    <script src="../assets/js/dashboard.js"></script>
+</body>
+
+</html>
