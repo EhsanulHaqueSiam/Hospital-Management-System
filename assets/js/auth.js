@@ -53,62 +53,104 @@ function isValidPhone(str) {
     return true;
 }
 
+function showError(id, msg) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = msg;
+}
+
+function clearError(id) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = '';
+}
+
+// Onblur validation functions
+function validateNameBlur() {
+    var val = document.getElementsByName('full_name')[0].value.trim();
+    if (!val) { showError('fullname-error', 'Name required'); return false; }
+    if (val.length < 2) { showError('fullname-error', 'Name must be at least 2 characters'); return false; }
+    if (!isValidName(val)) { showError('fullname-error', 'Name can only contain letters and spaces'); return false; }
+    clearError('fullname-error');
+    return true;
+}
+
+function validateEmailBlur() {
+    var val = document.getElementsByName('email')[0].value.trim();
+    if (!val) { showError('email-error', 'Email required'); return false; }
+    if (!isValidEmail(val)) { showError('email-error', 'Invalid email format (example: user@domain.com)'); return false; }
+    clearError('email-error');
+    return true;
+}
+
+function validatePhoneBlur() {
+    var val = document.getElementsByName('phone')[0].value.trim();
+    if (!val) { showError('phone-error', 'Phone required'); return false; }
+    if (!isValidPhone(val)) { showError('phone-error', 'Invalid format. Example: 01712345678'); return false; }
+    clearError('phone-error');
+    return true;
+}
+
+function validateUsernameBlur() {
+    var val = document.getElementsByName('username')[0].value.trim();
+    if (!val) { showError('username-error', 'Username required'); return false; }
+    if (val.length < 3) { showError('username-error', 'Username must be at least 3 characters'); return false; }
+    if (val.length > 20) { showError('username-error', 'Username cannot exceed 20 characters'); return false; }
+    if (!isValidUsername(val)) { showError('username-error', 'Username can only contain letters, numbers, and underscore'); return false; }
+    clearError('username-error');
+    return true;
+}
+
+function validatePasswordBlur() {
+    var val = document.getElementsByName('password')[0].value;
+    if (!val) { showError('password-error', 'Password required'); return false; }
+    if (val.length < 8) { showError('password-error', 'Password must be at least 8 characters'); return false; }
+    clearError('password-error');
+    return true;
+}
+
+function validateConfirmPasswordBlur() {
+    var pass = document.getElementsByName('password')[0].value;
+    var conf = document.getElementsByName('confirm_password')[0].value;
+    if (!conf) { showError('repassword-error', 'Please confirm password'); return false; }
+    if (pass !== conf) { showError('repassword-error', 'Passwords do not match'); return false; }
+    clearError('repassword-error');
+    return true;
+}
+
 function validateSignin() {
     var user = document.getElementsByName('email_username')[0];
     var pass = document.getElementsByName('password')[0];
-
     if (!user.value.trim()) { alert('Email or username required'); return false; }
     if (!pass.value) { alert('Password required'); return false; }
     return true;
 }
 
 function validateSignup() {
-    var name = document.getElementsByName('full_name')[0];
-    var email = document.getElementsByName('email')[0];
-    var phone = document.getElementsByName('phone')[0];
-    var user = document.getElementsByName('username')[0];
-    var pass = document.getElementsByName('password')[0];
-    var pass2 = document.getElementsByName('confirm_password')[0];
-
-    var nameVal = name.value.trim();
-    if (!nameVal) { alert('Name required'); return false; }
-    if (nameVal.length < 2) { alert('Name must be at least 2 characters'); return false; }
-    if (!isValidName(nameVal)) { alert('Name can only contain letters and spaces'); return false; }
-
-    var emailVal = email.value.trim();
-    if (!emailVal) { alert('Email required'); return false; }
-    if (!isValidEmail(emailVal)) { alert('Invalid email format (example: user@domain.com)'); return false; }
-
-    var phoneVal = phone.value.trim();
-    if (!phoneVal) { alert('Phone required'); return false; }
-    if (!isValidPhone(phoneVal)) { alert('Invalid phone format. Example: 01712345678'); return false; }
-
-    var userVal = user.value.trim();
-    if (!userVal) { alert('Username required'); return false; }
-    if (userVal.length < 3) { alert('Username must be at least 3 characters'); return false; }
-    if (userVal.length > 20) { alert('Username cannot exceed 20 characters'); return false; }
-    if (!isValidUsername(userVal)) { alert('Username can only contain letters, numbers, and underscore'); return false; }
-
-    if (!pass.value) { alert('Password required'); return false; }
-    if (pass.value.length < 8) { alert('Password must be at least 8 characters'); return false; }
-    if (pass.value !== pass2.value) { alert('Passwords do not match'); return false; }
-
-    return true;
+    var valid = true;
+    if (!validateNameBlur()) valid = false;
+    if (!validateEmailBlur()) valid = false;
+    if (!validatePhoneBlur()) valid = false;
+    if (!validateUsernameBlur()) valid = false;
+    if (!validatePasswordBlur()) valid = false;
+    if (!validateConfirmPasswordBlur()) valid = false;
+    return valid;
 }
 
 function validateForgotStep1() {
     var email = document.getElementsByName('email')[0];
     var emailVal = email.value.trim();
-    if (!emailVal) { alert('Email required'); return false; }
-    if (!isValidEmail(emailVal)) { alert('Invalid email format'); return false; }
+    if (!emailVal) { showError('email-error', 'Email required'); return false; }
+    if (!isValidEmail(emailVal)) { showError('email-error', 'Invalid email format'); return false; }
+    clearError('email-error');
     return true;
 }
 
 function validateForgotStep3() {
     var pass = document.getElementsByName('new_password')[0];
     var pass2 = document.getElementsByName('confirm_password')[0];
-    if (!pass.value) { alert('Password required'); return false; }
-    if (pass.value.length < 8) { alert('Password must be at least 8 characters'); return false; }
-    if (pass.value !== pass2.value) { alert('Passwords do not match'); return false; }
+    if (!pass.value) { showError('password-error', 'Password required'); return false; }
+    if (pass.value.length < 8) { showError('password-error', 'Password must be at least 8 characters'); return false; }
+    if (pass.value !== pass2.value) { showError('repassword-error', 'Passwords do not match'); return false; }
+    clearError('password-error');
+    clearError('repassword-error');
     return true;
 }

@@ -65,60 +65,98 @@ function isValidText(str) {
     return true;
 }
 
-function validateDepartment() {
-    var name = document.getElementsByName('department_name')[0];
-    var nameVal = name.value.trim();
+function showError(id, msg) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = msg;
+}
 
-    if (!nameVal) { alert('Department name required'); return false; }
-    if (nameVal.length < 2) { alert('Department name must be at least 2 characters'); return false; }
-    if (nameVal.length > 50) { alert('Department name cannot exceed 50 characters'); return false; }
-    if (!isValidText(nameVal)) { alert('Department name can only contain letters, numbers, and basic punctuation'); return false; }
+function clearError(id) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = '';
+}
 
+function validateDeptNameBlur() {
+    var val = document.getElementsByName('department_name')[0].value.trim();
+    if (!val) { showError('department-name-error', 'Department name required'); return false; }
+    if (val.length < 2) { showError('department-name-error', 'Name must be at least 2 characters'); return false; }
+    if (val.length > 50) { showError('department-name-error', 'Name cannot exceed 50 characters'); return false; }
+    if (!isValidText(val)) { showError('department-name-error', 'Only letters, numbers, and basic punctuation'); return false; }
+    clearError('department-name-error');
     return true;
 }
 
-function validateDoctor() {
-    var name = document.getElementsByName('full_name')[0];
-    var email = document.getElementsByName('email')[0];
-    var phone = document.getElementsByName('phone')[0];
-    var dept = document.getElementsByName('department_id')[0];
-    var spec = document.getElementsByName('specialization')[0];
-
-    var nameVal = name.value.trim();
-    if (!nameVal) { alert('Name required'); return false; }
-    if (nameVal.length < 2) { alert('Name must be at least 2 characters'); return false; }
-    if (!isValidName(nameVal)) { alert('Name can only contain letters and spaces'); return false; }
-
-    var emailVal = email.value.trim();
-    if (!emailVal) { alert('Email required'); return false; }
-    if (!isValidEmail(emailVal)) { alert('Invalid email format (example: doctor@hospital.com)'); return false; }
-
-    var phoneVal = phone.value.trim();
-    if (!phoneVal) { alert('Phone required'); return false; }
-    if (!isValidPhone(phoneVal)) { alert('Invalid phone format. Example: 01712345678'); return false; }
-
-    if (!dept.value) { alert('Please select a department'); return false; }
-
-    var specVal = spec.value.trim();
-    if (!specVal) { alert('Specialization required'); return false; }
-    if (specVal.length < 2) { alert('Specialization must be at least 2 characters'); return false; }
-    if (!isValidText(specVal)) { alert('Specialization can only contain letters, numbers, and basic punctuation'); return false; }
-
-    var user = document.getElementsByName('username')[0];
-    var pass = document.getElementsByName('password')[0];
-
-    if (user) {
-        var userVal = user.value.trim();
-        if (!userVal) { alert('Username required'); return false; }
-        if (userVal.length < 3) { alert('Username must be at least 3 characters'); return false; }
-        if (userVal.length > 20) { alert('Username cannot exceed 20 characters'); return false; }
-        if (!isValidUsername(userVal)) { alert('Username can only contain letters, numbers, and underscore'); return false; }
-    }
-
-    if (pass) {
-        if (!pass.value) { alert('Password required'); return false; }
-        if (pass.value.length < 8) { alert('Password must be at least 8 characters'); return false; }
-    }
-
+function validateDoctorNameBlur() {
+    var val = document.getElementsByName('full_name')[0].value.trim();
+    if (!val) { showError('fullname-error', 'Name required'); return false; }
+    if (val.length < 2) { showError('fullname-error', 'Name must be at least 2 characters'); return false; }
+    if (!isValidName(val)) { showError('fullname-error', 'Name can only contain letters and spaces'); return false; }
+    clearError('fullname-error');
     return true;
+}
+
+function validateDoctorEmailBlur() {
+    var val = document.getElementsByName('email')[0].value.trim();
+    if (!val) { showError('email-error', 'Email required'); return false; }
+    if (!isValidEmail(val)) { showError('email-error', 'Invalid email format'); return false; }
+    clearError('email-error');
+    return true;
+}
+
+function validateDoctorPhoneBlur() {
+    var val = document.getElementsByName('phone')[0].value.trim();
+    if (!val) { showError('phone-error', 'Phone required'); return false; }
+    if (!isValidPhone(val)) { showError('phone-error', 'Invalid format. Example: 01712345678'); return false; }
+    clearError('phone-error');
+    return true;
+}
+
+function validateDoctorUsernameBlur() {
+    var el = document.getElementsByName('username')[0];
+    if (!el) return true;
+    var val = el.value.trim();
+    if (!val) { showError('username-error', 'Username required'); return false; }
+    if (val.length < 3) { showError('username-error', 'Username must be at least 3 characters'); return false; }
+    if (val.length > 20) { showError('username-error', 'Username cannot exceed 20 characters'); return false; }
+    if (!isValidUsername(val)) { showError('username-error', 'Only letters, numbers, and underscore'); return false; }
+    clearError('username-error');
+    return true;
+}
+
+function validateDoctorPasswordBlur() {
+    var el = document.getElementsByName('password')[0];
+    if (!el) return true;
+    var val = el.value;
+    if (!val) { showError('password-error', 'Password required'); return false; }
+    if (val.length < 8) { showError('password-error', 'Password must be at least 8 characters'); return false; }
+    clearError('password-error');
+    return true;
+}
+
+function validateSpecializationBlur() {
+    var val = document.getElementsByName('specialization')[0].value.trim();
+    if (!val) { showError('specialization-error', 'Specialization required'); return false; }
+    if (val.length < 2) { showError('specialization-error', 'Must be at least 2 characters'); return false; }
+    if (!isValidText(val)) { showError('specialization-error', 'Only letters, numbers, and basic punctuation'); return false; }
+    clearError('specialization-error');
+    return true;
+}
+
+function validateDepartment() {
+    return validateDeptNameBlur();
+}
+
+function validateDoctor() {
+    var valid = true;
+    if (!validateDoctorNameBlur()) valid = false;
+    if (!validateDoctorEmailBlur()) valid = false;
+    if (!validateDoctorPhoneBlur()) valid = false;
+    if (!validateSpecializationBlur()) valid = false;
+    if (!validateDoctorUsernameBlur()) valid = false;
+    if (!validateDoctorPasswordBlur()) valid = false;
+
+    var dept = document.getElementsByName('department_id')[0];
+    if (!dept.value) { showError('department-error', 'Please select a department'); valid = false; }
+    else { clearError('department-error'); }
+
+    return valid;
 }
