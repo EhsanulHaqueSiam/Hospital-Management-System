@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <title>PAYMENT MANAGEMENT</title>
+        <link rel="stylesheet" href="style.css"/>
+    </head>
+    <body>
+        
+        <h1>Record Patient Payment</h1>
+        
+        <form action="" method="">
+            
+            <fieldset>
+                <legend>Bill Information</legend>
+                    <label for="bill_select">Select Outstanding Bill:</label>
+                    <select id="bill_select" name="bill_id" required>
+                        <option>bill01</option>
+                        <option>bill 02</option>
+                        <option>bill 03</option>
+                        </select>
+                    <label>Bill Balance Due:</label>
+                    <input type="number" value="" style="width: 100px;">
+                
+            </fieldset>
+
+            <fieldset>
+                <legend>Payment Details</legend>
+                    <label>Payment Amount (tk):</label>
+                    <input type="number" value="" style="width: 100px;">
+                    <label for="payment_method">Payment Method:</label>
+                    <select id="payment_method" name="method" required>
+                        <option value="">-- Select Method --</option>
+                        <option value="cash">Cash</option>
+                        <option value="card">Credit/Debit Card</option>
+                        <option value="mobile">Mobile Banking (e.g., Bkash)</option>
+                    </select>
+      
+                    <label for="transaction_id">Transaction/Reference ID (Optional):</label>
+                    <input type="text" id="transaction_id" name="ref_id" placeholder="Enter transaction reference">
+            </fieldset>
+
+            <input type="submit" value="Record Payment">
+            <input type="reset" value="Cancel">   
+        </form>
+    </body>
+</html>
