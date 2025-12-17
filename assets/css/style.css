@@ -1,157 +1,37 @@
-/* Hospital Management System */
-
-body {
-    margin: 0;
-    padding: 20px;
-    background-color: white;
+body{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    background-color: rgb(167, 163, 158);
+    margin: 20px;
 }
 
-/* Main Container */
-.main-container {
-    width: 600px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: white;
-}
-
-/* Navbar */
-.navbar {
-    background-color: #333;
-    color: white;
-    padding: 15px;
-    margin-bottom: 20px;
-}
-
-.navbar-title {
-    margin-right: 30px;
-    font-weight: bold;
-}
-
-.navbar-link {
-    color: white;
-    margin-left: 20px;
-}
-
-/* Fieldset and Legend */
-fieldset {
-    padding: 15px;
-    margin: 10px 0;
-}
-
-legend {
-    font-weight: bold;
-    padding: 5px;
-}
-
-/* Table */
-table {
+table{
     width: 100%;
+    background-color: antiquewhite;
+    border-collapse: collapse;
+    border: 1px solid black;
 }
-
-td {
-    padding: 5px;
-}
-
-th {
-    padding: 8px;
-    text-align: left;
-    background-color: white;
-}
-
-/* Form elements */
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="tel"],
-textarea,
-select {
-    width: 200px;
-    padding: 5px;
-}
-
-input[type="submit"],
-button {
-    padding: 8px 15px;
-    margin: 5px;
-}
-
-/* Links */
-a {
-    color: blue;
-}
-
-/* Error and Success messages */
-.error-message {
-    color: red;
-    font-size: 12px;
-}
-
-.success-message {
-    color: green;
-    font-size: 12px;
-}
-
-.form-links {
-    margin-top: 15px;
+th,td{
     padding: 10px;
-}
-
-/* Pagination */
-.pagination-container {
-    margin-top: 10px;
-    padding: 10px;
-}
-
-/* Hide/Show class */
-.hidden {
-    display: none;
-}
-
-/* Doctor only fields - hidden by default */
-.doctor-only-field {
-    display: none;
-}
-
-/* Button */
-.button {
-    padding: 8px 15px;
-    margin: 5px;
-    background-color: #333;
-    color: white;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    display: inline-block;
-}
-
-.btn-cancel {
-    background-color: #666;
-}
-
-/* Modal */
-.logout-modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-}
-
-.modal-content {
-    background-color: white;
-    width: 300px;
-    margin: 100px auto;
-    padding: 20px;
     text-align: center;
+    border: 1px solid black;
 }
-
-/* Pagination */
-.pagination {
-    margin-top: 10px;
+th{
+    background-color: brown;
+    color: black;
 }
-
-.pagination a {
-    margin-left: 10px;
+button {
+    background-color: rgb(56, 2, 2);
+    color: rgb(192, 185, 185);
+}
+.addbtn {
+    background-color: darkgreen;
+}
+.edit {
+    background-color: blue;
+}
+.delete {
+    background-color: red;
+}
+.restock {
+    background-color: green;
 }

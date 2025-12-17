@@ -1,0 +1,81 @@
+<html>
+<head>
+    <title>Room Management</title>
+    <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+    <h1>Hospital Room List</h1>
+        <label>Filter Status:</label>
+        <select>
+            <option>All</option>
+            <option>Available</option>
+            <option>Occupied</option>
+            <option>Maintenance</option>
+        </select>
+        <button>Add Room</button>
+   
+
+    <table>
+        <tr>
+            <th>Room No</th>
+            <th>Type</th>
+            <th>Floor</th>
+            <th>Price/Day</th>
+            <th>Status</th>
+            <th>Current Patient</th>
+            <th>Actions</th>
+        </tr>
+        <tr>
+            <td>101</td>
+            <td>General Ward</td>
+            <td>1st</td>
+            <td>2000 tk</td>
+            <td>Available</td>
+            <td></td>
+            <td><button>Assign Patient</button> <button>Edit</button></td>
+        </tr>
+        <tr>
+            <td>205</td>
+            <td>Private Room</td>
+            <td>2nd</td>
+            <td>10000 tk</td>
+            <td>Occupied</td>
+            <td>Mahedy</td>
+            <td><button>View Details</button> <button>Edit</button></td>
+        </tr>
+        <tr>
+            <td>301</td>
+            <td>ICU</td>
+            <td>3rd</td>
+            <td>250000 tk</td>
+            <td>Maintenance</td>
+            <td></td>
+            <td><button>Delete</button></td>
+        </tr>
+    </table>
+
+    <h3>Add New Room</h3>
+    <form>
+        <label>Room Number:</label>
+        <input type="text" name="room_no" required>
+        
+        <label>Room Type:</label>
+        <select name="">
+            <option>General Ward</option>
+            <option>Private Room</option>
+            <option>ICU</option>
+        </select>
+
+        <label>Status:</label>
+        <select name="">
+            <option>Available</option>
+            <option>Maintenance</option>
+            <option>Occupied</option>
+        </select>
+
+        <input type="submit" value="Add Room">
+    </form>
+  <script src="scriptrm.js"></script>
+</body>
+</html>
