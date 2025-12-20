@@ -88,7 +88,7 @@
         </form>
 
         <div class="form-links">
-            <a href="auth_signin.html">Back to Sign In</a>
+            <a href="auth_signin.php">Back to Sign In</a>
         </div>
     </div>
 

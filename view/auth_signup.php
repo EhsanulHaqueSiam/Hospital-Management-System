@@ -12,7 +12,7 @@
 
         <span class="success-message" id="success-message"></span>
 
-        <form method="POST" action="../controller/signup.php" onsubmit="return validateSignup()">
+        <form method="POST" action="../controller/signupCheck.php" onsubmit="return validateSignup()">
             <fieldset>
                 <legend>Registration Details</legend>
                 <table>
@@ -85,7 +85,7 @@
         </form>
 
         <div class="form-links">
-            Already have an account? <a href="auth_signin.html">Sign In</a>
+            Already have an account? <a href="auth_signin.php">Sign In</a>
         </div>
     </div>
 

@@ -1,3 +1,6 @@
+<?php
+require_once('../controller/sessionCheck.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,15 +13,15 @@
     <!-- Navbar -->
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
-        <a href="dashboard_main.html" class="navbar-link">Dashboard</a>
-        <a href="profile_view.html" class="navbar-link">My Profile</a>
+        <a href="dashboard_main.php" class="navbar-link">Dashboard</a>
+        <a href="profile_view.php" class="navbar-link">My Profile</a>
         <a href="../controller/logout.php" class="navbar-link">Logout</a>
     </div>
 
     <!-- Dashboard Selection -->
     <div class="main-container">
         <h2>Select Dashboard</h2>
-        <p>Welcome, Md Ehsanul Haque</p>
+        <p>Welcome, <?php echo $_SESSION['username']; ?></p>
 
         <br>
 
@@ -26,15 +29,15 @@
             <legend>Choose Your Dashboard</legend>
             <table>
                 <tr>
-                    <td><a href="dashboard_admin.html"><button>Admin Dashboard</button></a></td>
+                    <td><a href="dashboard_admin.php"><button>Admin Dashboard</button></a></td>
                     <td>For hospital administrators</td>
                 </tr>
                 <tr>
-                    <td><a href="dashboard_doctor.html"><button>Doctor Dashboard</button></a></td>
+                    <td><a href="dashboard_doctor.php"><button>Doctor Dashboard</button></a></td>
                     <td>For doctors</td>
                 </tr>
                 <tr>
-                    <td><a href="dashboard_patient.html"><button>Patient Dashboard</button></a></td>
+                    <td><a href="dashboard_patient.php"><button>Patient Dashboard</button></a></td>
                     <td>For patients</td>
                 </tr>
             </table>

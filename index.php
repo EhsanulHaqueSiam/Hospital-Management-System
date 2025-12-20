@@ -18,11 +18,11 @@
             <legend>Navigation</legend>
             <table>
                 <tr>
-                    <td><a href="view/auth_signin.html"><button>Sign In</button></a></td>
+                    <td><a href="view/auth_signin.php"><button>Sign In</button></a></td>
                     <td>Already have an account? Login here</td>
                 </tr>
                 <tr>
-                    <td><a href="view/auth_signup.html"><button>Sign Up</button></a></td>
+                    <td><a href="view/auth_signup.php"><button>Sign Up</button></a></td>
                     <td>New user? Register here</td>
                 </tr>
             </table>

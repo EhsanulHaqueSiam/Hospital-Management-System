@@ -1,43 +1,35 @@
+<?php
+require_once('../controller/sessionCheck.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <title>Edit Doctor - Hospital Management System</title>
+    <title>Add Doctor - Hospital Management System</title>
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 
 <body>
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
-        <a href="dashboard_admin.html" class="navbar-link">Dashboard</a>
-        <a href="profile_view.html" class="navbar-link">My Profile</a>
+        <a href="dashboard_admin.php" class="navbar-link">Dashboard</a>
+        <a href="profile_view.php" class="navbar-link">My Profile</a>
         <a href="../controller/logout.php" class="navbar-link">Logout</a>
     </div>
 
     <div class="main-container">
-        <h2>Edit Doctor</h2>
+        <h2>Add New Doctor</h2>
 
         <span class="success-message"></span>
 
-        <form method="POST" action="../controller/edit_doctor.php" enctype="multipart/form-data"
+        <form method="POST" action="../controller/add_doctor.php" enctype="multipart/form-data"
             onsubmit="return validateDoctor()">
-            <input type="hidden" name="doctor_id" value="1">
-
             <fieldset>
                 <legend>Doctor Information</legend>
                 <table>
                     <tr>
-                        <td>Doctor ID:</td>
-                        <td><b>1</b></td>
-                    </tr>
-                    <tr>
-                        <td>Current Picture:</td>
-                        <td><img src="../assets/images/default.jpg" alt="" width="100" height="100"></td>
-                    </tr>
-                    <tr>
                         <td>Full Name:</td>
-                        <td><input type="text" name="full_name" value="Dr. Md Ehsanul Haque"
-                                onblur="validateDoctorNameBlur()" required></td>
+                        <td><input type="text" name="full_name" onblur="validateDoctorNameBlur()" required></td>
                     </tr>
                     <tr>
                         <td></td>
@@ -45,8 +37,7 @@
                     </tr>
                     <tr>
                         <td>Email:</td>
-                        <td><input type="email" name="email" value="22-49370-3@student.aiub.edu"
-                                onblur="validateDoctorEmailBlur()" required></td>
+                        <td><input type="email" name="email" onblur="validateDoctorEmailBlur()" required></td>
                     </tr>
                     <tr>
                         <td></td>
@@ -54,19 +45,34 @@
                     </tr>
                     <tr>
                         <td>Phone:</td>
-                        <td><input type="tel" name="phone" value="01712378901" onblur="validateDoctorPhoneBlur()"
-                                required></td>
+                        <td><input type="tel" name="phone" onblur="validateDoctorPhoneBlur()" required></td>
                     </tr>
                     <tr>
                         <td></td>
                         <td><span class="error-message" id="phone-error"></span></td>
                     </tr>
                     <tr>
+                        <td>Username:</td>
+                        <td><input type="text" name="username" onblur="validateDoctorUsernameBlur()" required></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><span class="error-message" id="username-error"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Password:</td>
+                        <td><input type="password" name="password" onblur="validateDoctorPasswordBlur()" required></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><span class="error-message" id="password-error"></span></td>
+                    </tr>
+                    <tr>
                         <td>Department:</td>
                         <td>
                             <select name="department_id" required>
                                 <option value="">-- Select --</option>
-                                <option value="1" selected>Cardiology</option>
+                                <option value="1">Cardiology</option>
                             </select>
                         </td>
                     </tr>
@@ -76,8 +82,8 @@
                     </tr>
                     <tr>
                         <td>Specialization:</td>
-                        <td><input type="text" name="specialization" value="Cardiologist"
-                                onblur="validateSpecializationBlur()" required></td>
+                        <td><input type="text" name="specialization" onblur="validateSpecializationBlur()" required>
+                        </td>
                     </tr>
                     <tr>
                         <td></td>
@@ -85,31 +91,21 @@
                     </tr>
                     <tr>
                         <td>Bio:</td>
-                        <td><textarea name="bio" rows="4"
-                                cols="40">Experienced cardiologist with 10 years of practice.</textarea></td>
+                        <td><textarea name="bio" rows="4" cols="40"></textarea></td>
                     </tr>
                     <tr>
-                        <td>New Picture:</td>
+                        <td>Profile Picture:</td>
                         <td><input type="file" name="profile_picture" accept=".jpg,.jpeg,.png,.gif"></td>
                     </tr>
                     <tr>
                         <td></td>
-                        <td><small>Leave empty to keep current. Max 2MB.</small></td>
-                    </tr>
-                    <tr>
-                        <td>Status:</td>
-                        <td>
-                            <select name="status">
-                                <option value="Active" selected>Active</option>
-                                <option value="Inactive">Inactive</option>
-                            </select>
-                        </td>
+                        <td><small>Max 2MB. jpg, png, gif</small></td>
                     </tr>
                     <tr>
                         <td></td>
                         <td>
-                            <input type="submit" name="update_doctor" value="Update Doctor">
-                            <a href="admin_doctor_list.html"><button type="button">Cancel</button></a>
+                            <input type="submit" name="create_doctor" value="Create Doctor">
+                            <a href="admin_doctor_list.php"><button type="button">Cancel</button></a>
                         </td>
                     </tr>
                 </table>
