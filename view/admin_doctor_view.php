@@ -1,3 +1,6 @@
+<?php
+require_once('../controller/sessionCheck.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,8 +13,8 @@
     <!-- Navbar -->
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
-        <a href="dashboard_admin.html" class="navbar-link">Dashboard</a>
-        <a href="profile_view.html" class="navbar-link">My Profile</a>
+        <a href="dashboard_admin.php" class="navbar-link">Dashboard</a>
+        <a href="profile_view.php" class="navbar-link">My Profile</a>
         <a href="../controller/logout.php" class="navbar-link">Logout</a>
     </div>
 
@@ -70,8 +73,8 @@
         </fieldset>
 
         <br>
-        <a href="admin_doctor_edit.html"><button>Edit Doctor</button></a>
-        <a href="admin_doctor_list.html"><button>Back to List</button></a>
+        <a href="admin_doctor_edit.php"><button>Edit Doctor</button></a>
+        <a href="admin_doctor_list.php"><button>Back to List</button></a>
     </div>
 
     <script src="../assets/js/admin.js"></script>

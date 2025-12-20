@@ -1,3 +1,6 @@
+<?php
+require_once('../controller/sessionCheck.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,8 +13,8 @@
     <!-- Navbar -->
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
-        <a href="dashboard_main.html" class="navbar-link">Dashboard</a>
-        <a href="profile_view.html" class="navbar-link">My Profile</a>
+        <a href="dashboard_main.php" class="navbar-link">Dashboard</a>
+        <a href="profile_view.php" class="navbar-link">My Profile</a>
         <a href="../controller/logout.php" class="navbar-link">Logout</a>
     </div>
 
@@ -43,7 +46,7 @@
                 </tr>
                 <tr>
                     <td>Username:</td>
-                    <td>siam</td>
+                    <td><?php echo $_SESSION['username']; ?></td>
                 </tr>
                 <tr>
                     <td>Role:</td>
@@ -61,9 +64,9 @@
         </fieldset>
 
         <br>
-        <a href="profile_edit.html"><button>Edit Profile</button></a>
-        <a href="profile_upload_picture.html"><button>Change Picture</button></a>
-        <a href="profile_change_password.html"><button>Change Password</button></a>
+        <a href="profile_edit.php"><button>Edit Profile</button></a>
+        <a href="profile_upload_picture.php"><button>Change Picture</button></a>
+        <a href="profile_change_password.php"><button>Change Password</button></a>
     </div>
 
     <script src="../assets/js/profile.js"></script>

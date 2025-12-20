@@ -1,3 +1,6 @@
+<?php
+require_once('../controller/sessionCheck.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,8 +13,8 @@
     <!-- Navbar -->
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
-        <a href="dashboard_main.html" class="navbar-link">Dashboard</a>
-        <a href="profile_view.html" class="navbar-link">My Profile</a>
+        <a href="dashboard_main.php" class="navbar-link">Dashboard</a>
+        <a href="profile_view.php" class="navbar-link">My Profile</a>
         <a href="../controller/logout.php" class="navbar-link">Logout</a>
     </div>
 
@@ -56,7 +59,7 @@
                         <td>
                             <input type="submit" name="upload" value="Upload Picture">
                             <input type="submit" name="remove" value="Remove Picture">
-                            <a href="profile_view.html"><button type="button">Cancel</button></a>
+                            <a href="profile_view.php"><button type="button">Cancel</button></a>
                         </td>
                     </tr>
                 </table>
