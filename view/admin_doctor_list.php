@@ -1,3 +1,6 @@
+<?php
+require_once('../controller/sessionCheck.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,8 +13,8 @@
     <!-- Navbar -->
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
-        <a href="dashboard_admin.html" class="navbar-link">Dashboard</a>
-        <a href="profile_view.html" class="navbar-link">My Profile</a>
+        <a href="dashboard_admin.php" class="navbar-link">Dashboard</a>
+        <a href="profile_view.php" class="navbar-link">My Profile</a>
         <a href="../controller/logout.php" class="navbar-link">Logout</a>
     </div>
 
@@ -38,7 +41,7 @@
                         </td>
                         <td>
                             <input type="submit" value="Filter">
-                            <a href="admin_doctor_add.html"><button type="button">Add Doctor</button></a>
+                            <a href="admin_doctor_add.php"><button type="button">Add Doctor</button></a>
                         </td>
                     </tr>
                 </table>
@@ -68,8 +71,8 @@
                     <td>Cardiology</td>
                     <td>Active</td>
                     <td>
-                        <a href="admin_doctor_view.html"><button>View</button></a>
-                        <a href="admin_doctor_edit.html"><button>Edit</button></a>
+                        <a href="admin_doctor_view.php"><button>View</button></a>
+                        <a href="admin_doctor_edit.php"><button>Edit</button></a>
                         <a href="../controller/delete_doctor.php?id=1"><button>Delete</button></a>
                     </td>
                 </tr>

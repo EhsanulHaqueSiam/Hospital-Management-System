@@ -13,7 +13,7 @@
 
         <span class="success-message" id="success-message"></span>
 
-        <form method="POST" action="../controller/signin.php" onsubmit="return validateSignin()">
+        <form method="POST" action="../controller/signinCheck.php" onsubmit="return validateSignin()">
             <fieldset>
                 <legend>Login Details</legend>
                 <table>
@@ -47,9 +47,9 @@
         </form>
 
         <div class="form-links">
-            <a href="auth_forgot_password.html">Forgot Password?</a>
+            <a href="auth_forgot_password.php">Forgot Password?</a>
             <br><br>
-            Don't have an account? <a href="auth_signup.html">Sign Up</a>
+            Don't have an account? <a href="auth_signup.php">Sign Up</a>
         </div>
     </div>
 

@@ -1,31 +1,41 @@
+<?php
+require_once('../controller/sessionCheck.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <title>Add Department - Hospital Management System</title>
+    <title>Edit Department - Hospital Management System</title>
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 
 <body>
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
-        <a href="dashboard_admin.html" class="navbar-link">Dashboard</a>
-        <a href="profile_view.html" class="navbar-link">My Profile</a>
+        <a href="dashboard_admin.php" class="navbar-link">Dashboard</a>
+        <a href="profile_view.php" class="navbar-link">My Profile</a>
         <a href="../controller/logout.php" class="navbar-link">Logout</a>
     </div>
 
     <div class="main-container">
-        <h2>Add Department</h2>
+        <h2>Edit Department</h2>
 
         <span class="success-message"></span>
 
-        <form method="POST" action="../controller/add_department.php" onsubmit="return validateDepartment()">
+        <form method="POST" action="../controller/edit_department.php" onsubmit="return validateDepartment()">
+            <input type="hidden" name="id" value="1">
+
             <fieldset>
                 <legend>Department Information</legend>
                 <table>
                     <tr>
+                        <td>Department ID:</td>
+                        <td><b>1</b></td>
+                    </tr>
+                    <tr>
                         <td>Department Name:</td>
-                        <td><input type="text" name="department_name" onblur="validateDeptNameBlur()" required></td>
+                        <td><input type="text" name="department_name" value="Cardiology" onblur="validateDeptNameBlur()"
+                                required></td>
                     </tr>
                     <tr>
                         <td></td>
@@ -33,13 +43,14 @@
                     </tr>
                     <tr>
                         <td>Description:</td>
-                        <td><textarea name="description" rows="4" cols="40"></textarea></td>
+                        <td><textarea name="description" rows="4" cols="40">Heart and cardiovascular care</textarea>
+                        </td>
                     </tr>
                     <tr>
                         <td></td>
                         <td>
-                            <input type="submit" name="add_department" value="Add Department">
-                            <a href="admin_department_list.html"><button type="button">Cancel</button></a>
+                            <input type="submit" name="update_department" value="Update Department">
+                            <a href="admin_department_list.php"><button type="button">Cancel</button></a>
                         </td>
                     </tr>
                 </table>

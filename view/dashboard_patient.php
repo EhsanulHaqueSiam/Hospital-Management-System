@@ -1,3 +1,6 @@
+<?php
+require_once('../controller/sessionCheck.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,15 +13,15 @@
     <!-- Navbar -->
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
-        <a href="dashboard_patient.html" class="navbar-link">Dashboard</a>
-        <a href="profile_view.html" class="navbar-link">My Profile</a>
+        <a href="dashboard_patient.php" class="navbar-link">Dashboard</a>
+        <a href="profile_view.php" class="navbar-link">My Profile</a>
         <a href="../controller/logout.php" class="navbar-link">Logout</a>
     </div>
 
     <!-- Dashboard Content -->
     <div class="main-container">
         <h2>Patient Dashboard</h2>
-        <p>Welcome, Md Ehsanul Haque</p>
+        <p>Welcome, <?php echo $_SESSION['username']; ?></p>
 
         <!-- Stats -->
         <fieldset>
