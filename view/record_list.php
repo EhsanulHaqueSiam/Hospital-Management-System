@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <title>Appointment Schedule - Hospital Management System</title>
+    <title>Medical Records - Hospital Management System</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <script src="../assets/js/validation-helpers.js"></script>
     <script src="../assets/js/validation-fields.js"></script>
@@ -24,69 +25,79 @@
 
     <!-- Main Content -->
     <div class="main-container">
-        <h2>Appointment Schedule</h2>
+        <h2>Medical Records</h2>
 
         <div>
-            <a href="schedule_today.html" class="button">View Today's Timeline</a>
-            <button class="button" id="print-btn">Print Schedule</button>
+
+            <a href="record_add.php" class="button">Upload New Record</a>
         </div>
 
         <fieldset>
-            <legend>Filter Options</legend>
+            <legend>Filter Records</legend>
             <form action="" method="GET">
                 <table width="100%">
                     <tr>
                         <td>
 
-                            <select name="doctor_id">
-                                <option value="">-- All Doctors --</option>
+                            <input type="text" name="patient_search" placeholder="Search Patient Name...">
+                        </td>
+                        <td>
+                            <select name="record_type">
+                                <option value="">-- All Types --</option>
 
                             </select>
                         </td>
                         <td>
-                            <label>From:</label>
-                            <input type="date" name="date_from">
-                        </td>
-                        <td>
-                            <label>To:</label>
-                            <input type="date" name="date_to">
-                        </td>
-                        <td>
-                            <button type="submit" class="button">Apply Filter</button>
-                            <a href="schedule_list.html" class="button">Reset</a>
+                            <button type="submit" class="button">Filter</button>
+                            <a href="record_list.php" class="button">Reset</a>
                         </td>
                     </tr>
                 </table>
             </form>
-
-            <br>
-
-            <button class="filter-btn active">All</button>
         </fieldset>
 
         <br>
 
         <fieldset>
-            <legend>Schedule Results</legend>
-
-            <p>Showing appointments for: <b>All Dates</b></p>
-
+            <legend>Record List</legend>
             <table border="1" cellpadding="10" width="100%">
                 <thead>
                     <tr>
-                        <th>Time</th>
+                        <th>Record ID</th>
                         <th>Patient Name</th>
-                        <th>Doctor</th>
                         <th>Type</th>
-                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Uploaded By</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
 
+
+                    <tr>
+                        <td colspan="6" style="text-align:center;">No records found.</td>
+                    </tr>
+
                 </tbody>
             </table>
+
+            <br>
+
+            <div class="pagination">
+                <span>Page 1 of 1</span>
+            </div>
         </fieldset>
+    </div>
+
+    <!-- Delete Modal (Reusing Logout Modal Style) -->
+    <div class="logout-modal" id="delete-record-modal" style="display: none;">
+        <div class="modal-content">
+            <h3>Delete Record</h3>
+            <p>Are you sure you want to delete this medical record? This action cannot be undone.</p>
+            <br>
+            <button id="confirm-delete-record">Yes, Delete</button>
+            <button id="cancel-delete-record" class="btn-cancel">Cancel</button>
+        </div>
     </div>
 
     <!-- Logout Modal -->

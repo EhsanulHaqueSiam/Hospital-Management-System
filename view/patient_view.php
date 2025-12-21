@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,9 +28,9 @@
         <h2>Patient Details</h2>
 
         <div>
-            <a href="patient_list.html" class="button">Back to List</a>
+            <a href="patient_list.php" class="button">Back to List</a>
 
-            <a href="patient_edit.html?id=" class="button">Edit Profile</a>
+            <a href="patient_edit.php?id=" class="button">Edit Profile</a>
         </div>
 
 

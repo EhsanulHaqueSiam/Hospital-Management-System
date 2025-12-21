@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <title>Prescriptions - Hospital Management System</title>
+    <title>Today's Schedule - Hospital Management System</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <script src="../assets/js/validation-helpers.js"></script>
     <script src="../assets/js/validation-fields.js"></script>
@@ -24,63 +25,29 @@
 
     <!-- Main Content -->
     <div class="main-container">
-        <h2>Prescription Management</h2>
+
+        <h2>Today's Schedule - <span id="current-date">Dec 15, 2025</span></h2>
 
         <div>
-
-            <a href="prescription_add.html" class="button">Create New Prescription</a>
-            <button class="button" id="export-xml-btn">Export to XML</button>
+            <a href="schedule_list.php" class="button">Back to List</a>
+            <button class="button" id="refresh-btn">Refresh Schedule</button>
         </div>
 
         <fieldset>
-            <legend>Search Prescriptions</legend>
-            <form action="" method="GET">
-                <table width="100%">
-                    <tr>
-                        <td>
-                            <input type="text" name="search" placeholder="Search by ID, Patient, or Diagnosis...">
-                        </td>
-                        <td>
-
-                            <select name="patient_id">
-                                <option value="">-- Filter by Patient --</option>
-
-                            </select>
-                        </td>
-                        <td>
-                            <button type="submit" class="button">Search</button>
-                            <a href="prescription_list.html" class="button">Reset</a>
-                        </td>
-                    </tr>
-                </table>
-            </form>
-        </fieldset>
-
-        <br>
-
-        <fieldset>
-            <legend>Prescription List</legend>
+            <legend>Dr. Smith's Timeline</legend>
             <table border="1" cellpadding="10" width="100%">
                 <thead>
                     <tr>
-                        <th>Prescription ID</th>
-                        <th>Patient Name</th>
-                        <th>Doctor</th>
-                        <th>Diagnosis</th>
-                        <th>Date</th>
+                        <th width="20%">Time Slot</th>
+                        <th>Appointment Details</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
 
+
                 </tbody>
             </table>
-
-            <br>
-
-            <div class="pagination">
-                <span>Page 1 of 1</span>
-            </div>
         </fieldset>
     </div>
 
@@ -93,6 +60,8 @@
             <button id="cancel-logout" class="btn-cancel">Cancel</button>
         </div>
     </div>
+
+
 </body>
 
 </html>

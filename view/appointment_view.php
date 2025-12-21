@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,8 +28,8 @@
         <h2>Appointment Details</h2>
 
         <div>
-            <a href="appointment_list.html" class="button">Back to List</a>
-            <a href="edit_appointment.html?id=APT202501" class="button">Edit Appointment</a>
+            <a href="appointment_list.php" class="button">Back to List</a>
+            <a href="appointment_edit.php?id=APT202501" class="button">Edit Appointment</a>
             <button class="button" onclick="openCancelModal()">Cancel Appointment</button>
         </div>
 

@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <title>Book Appointment - Hospital Management System</title>
+    <title>Edit Appointment - Hospital Management System</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <script src="../assets/js/validation-helpers.js"></script>
     <script src="../assets/js/validation-fields.js"></script>
@@ -24,65 +25,42 @@
 
     <!-- Main Content -->
     <div class="main-container">
-        <h2>Book New Appointment</h2>
+        <h2>Edit Appointment</h2>
 
-
-        <!-- <div class="success-message">Appointment booked successfully! ID: APT202599</div> -->
-
-        <form action="" method="POST" onsubmit="return validateAppointmentForm(this)">
+        <form action="" method="POST">
+            <input type="hidden" name="appointment_id" value="APT202501">
 
             <fieldset>
-                <legend>Appointment Details</legend>
+                <legend>Details</legend>
                 <table cellpadding="8" width="100%">
                     <tr>
                         <td>Patient:</td>
-                        <td>
-
-                            <select name="patient_id" required>
-                                <option value="">-- Select Patient --</option>
-
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Department:</td>
-                        <td>
-                            <select name="department" onchange="loadDoctors()" required>
-                                <option value="">-- Select Department --</option>
-
-                            </select>
-                        </td>
+                        <td> </td>
                     </tr>
                     <tr>
                         <td>Doctor:</td>
                         <td>
+                            <select name="doctor_id" required>
 
-                            <select name="doctor_id" id="doctor-select" required>
-                                <option value="">-- Select Department First --</option>
                             </select>
                         </td>
                     </tr>
                     <tr>
                         <td>Date:</td>
-                        <td><input type="date" name="appointment_date" required></td>
+                        <td><input type="date" name="appointment_date" value="2025-12-15" required></td>
                     </tr>
                     <tr>
                         <td>Time Slot:</td>
                         <td>
-
                             <select name="time_slot" required>
-                                <option value="">-- Select Date First --</option>
 
                             </select>
                         </td>
                     </tr>
                     <tr>
-                        <td>Type:</td>
+                        <td>Status:</td>
                         <td>
-                            <select name="type">
-                                <option value="Consultation">Consultation</option>
-                                <option value="Follow-up">Follow-up</option>
-                                <option value="Emergency">Emergency</option>
+                            <select name="status">
 
                             </select>
                         </td>
@@ -93,21 +71,15 @@
             <br>
 
             <fieldset>
-                <legend>Medical Info</legend>
-                <table cellpadding="8" width="100%">
-                    <tr>
-                        <td>Symptoms:</td>
-                        <td><textarea name="symptoms" rows="3" placeholder="Describe symptoms (optional)"></textarea>
-                        </td>
-                    </tr>
-                </table>
+                <legend>Admin Notes</legend>
+                <textarea name="admin_notes" rows="4">Rescheduled per patient request.</textarea>
             </fieldset>
 
             <br>
 
             <div>
-                <button type="submit" name="book_appointment" class="button">Confirm Booking</button>
-                <a href="appointment_list.html" class="button btn-cancel">Cancel</a>
+                <button type="submit" name="update_appointment" class="button">Update Appointment</button>
+                <a href="appointment_list.php" class="button btn-cancel">Cancel</a>
             </div>
         </form>
     </div>
@@ -121,8 +93,6 @@
             <button id="cancel-logout" class="btn-cancel">Cancel</button>
         </div>
     </div>
-
-
 </body>
 
 </html>

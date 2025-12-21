@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <title>Patient List - Hospital Management System</title>
+    <title>Appointment List - Hospital Management System</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <script src="../assets/js/validation-helpers.js"></script>
     <script src="../assets/js/validation-fields.js"></script>
@@ -24,43 +25,54 @@
 
     <!-- Main Content -->
     <div class="main-container">
-        <h2>Patient Management</h2>
+        <h2>Appointment Management</h2>
 
         <div>
-            <a href="patient_add.html" class="button">Add New Patient</a>
+            <a href="appointment_add.php" class="button">Book Appointment</a>
             <a href="#" class="button" id="export-xml-btn">Export to XML</a>
         </div>
 
         <fieldset>
-            <legend>Search & Filter</legend>
+            <legend>Filter Appointments</legend>
             <form action="" method="GET">
-                <input type="text" name="search" placeholder="Search by Name, Email, Phone...">
-                <select name="filter_gender">
-                    <option value="">All Genders</option>
+                <input type="text" name="search" placeholder="Search Patient, Doctor, ID...">
+
+                <select name="status">
+                    <option value="">All Statuses</option>
 
                 </select>
-                <button type="submit" class="button">Search</button>
+
+                <br><label>From:</label>
+                <input type="date" name="date_from">
+                <label>To:</label>
+                <input type="date" name="date_to">
+
+                <button type="submit" class="button">Filter</button>
             </form>
         </fieldset>
 
         <br>
 
         <fieldset>
-            <legend>Registered Patients</legend>
+            <legend>All Appointments</legend>
             <table border="1" cellpadding="10" width="100%">
                 <thead>
                     <tr>
-                        <th>Patient ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Age</th>
-                        <th>Gender</th>
-                        <th>Last Visit</th>
+                        <th>Appointment ID</th>
+                        <th>Patient Name</th>
+                        <th>Doctor Name</th>
+                        <th>Date & Time</th>
+                        <th>Type</th>
+                        <th>Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
+
+                    <!-- Rows will be generated here by PHP -->
+                    <tr>
+                        <td colspan="7" style="text-align:center;">No appointments found.</td>
+                    </tr>
 
                 </tbody>
             </table>
@@ -68,23 +80,25 @@
             <br>
 
             <div class="pagination">
-                <span>Page 1 of 5</span>
+                <span>Page 1 of 3</span>
                 <a href="#">Next ></a>
             </div>
         </fieldset>
     </div>
 
-    <!-- Delete Modal -->
-    <div id="delete-modal" class="logout-modal">
+    <!-- Cancel Modal (Reusing Logout Modal Style) -->
+    <div class="logout-modal" id="cancel-appointment-modal" style="display: none;">
         <div class="modal-content">
-            <h3>Delete Patient</h3>
-            <p>Are you sure you want to delete <b id="delete-department-name"></b>?</p>
-            <p style="color: red; font-size: 0.9em;">Warning: This will delete all medical records and history.</p>
-            <br>
-            <button id="confirm-delete">Yes, Delete</button>
-            <button id="cancel-delete" class="btn-cancel">Cancel</button>
+            <h3>Cancel Appointment</h3>
+            <p>Are you sure you want to cancel this appointment?</p>
+            <textarea placeholder="Reason for cancellation (Optional)"></textarea>
+            <br><br>
+            <button onclick="confirmCancel()">Confirm Cancel</button>
+            <button onclick="closeCancelModal()" class="btn-cancel">Back</button>
         </div>
     </div>
+
+
 
     <!-- Logout Modal -->
     <div class="logout-modal" id="logout-modal">

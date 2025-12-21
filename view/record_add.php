@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -82,7 +83,7 @@
 
             <div>
                 <button type="submit" name="upload_record" class="button">Upload Record</button>
-                <a href="record_list.html" class="button btn-cancel">Cancel</a>
+                <a href="record_list.php" class="button btn-cancel">Cancel</a>
             </div>
         </form>
     </div>

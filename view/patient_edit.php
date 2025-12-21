@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -91,7 +92,7 @@
 
             <div>
                 <button type="submit" name="update_patient" class="button">Update Information</button>
-                <a href="patient_list.html" class="button btn-cancel">Cancel</a>
+                <a href="patient_list.php" class="button btn-cancel">Cancel</a>
             </div>
         </form>
     </div>

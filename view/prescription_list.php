@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <title>Edit Appointment - Hospital Management System</title>
+    <title>Prescriptions - Hospital Management System</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <script src="../assets/js/validation-helpers.js"></script>
     <script src="../assets/js/validation-fields.js"></script>
@@ -24,63 +25,64 @@
 
     <!-- Main Content -->
     <div class="main-container">
-        <h2>Edit Appointment</h2>
+        <h2>Prescription Management</h2>
 
-        <form action="" method="POST">
-            <input type="hidden" name="appointment_id" value="APT202501">
+        <div>
 
-            <fieldset>
-                <legend>Details</legend>
-                <table cellpadding="8" width="100%">
+            <a href="prescription_add.php" class="button">Create New Prescription</a>
+            <button class="button" id="export-xml-btn">Export to XML</button>
+        </div>
+
+        <fieldset>
+            <legend>Search Prescriptions</legend>
+            <form action="" method="GET">
+                <table width="100%">
                     <tr>
-                        <td>Patient:</td>
-                        <td> </td>
-                    </tr>
-                    <tr>
-                        <td>Doctor:</td>
                         <td>
-                            <select name="doctor_id" required>
+                            <input type="text" name="search" placeholder="Search by ID, Patient, or Diagnosis...">
+                        </td>
+                        <td>
+
+                            <select name="patient_id">
+                                <option value="">-- Filter by Patient --</option>
 
                             </select>
                         </td>
-                    </tr>
-                    <tr>
-                        <td>Date:</td>
-                        <td><input type="date" name="appointment_date" value="2025-12-15" required></td>
-                    </tr>
-                    <tr>
-                        <td>Time Slot:</td>
                         <td>
-                            <select name="time_slot" required>
-
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Status:</td>
-                        <td>
-                            <select name="status">
-
-                            </select>
+                            <button type="submit" class="button">Search</button>
+                            <a href="prescription_list.php" class="button">Reset</a>
                         </td>
                     </tr>
                 </table>
-            </fieldset>
+            </form>
+        </fieldset>
+
+        <br>
+
+        <fieldset>
+            <legend>Prescription List</legend>
+            <table border="1" cellpadding="10" width="100%">
+                <thead>
+                    <tr>
+                        <th>Prescription ID</th>
+                        <th>Patient Name</th>
+                        <th>Doctor</th>
+                        <th>Diagnosis</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
 
             <br>
 
-            <fieldset>
-                <legend>Admin Notes</legend>
-                <textarea name="admin_notes" rows="4">Rescheduled per patient request.</textarea>
-            </fieldset>
-
-            <br>
-
-            <div>
-                <button type="submit" name="update_appointment" class="button">Update Appointment</button>
-                <a href="appointment_list.html" class="button btn-cancel">Cancel</a>
+            <div class="pagination">
+                <span>Page 1 of 1</span>
             </div>
-        </form>
+        </fieldset>
     </div>
 
     <!-- Logout Modal -->

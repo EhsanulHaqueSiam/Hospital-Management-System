@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,7 +28,7 @@
         <h2>Medical Record Details</h2>
 
         <div>
-            <a href="record_list.html" class="button">Back to List</a>
+            <a href="record_list.php" class="button">Back to List</a>
 
             <button class="button" id="delete-record-btn">Delete Record</button>
         </div>
