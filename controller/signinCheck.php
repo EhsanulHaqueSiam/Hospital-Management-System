@@ -32,6 +32,6 @@ if (isset($_POST['signin'])) {
         echo "Invalid username/email or password";
     }
 } else {
-    header('location: ../view/auth_signin.html');
+    header('location: ../view/auth_signin.php');
 }
 ?>
