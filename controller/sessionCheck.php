@@ -2,7 +2,7 @@
 session_start();
 
 if (isset($_COOKIE['status']) !== true) {
-    header('location: auth_signin.html');
+    header('location: auth_signin.php');
     exit;
 }
 ?>

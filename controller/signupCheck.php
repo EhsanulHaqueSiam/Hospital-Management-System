@@ -37,9 +37,9 @@ if (isset($_POST['signup'])) {
             'password' => $password,
             'role' => $role
         );
-        header('location: ../view/auth_signin.html');
+        header('location: ../view/auth_signin.php');
     }
 } else {
-    header('location: ../view/auth_signup.html');
+    header('location: ../view/auth_signup.php');
 }
 ?>
