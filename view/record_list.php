@@ -1,0 +1,116 @@
+<?php
+require_once('../controller/sessionCheck.php');
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Medical Records - Hospital Management System</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="../assets/js/validation-helpers.js"></script>
+    <script src="../assets/js/validation-fields.js"></script>
+    <script src="../assets/js/validation-patient.js"></script>
+    <script src="../assets/js/validation-appointment.js"></script>
+    <script src="../assets/js/validation-prescription.js"></script>
+    <script src="../assets/js/validation-record.js"></script>
+    <script src="../assets/js/validation-init.js"></script>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <span class="navbar-title">Hospital Management System</span>
+        <a href="#" class="navbar-link">Dashboard</a>
+        <a href="#" class="navbar-link">My Profile</a>
+        <a href="#" class="navbar-link" id="logout-btn">Logout</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <h2>Medical Records</h2>
+
+        <div>
+
+            <a href="record_add.php" class="button">Upload New Record</a>
+        </div>
+
+        <fieldset>
+            <legend>Filter Records</legend>
+            <form action="" method="GET">
+                <table width="100%">
+                    <tr>
+                        <td>
+
+                            <input type="text" name="patient_search" placeholder="Search Patient Name...">
+                        </td>
+                        <td>
+                            <select name="record_type">
+                                <option value="">-- All Types --</option>
+
+                            </select>
+                        </td>
+                        <td>
+                            <button type="submit" class="button">Filter</button>
+                            <a href="record_list.php" class="button">Reset</a>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </fieldset>
+
+        <br>
+
+        <fieldset>
+            <legend>Record List</legend>
+            <table border="1" cellpadding="10" width="100%">
+                <thead>
+                    <tr>
+                        <th>Record ID</th>
+                        <th>Patient Name</th>
+                        <th>Type</th>
+                        <th>Date</th>
+                        <th>Uploaded By</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+
+                    <tr>
+                        <td colspan="6" style="text-align:center;">No records found.</td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+            <br>
+
+            <div class="pagination">
+                <span>Page 1 of 1</span>
+            </div>
+        </fieldset>
+    </div>
+
+    <!-- Delete Modal (Reusing Logout Modal Style) -->
+    <div class="logout-modal" id="delete-record-modal" style="display: none;">
+        <div class="modal-content">
+            <h3>Delete Record</h3>
+            <p>Are you sure you want to delete this medical record? This action cannot be undone.</p>
+            <br>
+            <button id="confirm-delete-record">Yes, Delete</button>
+            <button id="cancel-delete-record" class="btn-cancel">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Logout Modal -->
+    <div class="logout-modal" id="logout-modal">
+        <div class="modal-content">
+            <p>Are you sure you want to logout?</p>
+            <br>
+            <button id="confirm-logout">Yes</button>
+            <button id="cancel-logout" class="btn-cancel">Cancel</button>
+        </div>
+    </div>
+</body>
+
+</html>
