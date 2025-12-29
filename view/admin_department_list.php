@@ -1,5 +1,9 @@
 <?php
-require_once('../controller/sessionCheck.php');
+require_once('../controller/adminCheck.php');
+require_once('../model/departmentModel.php');
+
+// Fetch all departments
+$departments = getAllDepartments();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -52,19 +56,26 @@ require_once('../controller/sessionCheck.php');
                     <th>ID</th>
                     <th>Name</th>
                     <th>Description</th>
-                    <th>Doctors</th>
                     <th>Actions</th>
                 </tr>
-                <tr>
-                    <td>1</td>
-                    <td>Cardiology</td>
-                    <td>Heart and cardiovascular care</td>
-                    <td>5</td>
-                    <td>
-                        <a href="admin_department_edit.php"><button>Edit</button></a>
-                        <a href="../controller/delete_department.php?id=1"><button>Delete</button></a>
-                    </td>
-                </tr>
+                <?php if (count($departments) > 0): ?>
+                    <?php foreach ($departments as $dept): ?>
+                        <tr>
+                            <td><?php echo $dept['id']; ?></td>
+                            <td><?php echo $dept['department_name']; ?></td>
+                            <td><?php echo $dept['description']; ?></td>
+                            <td>
+                                <a href="admin_department_edit.php?id=<?php echo $dept['id']; ?>"><button>Edit</button></a>
+                                <a href="../controller/delete_department.php?id=<?php echo $dept['id']; ?>"
+                                    onclick="return confirm('Are you sure?');"><button>Delete</button></a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="4" align="center">No departments found</td>
+                    </tr>
+                <?php endif; ?>
             </table>
 
             <br>
