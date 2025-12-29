@@ -1,5 +1,3 @@
-/* Individual Field Validation Functions - Called via onblur */
-
 function validateName(field) {
     if (isEmpty(field.value)) {
         showError(field, "Full name is required");

@@ -1,5 +1,3 @@
-/* Simple Validation Helper Functions - Using Built-in Functions */
-
 function isEmpty(value) {
     if (value === null || value === undefined) {
         return true;

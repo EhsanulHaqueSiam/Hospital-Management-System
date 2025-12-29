@@ -1,5 +1,3 @@
-/* Appointment Form Validation */
-
 function validateAppointmentForm(form) {
     clearFormErrors(form);
     var valid = true;

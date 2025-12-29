@@ -1,5 +1,3 @@
-/* Medical Record Form Validation */
-
 function validateRecordForm(form) {
     clearFormErrors(form);
     var valid = true;

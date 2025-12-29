@@ -1,5 +1,3 @@
-// Profile - Form Validation
-
 function isValidName(str) {
     if (str.length === 0) return false;
     for (var i = 0; i < str.length; i++) {
