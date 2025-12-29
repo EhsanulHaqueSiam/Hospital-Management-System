@@ -1,5 +1,11 @@
 <?php
-require_once('../controller/sessionCheck.php');
+require_once('../controller/adminCheck.php');
+require_once('../model/doctorModel.php');
+require_once('../model/userModel.php');
+require_once('../model/departmentModel.php');
+
+// Fetch all doctors
+$doctors = getAllDoctors();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,30 +28,22 @@ require_once('../controller/sessionCheck.php');
     <div class="main-container">
         <h2>Doctor List</h2>
 
-        <span class="success-message"></span>
-
         <!-- Actions -->
         <fieldset>
             <legend>Actions</legend>
-            <form method="GET" action="">
-                <table>
-                    <tr>
-                        <td>Search: <input type="text" name="search" value="">
-                        </td>
-                        <td>
-                            Department:
-                            <select name="department">
-                                <option value="">-- All --</option>
-                                <option value="1">Cardiology</option>
-                            </select>
-                        </td>
-                        <td>
-                            <input type="submit" value="Filter">
-                            <a href="admin_doctor_add.php"><button type="button">Add Doctor</button></a>
-                        </td>
-                    </tr>
-                </table>
-            </form>
+            <table>
+                <tr>
+                    <td>
+                        <form method="GET" action="">
+                            Search: <input type="text" name="search" value="">
+                            <input type="submit" value="Search">
+                        </form>
+                    </td>
+                    <td>
+                        <a href="admin_doctor_add.php"><button type="button">Add Doctor</button></a>
+                    </td>
+                </tr>
+            </table>
         </fieldset>
 
         <br>
@@ -53,32 +51,50 @@ require_once('../controller/sessionCheck.php');
         <!-- Doctor Table -->
         <fieldset>
             <legend>All Doctors</legend>
-            <table border="1" cellpadding="8" width="100%" id="doctor-table">
+            <table border="1" cellpadding="8" width="100%">
                 <tr>
                     <th>ID</th>
-                    <th>Name</th>
+                    <th>Full Name</th>
                     <th>Email</th>
                     <th>Phone</th>
+                    <th>Specialization</th>
                     <th>Department</th>
-                    <th>Status</th>
+                    <th>Bio</th>
                     <th>Actions</th>
                 </tr>
-                <tr>
-                    <td>1</td>
-                    <td>Dr. Md Ehsanul Haque</td>
-                    <td>22-49370-3@student.aiub.edu</td>
-                    <td>01712378901</td>
-                    <td>Cardiology</td>
-                    <td>Active</td>
-                    <td>
-                        <a href="admin_doctor_view.php"><button>View</button></a>
-                        <a href="admin_doctor_edit.php"><button>Edit</button></a>
-                        <a href="../controller/delete_doctor.php?id=1"><button>Delete</button></a>
-                    </td>
-                </tr>
+                <?php if (count($doctors) > 0): ?>
+                    <?php foreach ($doctors as $doctor): ?>
+                        <?php
+                        // Fetch user and department info separately
+                        $user = getUserById($doctor['user_id']);
+                        $dept = $doctor['department_id'] ? getDepartmentById($doctor['department_id']) : null;
+                        ?>
+                        <tr>
+                            <td><?php echo $doctor['id']; ?></td>
+                            <td><?php echo $user ? $user['full_name'] : 'N/A'; ?></td>
+                            <td><?php echo $user ? $user['email'] : 'N/A'; ?></td>
+                            <td><?php echo $user ? $user['phone'] : 'N/A'; ?></td>
+                            <td><?php echo $doctor['specialization']; ?></td>
+                            <td><?php echo $dept ? $dept['department_name'] : 'N/A'; ?></td>
+                            <td><?php echo substr($doctor['bio'], 0, 50) . '...'; ?></td>
+                            <td>
+                                <a href="admin_doctor_view.php?id=<?php echo $doctor['id']; ?>"><button>View</button></a>
+                                <a href="admin_doctor_edit.php?id=<?php echo $doctor['id']; ?>"><button>Edit</button></a>
+                                <a href="../controller/delete_doctor.php?id=<?php echo $doctor['id']; ?>"
+                                    onclick="return confirm('Are you sure?');"><button>Delete</button></a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="8" align="center">No doctors found</td>
+                    </tr>
+                <?php endif; ?>
             </table>
 
             <br>
+
+            <!-- Pagination -->
             <div class="pagination-container">
             </div>
         </fieldset>
