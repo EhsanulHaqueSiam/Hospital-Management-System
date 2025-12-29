@@ -1,5 +1,19 @@
 <?php
-require_once('../controller/sessionCheck.php');
+require_once('../controller/adminCheck.php');
+require_once('../model/doctorModel.php');
+require_once('../model/userModel.php');
+require_once('../model/departmentModel.php');
+
+// Get doctor ID from URL
+$doctor_id = isset($_GET['id']) ? $_GET['id'] : 0;
+
+// Fetch doctor info
+$doctor = getDoctorById($doctor_id);
+
+if ($doctor) {
+    $user = getUserById($doctor['user_id']);
+    $dept = $doctor['department_id'] ? getDepartmentById($doctor['department_id']) : null;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -18,63 +32,60 @@ require_once('../controller/sessionCheck.php');
         <a href="../controller/logout.php" class="navbar-link">Logout</a>
     </div>
 
-    <!-- View Doctor Details -->
+    <!-- Doctor Details -->
     <div class="main-container">
         <h2>Doctor Details</h2>
 
-        <fieldset>
-            <legend>Doctor Information</legend>
-            <table>
-                <tr>
-                    <td>Profile Picture:</td>
-                    <td><img src="../assets/images/default.jpg" alt="" width="100" height="100"></td>
-                </tr>
-                <tr>
-                    <td>Doctor ID:</td>
-                    <td>1</td>
-                </tr>
-                <tr>
-                    <td>Full Name:</td>
-                    <td>Dr. Md Ehsanul Haque</td>
-                </tr>
-                <tr>
-                    <td>Email:</td>
-                    <td>22-49370-3@student.aiub.edu</td>
-                </tr>
-                <tr>
-                    <td>Phone:</td>
-                    <td>01712378901</td>
-                </tr>
-                <tr>
-                    <td>Username:</td>
-                    <td>siam</td>
-                </tr>
-                <tr>
-                    <td>Department:</td>
-                    <td>Cardiology</td>
-                </tr>
-                <tr>
-                    <td>Specialization:</td>
-                    <td>Cardiologist</td>
-                </tr>
-                <tr>
-                    <td>Bio:</td>
-                    <td>Experienced cardiologist with 10 years of practice.</td>
-                </tr>
-                <tr>
-                    <td>Status:</td>
-                    <td>Active</td>
-                </tr>
-                <tr>
-                    <td>Registered:</td>
-                    <td>2024-01-01</td>
-                </tr>
-            </table>
-        </fieldset>
+        <?php if ($doctor && $user): ?>
+            <fieldset>
+                <legend>Personal Information</legend>
+                <table>
+                    <tr>
+                        <td>Full Name:</td>
+                        <td><?php echo $user['full_name']; ?></td>
+                    </tr>
+                    <tr>
+                        <td>Email:</td>
+                        <td><?php echo $user['email']; ?></td>
+                    </tr>
+                    <tr>
+                        <td>Phone:</td>
+                        <td><?php echo $user['phone']; ?></td>
+                    </tr>
+                    <tr>
+                        <td>Username:</td>
+                        <td><?php echo $user['username']; ?></td>
+                    </tr>
+                </table>
+            </fieldset>
 
-        <br>
-        <a href="admin_doctor_edit.php"><button>Edit Doctor</button></a>
-        <a href="admin_doctor_list.php"><button>Back to List</button></a>
+            <br>
+
+            <fieldset>
+                <legend>Professional Information</legend>
+                <table>
+                    <tr>
+                        <td>Specialization:</td>
+                        <td><?php echo $doctor['specialization']; ?></td>
+                    </tr>
+                    <tr>
+                        <td>Department:</td>
+                        <td><?php echo $dept ? $dept['department_name'] : 'N/A'; ?></td>
+                    </tr>
+                    <tr>
+                        <td>Bio:</td>
+                        <td><?php echo $doctor['bio']; ?></td>
+                    </tr>
+                </table>
+            </fieldset>
+
+            <br>
+            <a href="admin_doctor_edit.php?id=<?php echo $doctor['id']; ?>"><button>Edit Doctor</button></a>
+            <a href="admin_doctor_list.php"><button>Back to List</button></a>
+        <?php else: ?>
+            <p>Doctor not found.</p>
+            <a href="admin_doctor_list.php"><button>Back to List</button></a>
+        <?php endif; ?>
     </div>
 
     <script src="../assets/js/admin.js"></script>
