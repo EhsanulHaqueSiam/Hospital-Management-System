@@ -1,8 +1,11 @@
+<?php
+require_once('../controller/sessionCheck.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <title>Add Patient - Hospital Management System</title>
+    <title>Edit Patient - Hospital Management System</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <script src="../assets/js/validation-helpers.js"></script>
     <script src="../assets/js/validation-fields.js"></script>
@@ -24,47 +27,36 @@
 
     <!-- Main Content -->
     <div class="main-container">
-        <h2>Add New Patient</h2>
+        <h2>Edit Patient Information</h2>
 
 
-        <!-- <div class="success-message">Patient registered successfully!</div> -->
 
-        <form action="" method="POST" onsubmit="return validatePatientForm(this)">
+        <form action="" method="POST" onsubmit="return validatePatientEditForm(this)">
 
+            <input type="hidden" name="patient_id" value="PAT_ID_HERE">
 
             <fieldset>
                 <legend>Personal Information</legend>
                 <table cellpadding="5">
                     <tr>
                         <td>Full Name:</td>
-                        <td><input type="text" name="full_name" required onblur="validateName(this)"></td>
-                    </tr>
-                    <tr>
-                        <td>Date of Birth:</td>
-                        <td><input type="date" name="dob" required onblur="validateDOB(this)"></td>
+                        <td><input type="text" name="full_name" value="" required onblur="validateName(this)"></td>
                     </tr>
                     <tr>
                         <td>Gender:</td>
                         <td>
+
                             <select name="gender" required>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                                <option value="Other">Other</option>
+
                             </select>
                         </td>
                     </tr>
                     <tr>
                         <td>Blood Group:</td>
                         <td>
+
                             <select name="blood_group">
-                                <option value="A+">A+</option>
-                                <option value="A-">A-</option>
-                                <option value="B+">B+</option>
-                                <option value="B-">B-</option>
-                                <option value="O+">O+</option>
-                                <option value="O-">O-</option>
-                                <option value="AB+">AB+</option>
-                                <option value="AB-">AB-</option>
+
                             </select>
                         </td>
                     </tr>
@@ -78,11 +70,11 @@
                 <table cellpadding="5">
                     <tr>
                         <td>Email:</td>
-                        <td><input type="email" name="email" required onblur="validateEmail(this)"></td>
+                        <td><input type="email" name="email" value="" required onblur="validateEmail(this)"></td>
                     </tr>
                     <tr>
                         <td>Phone:</td>
-                        <td><input type="tel" name="phone" required onblur="validatePhone(this)"></td>
+                        <td><input type="tel" name="phone" value="" required onblur="validatePhone(this)"></td>
                     </tr>
                     <tr>
                         <td>Address:</td>
@@ -90,33 +82,19 @@
                     </tr>
                     <tr>
                         <td>Emergency Contact:</td>
-                        <td><input type="text" name="emergency_contact"></td>
+                        <td><input type="text" name="emergency_contact" value="">
+                        </td>
                     </tr>
                 </table>
             </fieldset>
 
             <br>
-
-            <fieldset>
-                <legend>Account Credentials</legend>
-                <table cellpadding="5">
-                    <tr>
-                        <td>Username:</td>
-                        <td><input type="text" name="username" required onblur="validateUsername(this)"></td>
-
-                    </tr>
-                    <tr>
-                        <td>Password:</td>
-                        <td><input type="password" name="password" required onblur="validatePassword(this)"></td>
-                    </tr>
-                </table>
-            </fieldset>
-
+            <p><i>Note: Username and Date of Birth cannot be changed.</i></p>
             <br>
 
             <div>
-                <button type="submit" name="submit_patient" class="button">Register Patient</button>
-                <a href="patient_list.html" class="button btn-cancel">Cancel</a>
+                <button type="submit" name="update_patient" class="button">Update Information</button>
+                <a href="patient_list.php" class="button btn-cancel">Cancel</a>
             </div>
         </form>
     </div>

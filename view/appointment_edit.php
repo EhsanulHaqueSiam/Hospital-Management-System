@@ -1,8 +1,11 @@
+<?php
+require_once('../controller/sessionCheck.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <title>Upload Medical Record - Hospital Management System</title>
+    <title>Edit Appointment - Hospital Management System</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <script src="../assets/js/validation-helpers.js"></script>
     <script src="../assets/js/validation-fields.js"></script>
@@ -24,42 +27,44 @@
 
     <!-- Main Content -->
     <div class="main-container">
-        <h2>Upload Medical Record</h2>
+        <h2>Edit Appointment</h2>
 
-        <form action="" method="POST" enctype="multipart/form-data" onsubmit="return validateRecordForm(this)">
+        <form action="" method="POST">
+            <input type="hidden" name="appointment_id" value="APT202501">
+
             <fieldset>
-                <legend>Record Details</legend>
-                <table cellpadding="10" width="100%">
+                <legend>Details</legend>
+                <table cellpadding="8" width="100%">
                     <tr>
                         <td>Patient:</td>
+                        <td> </td>
+                    </tr>
+                    <tr>
+                        <td>Doctor:</td>
                         <td>
-
-                            <select name="patient_id" required>
-                                <option value="">-- Select Patient --</option>
+                            <select name="doctor_id" required>
 
                             </select>
                         </td>
                     </tr>
                     <tr>
-                        <td>Record Type:</td>
+                        <td>Date:</td>
+                        <td><input type="date" name="appointment_date" value="2025-12-15" required></td>
+                    </tr>
+                    <tr>
+                        <td>Time Slot:</td>
                         <td>
-                            <select name="record_type" required>
+                            <select name="time_slot" required>
 
                             </select>
                         </td>
                     </tr>
                     <tr>
-                        <td>Record Date:</td>
+                        <td>Status:</td>
                         <td>
-                            <input type="date" name="record_date" required>
+                            <select name="status">
 
-                        </td>
-                    </tr>
-                    <tr>
-                        <td valign="top">Description:</td>
-                        <td>
-                            <textarea name="description" rows="4"
-                                placeholder="Enter details about the record..."></textarea>
+                            </select>
                         </td>
                     </tr>
                 </table>
@@ -68,21 +73,15 @@
             <br>
 
             <fieldset>
-                <legend>Attachments</legend>
-                <p>Select files to upload (Max 5 files, 10MB each). Supported formats: PDF, JPG, PNG.</p>
-                <br>
-                <input type="file" name="record_files[]" id="record-file-input" multiple accept=".pdf,.jpg,.jpeg,.png">
-
-                <div class="file-preview-area" id="file-preview-container" style="display: none;">
-                    <!-- JS will populate preview here -->
-                </div>
+                <legend>Admin Notes</legend>
+                <textarea name="admin_notes" rows="4">Rescheduled per patient request.</textarea>
             </fieldset>
 
             <br>
 
             <div>
-                <button type="submit" name="upload_record" class="button">Upload Record</button>
-                <a href="record_list.html" class="button btn-cancel">Cancel</a>
+                <button type="submit" name="update_appointment" class="button">Update Appointment</button>
+                <a href="appointment_list.php" class="button btn-cancel">Cancel</a>
             </div>
         </form>
     </div>

@@ -1,8 +1,11 @@
+<?php
+require_once('../controller/sessionCheck.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <title>Medical Records - Hospital Management System</title>
+    <title>Appointment List - Hospital Management System</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <script src="../assets/js/validation-helpers.js"></script>
     <script src="../assets/js/validation-fields.js"></script>
@@ -24,57 +27,53 @@
 
     <!-- Main Content -->
     <div class="main-container">
-        <h2>Medical Records</h2>
+        <h2>Appointment Management</h2>
 
         <div>
-
-            <a href="record_add.html" class="button">Upload New Record</a>
+            <a href="appointment_add.php" class="button">Book Appointment</a>
+            <a href="#" class="button" id="export-xml-btn">Export to XML</a>
         </div>
 
         <fieldset>
-            <legend>Filter Records</legend>
+            <legend>Filter Appointments</legend>
             <form action="" method="GET">
-                <table width="100%">
-                    <tr>
-                        <td>
+                <input type="text" name="search" placeholder="Search Patient, Doctor, ID...">
 
-                            <input type="text" name="patient_search" placeholder="Search Patient Name...">
-                        </td>
-                        <td>
-                            <select name="record_type">
-                                <option value="">-- All Types --</option>
+                <select name="status">
+                    <option value="">All Statuses</option>
 
-                            </select>
-                        </td>
-                        <td>
-                            <button type="submit" class="button">Filter</button>
-                            <a href="record_list.html" class="button">Reset</a>
-                        </td>
-                    </tr>
-                </table>
+                </select>
+
+                <br><label>From:</label>
+                <input type="date" name="date_from">
+                <label>To:</label>
+                <input type="date" name="date_to">
+
+                <button type="submit" class="button">Filter</button>
             </form>
         </fieldset>
 
         <br>
 
         <fieldset>
-            <legend>Record List</legend>
+            <legend>All Appointments</legend>
             <table border="1" cellpadding="10" width="100%">
                 <thead>
                     <tr>
-                        <th>Record ID</th>
+                        <th>Appointment ID</th>
                         <th>Patient Name</th>
+                        <th>Doctor Name</th>
+                        <th>Date & Time</th>
                         <th>Type</th>
-                        <th>Date</th>
-                        <th>Uploaded By</th>
+                        <th>Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
 
-
+                    <!-- Rows will be generated here by PHP -->
                     <tr>
-                        <td colspan="6" style="text-align:center;">No records found.</td>
+                        <td colspan="7" style="text-align:center;">No appointments found.</td>
                     </tr>
 
                 </tbody>
@@ -83,21 +82,25 @@
             <br>
 
             <div class="pagination">
-                <span>Page 1 of 1</span>
+                <span>Page 1 of 3</span>
+                <a href="#">Next ></a>
             </div>
         </fieldset>
     </div>
 
-    <!-- Delete Modal (Reusing Logout Modal Style) -->
-    <div class="logout-modal" id="delete-record-modal" style="display: none;">
+    <!-- Cancel Modal (Reusing Logout Modal Style) -->
+    <div class="logout-modal" id="cancel-appointment-modal" style="display: none;">
         <div class="modal-content">
-            <h3>Delete Record</h3>
-            <p>Are you sure you want to delete this medical record? This action cannot be undone.</p>
-            <br>
-            <button id="confirm-delete-record">Yes, Delete</button>
-            <button id="cancel-delete-record" class="btn-cancel">Cancel</button>
+            <h3>Cancel Appointment</h3>
+            <p>Are you sure you want to cancel this appointment?</p>
+            <textarea placeholder="Reason for cancellation (Optional)"></textarea>
+            <br><br>
+            <button onclick="confirmCancel()">Confirm Cancel</button>
+            <button onclick="closeCancelModal()" class="btn-cancel">Back</button>
         </div>
     </div>
+
+
 
     <!-- Logout Modal -->
     <div class="logout-modal" id="logout-modal">

@@ -1,3 +1,6 @@
+<?php
+require_once('../controller/sessionCheck.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -33,7 +36,7 @@
         </div>
 
         <div>
-            <a href="prescription_list.html" class="button">Back to List</a>
+            <a href="prescription_list.php" class="button">Back to List</a>
             <button class="button" onclick="window.print()">🖨️ Print Prescription</button>
             <button class="button">Download PDF</button>
 

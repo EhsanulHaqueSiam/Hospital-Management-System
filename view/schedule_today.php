@@ -1,3 +1,6 @@
+<?php
+require_once('../controller/sessionCheck.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -28,7 +31,7 @@
         <h2>Today's Schedule - <span id="current-date">Dec 15, 2025</span></h2>
 
         <div>
-            <a href="schedule_list.html" class="button">Back to List</a>
+            <a href="schedule_list.php" class="button">Back to List</a>
             <button class="button" id="refresh-btn">Refresh Schedule</button>
         </div>
 

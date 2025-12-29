@@ -1,8 +1,11 @@
+<?php
+require_once('../controller/sessionCheck.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <title>Appointment Details - Hospital Management System</title>
+    <title>Patient Details - Hospital Management System</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <script src="../assets/js/validation-helpers.js"></script>
     <script src="../assets/js/validation-fields.js"></script>
@@ -24,32 +27,38 @@
 
     <!-- Main Content -->
     <div class="main-container">
-        <h2>Appointment Details</h2>
+        <h2>Patient Details</h2>
 
         <div>
-            <a href="appointment_list.html" class="button">Back to List</a>
-            <a href="edit_appointment.html?id=APT202501" class="button">Edit Appointment</a>
-            <button class="button" onclick="openCancelModal()">Cancel Appointment</button>
+            <a href="patient_list.php" class="button">Back to List</a>
+
+            <a href="patient_edit.php?id=" class="button">Edit Profile</a>
         </div>
 
+
+
         <div>
             <fieldset>
-                <legend>Appointment Info</legend>
+                <legend>Personal Information</legend>
                 <table cellpadding="8" width="100%">
                     <tr>
-                        <td><b>Appointment ID:</b></td>
+                        <td width="20%"><b>Patient ID:</b></td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td><b>Date & Time:</b></td>
+                        <td><b>Full Name:</b></td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td><b>Status:</b></td>
+                        <td><b>Date of Birth:</b></td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td><b>Type:</b></td>
+                        <td><b>Gender:</b></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><b>Blood Group:</b></td>
                         <td></td>
                     </tr>
                 </table>
@@ -58,18 +67,22 @@
             <br>
 
             <fieldset>
-                <legend>Patient Info</legend>
+                <legend>Contact Information</legend>
                 <table cellpadding="8" width="100%">
                     <tr>
-                        <td><b>Name:</b></td>
+                        <td width="20%"><b>Email:</b></td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td><b>Age/Gender:</b></td>
+                        <td><b>Phone:</b></td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td><b>Contact:</b></td>
+                        <td><b>Address:</b></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><b>Emergency Contact:</b></td>
                         <td></td>
                     </tr>
                 </table>
@@ -78,47 +91,46 @@
             <br>
 
             <fieldset>
-                <legend>Doctor Info</legend>
-                <table cellpadding="8" width="100%">
-                    <tr>
-                        <td><b>Doctor:</b></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td><b>Department:</b></td>
-                        <td></td>
-                    </tr>
+                <legend>Medical History</legend>
+
+                <table border="1" cellpadding="5" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Doctor</th>
+                            <th>Diagnosis/Reason</th>
+                            <th>Prescription</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+
+
+                    </tbody>
                 </table>
             </fieldset>
 
             <br>
 
             <fieldset>
-                <legend>Medical Info</legend>
-                <p><b>Symptoms:</b> </p>
-                <br>
-                <p><b>Prescription:</b></p>
+                <legend>Usage & Billing</legend>
+                <table border="1" cellpadding="5" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Bill ID</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-                <div>
-                    No prescription added yet.
-                </div>
+
+                    </tbody>
+                </table>
             </fieldset>
         </div>
     </div>
-
-    <!-- Cancel Modal -->
-    <div class="logout-modal" id="cancel-appointment-modal" style="display: none;">
-        <div class="modal-content">
-            <h3>Cancel Appointment</h3>
-            <p>Are you sure you want to cancel this appointment?</p>
-            <textarea placeholder="Reason for cancellation" style="width: 100%; height: 60px;"></textarea>
-            <br><br>
-            <button onclick="confirmCancel()">Confirm Cancel</button>
-            <button onclick="closeCancelModal()" class="btn-cancel">Back</button>
-        </div>
-    </div>
-
-
 
     <!-- Logout Modal -->
     <div class="logout-modal" id="logout-modal">

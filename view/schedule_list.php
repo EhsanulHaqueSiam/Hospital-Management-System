@@ -1,3 +1,6 @@
+<?php
+require_once('../controller/sessionCheck.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,7 +30,7 @@
         <h2>Appointment Schedule</h2>
 
         <div>
-            <a href="schedule_today.html" class="button">View Today's Timeline</a>
+            <a href="schedule_today.php" class="button">View Today's Timeline</a>
             <button class="button" id="print-btn">Print Schedule</button>
         </div>
 
@@ -53,7 +56,7 @@
                         </td>
                         <td>
                             <button type="submit" class="button">Apply Filter</button>
-                            <a href="schedule_list.html" class="button">Reset</a>
+                            <a href="schedule_list.php" class="button">Reset</a>
                         </td>
                     </tr>
                 </table>

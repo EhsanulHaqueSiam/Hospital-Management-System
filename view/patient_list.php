@@ -1,3 +1,6 @@
+<?php
+require_once('../controller/sessionCheck.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,7 +30,7 @@
         <h2>Patient Management</h2>
 
         <div>
-            <a href="patient_add.html" class="button">Add New Patient</a>
+            <a href="patient_add.php" class="button">Add New Patient</a>
             <a href="#" class="button" id="export-xml-btn">Export to XML</a>
         </div>
 
