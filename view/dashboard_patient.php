@@ -1,5 +1,17 @@
 <?php
-require_once('../controller/sessionCheck.php');
+require_once('../controller/patientCheck.php');
+require_once('../model/patientModel.php');
+require_once('../model/appointmentModel.php');
+
+// Get logged-in patient's info
+$patient = getPatientByUserId($_SESSION['user_id']);
+
+if ($patient) {
+    // Get appointments for this patient
+    $appointments = getAppointmentsByPatient($patient['id']);
+} else {
+    $appointments = array();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -28,9 +40,9 @@ require_once('../controller/sessionCheck.php');
             <legend>Your Statistics</legend>
             <table border="1" cellpadding="10">
                 <tr>
-                    <td align="center"><b>Upcoming Appointments</b><br><br>2</td>
-                    <td align="center"><b>Medical Records</b><br><br>8</td>
-                    <td align="center"><b>Pending Bills</b><br><br>$150</td>
+                    <td align="center"><b>Upcoming Appointments</b><br><br><?php echo count($appointments); ?></td>
+                    <td align="center"><b>Blood
+                            Group</b><br><br><?php echo $patient ? $patient['blood_group'] : 'N/A'; ?></td>
                 </tr>
             </table>
         </fieldset>
@@ -39,20 +51,40 @@ require_once('../controller/sessionCheck.php');
 
         <!-- Appointment History -->
         <fieldset>
-            <legend>Appointment History</legend>
+            <legend>Your Appointments</legend>
             <table border="1" cellpadding="8" width="100%">
                 <tr>
-                    <th>Doctor</th>
-                    <th>Department</th>
+                    <th>ID</th>
+                    <th>Doctor Name</th>
                     <th>Date</th>
+                    <th>Time</th>
+                    <th>Reason</th>
                     <th>Status</th>
                 </tr>
-                <tr>
-                    <td>Dr. Md Ehsanul Haque</td>
-                    <td>General Medicine</td>
-                    <td>2024-12-16</td>
-                    <td>Completed</td>
-                </tr>
+                <?php if (count($appointments) > 0): ?>
+                    <?php
+                    require_once('../model/doctorModel.php');
+                    require_once('../model/userModel.php');
+                    foreach (array_slice($appointments, 0, 10) as $appointment):
+                        $doctor = getDoctorById($appointment['doctor_id']);
+                        $doctor_user = $doctor ? getUserById($doctor['user_id']) : null;
+                        ?>
+                        <tr>
+                            <td><?php echo $appointment['id']; ?></td>
+                            <td><?php echo $doctor_user ? 'Dr. ' . $doctor_user['full_name'] : 'Doctor #' . $appointment['doctor_id']; ?>
+                            </td>
+                            <td><?php echo $appointment['appointment_date']; ?></td>
+                            <td><?php echo isset($appointment['appointment_time']) ? $appointment['appointment_time'] : 'N/A'; ?>
+                            </td>
+                            <td><?php echo $appointment['reason']; ?></td>
+                            <td><?php echo $appointment['status']; ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="6" align="center">No appointments found</td>
+                    </tr>
+                <?php endif; ?>
             </table>
         </fieldset>
     </div>
