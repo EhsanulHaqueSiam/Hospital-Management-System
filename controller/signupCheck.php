@@ -1,13 +1,10 @@
 <?php
+require_once('../model/userModel.php');
+
 session_start();
 
-if (!isset($_SESSION['users'])) {
-    $_SESSION['users'] = array(
-        array('username' => 'admin', 'email' => 'admin@hospital.com', 'password' => 'admin123')
-    );
-}
-
 if (isset($_POST['signup'])) {
+
     $full_name = $_POST['full_name'];
     $email = $_POST['email'];
     $phone = $_POST['phone'];
@@ -16,28 +13,33 @@ if (isset($_POST['signup'])) {
     $confirm_password = $_POST['confirm_password'];
     $role = $_POST['role'];
 
-    $exists = false;
-    foreach ($_SESSION['users'] as $user) {
-        if ($user['username'] == $username || $user['email'] == $email) {
-            $exists = true;
-            break;
-        }
-    }
-
-    if ($exists) {
-        echo "Username or email already exists";
+    if ($full_name == "" || $email == "" || $phone == "" || $username == "" || $password == "" || $role == "") {
+        echo "All fields are required";
     } else if ($password != $confirm_password) {
         echo "Passwords do not match";
     } else {
-        $_SESSION['users'][] = array(
-            'full_name' => $full_name,
-            'email' => $email,
-            'phone' => $phone,
-            'username' => $username,
-            'password' => $password,
-            'role' => $role
-        );
-        header('location: ../view/auth_signin.php');
+        $existingUserByUsername = getUserByUsername($username);
+
+        if ($existingUserByUsername != false) {
+            echo "Username already exists";
+        } else {
+            $user = [
+                'full_name' => $full_name,
+                'email' => $email,
+                'phone' => $phone,
+                'username' => $username,
+                'password' => $password,
+                'role' => $role
+            ];
+
+            $status = addUser($user);
+
+            if ($status) {
+                header('location: ../view/auth_signin.php');
+            } else {
+                echo "Registration failed. Please try again.";
+            }
+        }
     }
 } else {
     header('location: ../view/auth_signup.php');
