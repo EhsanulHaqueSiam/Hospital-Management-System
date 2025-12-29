@@ -1,35 +1,46 @@
 <?php
+require_once('../model/userModel.php');
+
 session_start();
 
-if (!isset($_SESSION['users'])) {
-    $_SESSION['users'] = array(
-        array('username' => 'admin', 'email' => 'admin@hospital.com', 'password' => 'admin123')
-    );
-}
-
 if (isset($_POST['signin'])) {
-    $email_username = $_POST['email_username'];
+
+    $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $found = false;
-    foreach ($_SESSION['users'] as $user) {
-        if (($user['username'] == $email_username || $user['email'] == $email_username) && $user['password'] == $password) {
-            $found = true;
-            $_SESSION['username'] = $user['username'];
-            break;
-        }
-    }
-
-    if ($found) {
-        setcookie('status', 'true', time() + 3000, '/');
-
-        if (isset($_POST['remember_me'])) {
-            setcookie('remember_user', $email_username, time() + (86400 * 30), '/');
-        }
-
-        header('location: ../view/dashboard_main.php');
+    if ($username == "" || $password == "") {
+        echo "Username and password are required";
     } else {
-        echo "Invalid username/email or password";
+
+        $credentials = ['username' => $username, 'password' => $password];
+        $user = login($credentials);
+
+        if ($user != false) {
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['role'] = $user['role'];
+            $_SESSION['full_name'] = $user['full_name'];
+
+            setcookie('status', 'true', time() + 3000, '/');
+
+            if (isset($_POST['remember_me'])) {
+                setcookie('remember_user', $username, time() + (86400 * 30), '/');
+            }
+
+            // Redirect based on user role
+            if ($user['role'] == 'admin') {
+                header('location: ../view/dashboard_admin.php');
+            } elseif ($user['role'] == 'doctor') {
+                header('location: ../view/dashboard_doctor.php');
+            } elseif ($user['role'] == 'patient') {
+                header('location: ../view/dashboard_patient.php');
+            } else {
+                // Invalid role - logout and show error
+                echo "Invalid user role. Please contact administrator.";
+            }
+        } else {
+            echo "Invalid username or password";
+        }
     }
 } else {
     header('location: ../view/auth_signin.php');

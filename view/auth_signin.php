@@ -18,8 +18,8 @@
                 <legend>Login Details</legend>
                 <table>
                     <tr>
-                        <td>Email or Username:</td>
-                        <td><input type="text" name="email_username" value="" required></td>
+                        <td>Username:</td>
+                        <td><input type="text" name="username" value="" required></td>
                     </tr>
                     <tr>
                         <td></td>
