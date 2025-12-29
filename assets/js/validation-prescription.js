@@ -1,5 +1,3 @@
-/* Prescription Form Validation */
-
 function validatePrescriptionForm(form) {
     clearFormErrors(form);
     var valid = true;

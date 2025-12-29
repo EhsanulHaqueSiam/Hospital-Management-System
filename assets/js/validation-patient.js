@@ -1,5 +1,3 @@
-/* Patient Form Validation */
-
 function validatePatientForm(form) {
     clearFormErrors(form);
     var valid = true;

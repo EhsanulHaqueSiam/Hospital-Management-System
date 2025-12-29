@@ -160,12 +160,15 @@ a {
 .addbtn {
     background-color: darkgreen;
 }
+
 .edit {
     background-color: blue;
 }
+
 .delete {
     background-color: red;
 }
+
 .restock {
     background-color: green;
 }
