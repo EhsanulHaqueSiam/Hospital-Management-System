@@ -1,5 +1,9 @@
 <?php
 require_once('../controller/sessionCheck.php');
+require_once('../model/userModel.php');
+
+// Fetch logged-in user's data
+$user = getUserById($_SESSION['user_id']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -13,7 +17,20 @@ require_once('../controller/sessionCheck.php');
     <!-- Navbar -->
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
-        <a href="dashboard_main.php" class="navbar-link">Dashboard</a>
+        <?php
+        if ($_SESSION['role'] == 'admin') {
+            $dashboard_link = 'dashboard_admin.php';
+        } elseif ($_SESSION['role'] == 'doctor') {
+            $dashboard_link = 'dashboard_doctor.php';
+        } elseif ($_SESSION['role'] == 'patient') {
+            $dashboard_link = 'dashboard_patient.php';
+        } else {
+            // Undefined role - redirect to logout
+            header('location: ../controller/logout.php');
+            exit;
+        }
+        ?>
+        <a href="<?php echo $dashboard_link; ?>" class="navbar-link">Dashboard</a>
         <a href="profile_view.php" class="navbar-link">My Profile</a>
         <a href="../controller/logout.php" class="navbar-link">Logout</a>
     </div>
@@ -28,37 +45,37 @@ require_once('../controller/sessionCheck.php');
                 <tr>
                     <td>Profile Picture:</td>
                     <td>
-                        <img src="../assets/images/default.jpg" alt="Profile Picture" width="100" height="100"
-                            id="profile-picture">
+                        <img src="<?php echo $user && $user['profile_picture'] ? $user['profile_picture'] : '../assets/images/default.jpg'; ?>"
+                            alt="Profile Picture" width="100" height="100" id="profile-picture">
                     </td>
                 </tr>
                 <tr>
                     <td>Full Name:</td>
-                    <td>Md Ehsanul Haque</td>
+                    <td><?php echo $user ? $user['full_name'] : 'N/A'; ?></td>
                 </tr>
                 <tr>
                     <td>Email:</td>
-                    <td>22-49370-3@student.aiub.edu</td>
+                    <td><?php echo $user ? $user['email'] : 'N/A'; ?></td>
                 </tr>
                 <tr>
                     <td>Phone:</td>
-                    <td>01712378901</td>
+                    <td><?php echo $user ? $user['phone'] : 'N/A'; ?></td>
                 </tr>
                 <tr>
                     <td>Username:</td>
-                    <td><?php echo $_SESSION['username']; ?></td>
+                    <td><?php echo $user ? $user['username'] : 'N/A'; ?></td>
                 </tr>
                 <tr>
                     <td>Role:</td>
-                    <td>Patient</td>
+                    <td><?php echo $user ? $user['role'] : 'N/A'; ?></td>
                 </tr>
                 <tr>
                     <td>Registration Date:</td>
-                    <td>2024-01-01</td>
+                    <td><?php echo $user ? $user['registration_date'] : 'N/A'; ?></td>
                 </tr>
                 <tr>
                     <td>Address:</td>
-                    <td>1 Kuratoli, Dhaka 1229</td>
+                    <td><?php echo $user && $user['address'] ? $user['address'] : 'N/A'; ?></td>
                 </tr>
             </table>
         </fieldset>
