@@ -13,7 +13,20 @@ require_once('../controller/sessionCheck.php');
     <!-- Navbar -->
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
-        <a href="dashboard_main.php" class="navbar-link">Dashboard</a>
+        <?php
+        if ($_SESSION['role'] == 'admin') {
+            $dashboard_link = 'dashboard_admin.php';
+        } elseif ($_SESSION['role'] == 'doctor') {
+            $dashboard_link = 'dashboard_doctor.php';
+        } elseif ($_SESSION['role'] == 'patient') {
+            $dashboard_link = 'dashboard_patient.php';
+        } else {
+            // Undefined role - redirect to logout
+            header('location: ../controller/logout.php');
+            exit;
+        }
+        ?>
+        <a href="<?php echo $dashboard_link; ?>" class="navbar-link">Dashboard</a>
         <a href="profile_view.php" class="navbar-link">My Profile</a>
         <a href="../controller/logout.php" class="navbar-link">Logout</a>
     </div>
@@ -24,22 +37,13 @@ require_once('../controller/sessionCheck.php');
 
         <span class="success-message" id="success-message"></span>
 
-        <form method="POST" action="../controller/upload_picture.php" enctype="multipart/form-data"
-            onsubmit="return validatePicture()">
+        <form method="POST" action="../controller/upload_picture.php" enctype="multipart/form-data">
             <fieldset>
                 <legend>Profile Picture</legend>
                 <table>
                     <tr>
-                        <td>Current Picture:</td>
-                        <td>
-                            <img src="../assets/images/default.jpg" alt="Current Picture" width="100" height="100"
-                                id="current-picture">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>New Picture:</td>
-                        <td><input type="file" name="profile_picture" id="file-input" accept=".jpg,.jpeg,.png,.gif"
-                                onchange="previewPicture()"></td>
+                        <td>Image:</td>
+                        <td><input type="file" name="myfile" /></td>
                     </tr>
                     <tr>
                         <td></td>
@@ -47,24 +51,15 @@ require_once('../controller/sessionCheck.php');
                     </tr>
                     <tr>
                         <td></td>
-                        <td><span class="error-message" id="file-error"></span></td>
-                    </tr>
-                    <tr>
-                        <td>Preview:</td>
-                        <td><img src="" alt="Preview" width="100" height="100" id="preview-picture"
-                                style="display:none;"></td>
-                    </tr>
-                    <tr>
-                        <td></td>
                         <td>
-                            <input type="submit" name="upload" value="Upload Picture">
-                            <input type="submit" name="remove" value="Remove Picture">
+                            <input type="submit" name="submit" value="Upload" />
                             <a href="profile_view.php"><button type="button">Cancel</button></a>
                         </td>
                     </tr>
                 </table>
             </fieldset>
         </form>
+
     </div>
 
     <script src="../assets/js/profile.js"></script>
