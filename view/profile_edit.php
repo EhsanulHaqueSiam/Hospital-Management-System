@@ -10,9 +10,23 @@ require_once('../controller/sessionCheck.php');
 </head>
 
 <body>
+    <!-- Navbar -->
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
-        <a href="dashboard_main.php" class="navbar-link">Dashboard</a>
+        <?php
+        if ($_SESSION['role'] == 'admin') {
+            $dashboard_link = 'dashboard_admin.php';
+        } elseif ($_SESSION['role'] == 'doctor') {
+            $dashboard_link = 'dashboard_doctor.php';
+        } elseif ($_SESSION['role'] == 'patient') {
+            $dashboard_link = 'dashboard_patient.php';
+        } else {
+            // Undefined role - redirect to logout
+            header('location: ../controller/logout.php');
+            exit;
+        }
+        ?>
+        <a href="<?php echo $dashboard_link; ?>" class="navbar-link">Dashboard</a>
         <a href="profile_view.php" class="navbar-link">My Profile</a>
         <a href="../controller/logout.php" class="navbar-link">Logout</a>
     </div>
