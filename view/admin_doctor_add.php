@@ -1,5 +1,5 @@
 <?php
-require_once('../controller/sessionCheck.php');
+require_once('../controller/adminCheck.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -92,6 +92,10 @@ require_once('../controller/sessionCheck.php');
                     <tr>
                         <td>Bio:</td>
                         <td><textarea name="bio" rows="4" cols="40"></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>Address:</td>
+                        <td><textarea name="address" rows="3" cols="40"></textarea></td>
                     </tr>
                     <tr>
                         <td>Profile Picture:</td>
