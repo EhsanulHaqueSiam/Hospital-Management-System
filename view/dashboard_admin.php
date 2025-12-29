@@ -1,5 +1,17 @@
 <?php
-require_once('../controller/sessionCheck.php');
+require_once('../controller/adminCheck.php');
+require_once('../model/patientModel.php');
+require_once('../model/doctorModel.php');
+require_once('../model/appointmentModel.php');
+
+// Fetch real statistics
+$patients = getAllPatients();
+$doctors = getAllDoctors();
+$appointments = getAllAppointments();
+
+$totalPatients = count($patients);
+$totalDoctors = count($doctors);
+$totalAppointments = count($appointments);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -28,10 +40,9 @@ require_once('../controller/sessionCheck.php');
             <legend>Hospital Statistics</legend>
             <table border="1" cellpadding="10">
                 <tr>
-                    <td align="center"><b>Total Patients</b><br><br>150</td>
-                    <td align="center"><b>Total Doctors</b><br><br>25</td>
-                    <td align="center"><b>Today's Appointments</b><br><br>12</td>
-                    <td align="center"><b>Total Revenue</b><br><br>$45,000</td>
+                    <td align="center"><b>Total Patients</b><br><br><?php echo $totalPatients; ?></td>
+                    <td align="center"><b>Total Doctors</b><br><br><?php echo $totalDoctors; ?></td>
+                    <td align="center"><b>Total Appointments</b><br><br><?php echo $totalAppointments; ?></td>
                 </tr>
             </table>
         </fieldset>
@@ -52,17 +63,32 @@ require_once('../controller/sessionCheck.php');
             <legend>Recent Appointments</legend>
             <table border="1" cellpadding="8" width="100%">
                 <tr>
-                    <th>Patient</th>
-                    <th>Doctor</th>
+                    <th>ID</th>
+                    <th>Patient ID</th>
+                    <th>Doctor ID</th>
                     <th>Date</th>
+                    <th>Time</th>
+                    <th>Reason</th>
                     <th>Status</th>
                 </tr>
-                <tr>
-                    <td>Md Ehsanul Haque</td>
-                    <td>Dr. Md Ehsanul Haque</td>
-                    <td>2024-12-16</td>
-                    <td>Confirmed</td>
-                </tr>
+                <?php if (count($appointments) > 0): ?>
+                    <?php foreach (array_slice($appointments, 0, 5) as $appointment): ?>
+                        <tr>
+                            <td><?php echo $appointment['id']; ?></td>
+                            <td><?php echo $appointment['patient_id']; ?></td>
+                            <td><?php echo $appointment['doctor_id']; ?></td>
+                            <td><?php echo $appointment['appointment_date']; ?></td>
+                            <td><?php echo isset($appointment['appointment_time']) ? $appointment['appointment_time'] : 'N/A'; ?>
+                            </td>
+                            <td><?php echo $appointment['reason']; ?></td>
+                            <td><?php echo $appointment['status']; ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="7" align="center">No appointments found</td>
+                    </tr>
+                <?php endif; ?>
             </table>
         </fieldset>
     </div>
