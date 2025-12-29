@@ -1,5 +1,5 @@
 <?php
-require_once('../controller/sessionCheck.php');
+require_once('../controller/adminCheck.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
