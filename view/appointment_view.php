@@ -1,5 +1,28 @@
 <?php
 require_once('../controller/sessionCheck.php');
+require_once('../model/appointmentModel.php');
+require_once('../model/patientModel.php');
+require_once('../model/doctorModel.php');
+require_once('../model/userModel.php');
+
+$role = $_SESSION['role'];
+
+// Get appointment ID from URL
+$appointment_id = isset($_GET['id']) ? $_GET['id'] : 0;
+
+// Fetch appointment data
+$appointment = getAppointmentById($appointment_id);
+if (!$appointment) {
+    header('location: appointment_list.php');
+    exit;
+}
+
+// Fetch patient and doctor data
+$patient = getPatientById($appointment['patient_id']);
+$patient_user = $patient ? getUserById($patient['user_id']) : null;
+
+$doctor = getDoctorById($appointment['doctor_id']);
+$doctor_user = $doctor ? getUserById($doctor['user_id']) : null;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -7,130 +30,154 @@ require_once('../controller/sessionCheck.php');
 <head>
     <title>Appointment Details - Hospital Management System</title>
     <link rel="stylesheet" href="../assets/css/style.css">
-    <script src="../assets/js/validation-helpers.js"></script>
-    <script src="../assets/js/validation-fields.js"></script>
-    <script src="../assets/js/validation-patient.js"></script>
-    <script src="../assets/js/validation-appointment.js"></script>
-    <script src="../assets/js/validation-prescription.js"></script>
-    <script src="../assets/js/validation-record.js"></script>
-    <script src="../assets/js/validation-init.js"></script>
 </head>
 
 <body>
     <!-- Navbar -->
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
-        <a href="#" class="navbar-link">Dashboard</a>
-        <a href="#" class="navbar-link">My Profile</a>
-        <a href="#" class="navbar-link" id="logout-btn">Logout</a>
+        <?php if ($role == 'admin'): ?>
+            <a href="dashboard_admin.php" class="navbar-link">Dashboard</a>
+        <?php elseif ($role == 'doctor'): ?>
+            <a href="dashboard_doctor.php" class="navbar-link">Dashboard</a>
+        <?php else: ?>
+            <a href="dashboard_patient.php" class="navbar-link">Dashboard</a>
+        <?php endif; ?>
+        <a href="profile_view.php" class="navbar-link">My Profile</a>
+        <a href="../controller/logout.php" class="navbar-link">Logout</a>
     </div>
 
-    <!-- Main Content -->
+    <!-- Appointment Details -->
     <div class="main-container">
         <h2>Appointment Details</h2>
 
         <div>
-            <a href="appointment_list.php" class="button">Back to List</a>
-            <a href="appointment_edit.php?id=APT202501" class="button">Edit Appointment</a>
-            <button class="button" onclick="openCancelModal()">Cancel Appointment</button>
+            <a href="appointment_list.php"><button>Back to List</button></a>
+            <?php if ($role == 'admin'): ?>
+                <a href="appointment_edit.php?id=<?php echo $appointment['id']; ?>"><button>Edit</button></a>
+                <a href="../controller/delete_appointment.php?id=<?php echo $appointment['id']; ?>"
+                    onclick="return confirm('Are you sure?');"><button>Delete</button></a>
+            <?php endif; ?>
         </div>
 
-        <div>
-            <fieldset>
-                <legend>Appointment Info</legend>
-                <table cellpadding="8" width="100%">
-                    <tr>
-                        <td><b>Appointment ID:</b></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td><b>Date & Time:</b></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td><b>Status:</b></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td><b>Type:</b></td>
-                        <td></td>
-                    </tr>
-                </table>
-            </fieldset>
+        <br>
 
+        <fieldset>
+            <legend>Appointment Information</legend>
+            <table cellpadding="8" width="100%">
+                <tr>
+                    <td width="20%"><b>Appointment ID:</b></td>
+                    <td><?php echo $appointment['id']; ?></td>
+                </tr>
+                <tr>
+                    <td><b>Date:</b></td>
+                    <td><?php echo $appointment['appointment_date']; ?></td>
+                </tr>
+                <tr>
+                    <td><b>Time:</b></td>
+                    <td><?php echo $appointment['appointment_time']; ?></td>
+                </tr>
+                <tr>
+                    <td><b>Status:</b></td>
+                    <td>
+                        <span style="font-weight: bold; color: 
+                            <?php
+                            switch ($appointment['status']) {
+                                case 'pending':
+                                    echo 'orange';
+                                    break;
+                                case 'confirmed':
+                                    echo 'blue';
+                                    break;
+                                case 'completed':
+                                    echo 'green';
+                                    break;
+                                case 'cancelled':
+                                    echo 'red';
+                                    break;
+                                default:
+                                    echo 'black';
+                            }
+                            ?>;">
+                            <?php echo ucfirst($appointment['status']); ?>
+                        </span>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+
+        <br>
+
+        <fieldset>
+            <legend>Patient Information</legend>
+            <table cellpadding="8" width="100%">
+                <tr>
+                    <td width="20%"><b>Patient Name:</b></td>
+                    <td><?php echo $patient_user ? $patient_user['full_name'] : 'N/A'; ?></td>
+                </tr>
+                <tr>
+                    <td><b>Phone:</b></td>
+                    <td><?php echo $patient_user ? $patient_user['phone'] : 'N/A'; ?></td>
+                </tr>
+                <tr>
+                    <td><b>Email:</b></td>
+                    <td><?php echo $patient_user ? $patient_user['email'] : 'N/A'; ?></td>
+                </tr>
+            </table>
+        </fieldset>
+
+        <br>
+
+        <fieldset>
+            <legend>Doctor Information</legend>
+            <table cellpadding="8" width="100%">
+                <tr>
+                    <td width="20%"><b>Doctor Name:</b></td>
+                    <td><?php echo $doctor_user ? $doctor_user['full_name'] : 'N/A'; ?></td>
+                </tr>
+                <tr>
+                    <td><b>Specialization:</b></td>
+                    <td><?php echo $doctor ? $doctor['specialization'] : 'N/A'; ?></td>
+                </tr>
+            </table>
+        </fieldset>
+
+        <br>
+
+        <fieldset>
+            <legend>Reason & Notes</legend>
+            <table cellpadding="8" width="100%">
+                <tr>
+                    <td width="20%"><b>Reason:</b></td>
+                    <td><?php echo $appointment['reason'] ? $appointment['reason'] : 'Not specified'; ?></td>
+                </tr>
+                <tr>
+                    <td><b>Notes:</b></td>
+                    <td><?php echo $appointment['notes'] ? $appointment['notes'] : 'No notes'; ?></td>
+                </tr>
+            </table>
+        </fieldset>
+
+        <?php if ($role == 'doctor' || $role == 'admin'): ?>
             <br>
-
             <fieldset>
-                <legend>Patient Info</legend>
-                <table cellpadding="8" width="100%">
-                    <tr>
-                        <td><b>Name:</b></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td><b>Age/Gender:</b></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td><b>Contact:</b></td>
-                        <td></td>
-                    </tr>
-                </table>
+                <legend>Update Status</legend>
+                <form method="POST" action="../controller/update_appointment_status.php">
+                    <input type="hidden" name="appointment_id" value="<?php echo $appointment['id']; ?>">
+                    <select name="status" required>
+                        <option value="pending" <?php echo $appointment['status'] == 'pending' ? 'selected' : ''; ?>>Pending
+                        </option>
+                        <option value="confirmed" <?php echo $appointment['status'] == 'confirmed' ? 'selected' : ''; ?>>
+                            Confirmed</option>
+                        <option value="completed" <?php echo $appointment['status'] == 'completed' ? 'selected' : ''; ?>>
+                            Completed</option>
+                        <option value="cancelled" <?php echo $appointment['status'] == 'cancelled' ? 'selected' : ''; ?>>
+                            Cancelled</option>
+                    </select>
+                    <input type="submit" name="submit" value="Update Status">
+                </form>
             </fieldset>
-
-            <br>
-
-            <fieldset>
-                <legend>Doctor Info</legend>
-                <table cellpadding="8" width="100%">
-                    <tr>
-                        <td><b>Doctor:</b></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td><b>Department:</b></td>
-                        <td></td>
-                    </tr>
-                </table>
-            </fieldset>
-
-            <br>
-
-            <fieldset>
-                <legend>Medical Info</legend>
-                <p><b>Symptoms:</b> </p>
-                <br>
-                <p><b>Prescription:</b></p>
-
-                <div>
-                    No prescription added yet.
-                </div>
-            </fieldset>
-        </div>
-    </div>
-
-    <!-- Cancel Modal -->
-    <div class="logout-modal" id="cancel-appointment-modal" style="display: none;">
-        <div class="modal-content">
-            <h3>Cancel Appointment</h3>
-            <p>Are you sure you want to cancel this appointment?</p>
-            <textarea placeholder="Reason for cancellation" style="width: 100%; height: 60px;"></textarea>
-            <br><br>
-            <button onclick="confirmCancel()">Confirm Cancel</button>
-            <button onclick="closeCancelModal()" class="btn-cancel">Back</button>
-        </div>
-    </div>
-
-
-
-    <!-- Logout Modal -->
-    <div class="logout-modal" id="logout-modal">
-        <div class="modal-content">
-            <p>Are you sure you want to logout?</p>
-            <br>
-            <button id="confirm-logout">Yes</button>
-            <button id="cancel-logout" class="btn-cancel">Cancel</button>
-        </div>
+        <?php endif; ?>
     </div>
 </body>
 

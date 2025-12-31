@@ -1,5 +1,26 @@
 <?php
 require_once('../controller/sessionCheck.php');
+require_once('../model/appointmentModel.php');
+require_once('../model/patientModel.php');
+require_once('../model/doctorModel.php');
+require_once('../model/userModel.php');
+
+// Get user role to determine what to show
+$role = $_SESSION['role'];
+$user_id = $_SESSION['user_id'];
+
+// Fetch appointments based on role
+if ($role == 'admin') {
+    $appointments = getAllAppointments();
+} elseif ($role == 'doctor') {
+    require_once('../model/doctorModel.php');
+    $doctor = getDoctorByUserId($user_id);
+    $appointments = $doctor ? getAppointmentsByDoctor($doctor['id']) : [];
+} else {
+    require_once('../model/patientModel.php');
+    $patient = getPatientByUserId($user_id);
+    $appointments = $patient ? getAppointmentsByPatient($patient['id']) : [];
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -7,109 +28,106 @@ require_once('../controller/sessionCheck.php');
 <head>
     <title>Appointment List - Hospital Management System</title>
     <link rel="stylesheet" href="../assets/css/style.css">
-    <script src="../assets/js/validation-helpers.js"></script>
-    <script src="../assets/js/validation-fields.js"></script>
-    <script src="../assets/js/validation-patient.js"></script>
-    <script src="../assets/js/validation-appointment.js"></script>
-    <script src="../assets/js/validation-prescription.js"></script>
-    <script src="../assets/js/validation-record.js"></script>
-    <script src="../assets/js/validation-init.js"></script>
 </head>
 
 <body>
     <!-- Navbar -->
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
-        <a href="#" class="navbar-link">Dashboard</a>
-        <a href="#" class="navbar-link">My Profile</a>
-        <a href="#" class="navbar-link" id="logout-btn">Logout</a>
+        <?php if ($role == 'admin'): ?>
+            <a href="dashboard_admin.php" class="navbar-link">Dashboard</a>
+        <?php elseif ($role == 'doctor'): ?>
+            <a href="dashboard_doctor.php" class="navbar-link">Dashboard</a>
+        <?php else: ?>
+            <a href="dashboard_patient.php" class="navbar-link">Dashboard</a>
+        <?php endif; ?>
+        <a href="profile_view.php" class="navbar-link">My Profile</a>
+        <a href="../controller/logout.php" class="navbar-link">Logout</a>
     </div>
 
-    <!-- Main Content -->
+    <!-- Appointment List -->
     <div class="main-container">
         <h2>Appointment Management</h2>
 
-        <div>
-            <a href="appointment_add.php" class="button">Book Appointment</a>
-            <a href="#" class="button" id="export-xml-btn">Export to XML</a>
-        </div>
-
+        <!-- Actions -->
         <fieldset>
-            <legend>Filter Appointments</legend>
-            <form action="" method="GET">
-                <input type="text" name="search" placeholder="Search Patient, Doctor, ID...">
-
-                <select name="status">
-                    <option value="">All Statuses</option>
-
-                </select>
-
-                <br><label>From:</label>
-                <input type="date" name="date_from">
-                <label>To:</label>
-                <input type="date" name="date_to">
-
-                <button type="submit" class="button">Filter</button>
-            </form>
+            <legend>Actions</legend>
+            <table>
+                <tr>
+                    <td>
+                        <form method="GET" action="">
+                            Search: <input type="text" name="search" value="">
+                            <select name="status">
+                                <option value="">All Statuses</option>
+                                <option value="pending">Pending</option>
+                                <option value="confirmed">Confirmed</option>
+                                <option value="completed">Completed</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                            <input type="submit" value="Filter">
+                        </form>
+                    </td>
+                    <td>
+                        <a href="appointment_add.php"><button type="button">Book Appointment</button></a>
+                    </td>
+                </tr>
+            </table>
         </fieldset>
 
         <br>
 
+        <!-- Appointment Table -->
         <fieldset>
             <legend>All Appointments</legend>
-            <table border="1" cellpadding="10" width="100%">
-                <thead>
-                    <tr>
-                        <th>Appointment ID</th>
-                        <th>Patient Name</th>
-                        <th>Doctor Name</th>
-                        <th>Date & Time</th>
-                        <th>Type</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
+            <table border="1" cellpadding="8" width="100%">
+                <tr>
+                    <th>ID</th>
+                    <th>Patient Name</th>
+                    <th>Doctor Name</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+                <?php if (count($appointments) > 0): ?>
+                    <?php foreach ($appointments as $appointment): ?>
+                        <?php
+                        // Fetch patient and doctor info
+                        $patient = getPatientById($appointment['patient_id']);
+                        $patient_user = $patient ? getUserById($patient['user_id']) : null;
 
-                    <!-- Rows will be generated here by PHP -->
+                        $doctor = getDoctorById($appointment['doctor_id']);
+                        $doctor_user = $doctor ? getUserById($doctor['user_id']) : null;
+                        ?>
+                        <tr>
+                            <td><?php echo $appointment['id']; ?></td>
+                            <td><?php echo $patient_user ? $patient_user['full_name'] : 'N/A'; ?></td>
+                            <td><?php echo $doctor_user ? $doctor_user['full_name'] : 'N/A'; ?></td>
+                            <td><?php echo $appointment['appointment_date']; ?></td>
+                            <td><?php echo $appointment['appointment_time']; ?></td>
+                            <td><?php echo ucfirst($appointment['status']); ?></td>
+                            <td>
+                                <a href="appointment_view.php?id=<?php echo $appointment['id']; ?>"><button>View</button></a>
+                                <?php if ($role == 'admin'): ?>
+                                    <a href="appointment_edit.php?id=<?php echo $appointment['id']; ?>"><button>Edit</button></a>
+                                    <a href="../controller/delete_appointment.php?id=<?php echo $appointment['id']; ?>"
+                                        onclick="return confirm('Are you sure?');"><button>Delete</button></a>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
                     <tr>
-                        <td colspan="7" style="text-align:center;">No appointments found.</td>
+                        <td colspan="7" align="center">No appointments found</td>
                     </tr>
-
-                </tbody>
+                <?php endif; ?>
             </table>
 
             <br>
 
-            <div class="pagination">
-                <span>Page 1 of 3</span>
-                <a href="#">Next ></a>
+            <div class="pagination-container">
             </div>
         </fieldset>
-    </div>
-
-    <!-- Cancel Modal (Reusing Logout Modal Style) -->
-    <div class="logout-modal" id="cancel-appointment-modal" style="display: none;">
-        <div class="modal-content">
-            <h3>Cancel Appointment</h3>
-            <p>Are you sure you want to cancel this appointment?</p>
-            <textarea placeholder="Reason for cancellation (Optional)"></textarea>
-            <br><br>
-            <button onclick="confirmCancel()">Confirm Cancel</button>
-            <button onclick="closeCancelModal()" class="btn-cancel">Back</button>
-        </div>
-    </div>
-
-
-
-    <!-- Logout Modal -->
-    <div class="logout-modal" id="logout-modal">
-        <div class="modal-content">
-            <p>Are you sure you want to logout?</p>
-            <br>
-            <button id="confirm-logout">Yes</button>
-            <button id="cancel-logout" class="btn-cancel">Cancel</button>
-        </div>
     </div>
 </body>
 
