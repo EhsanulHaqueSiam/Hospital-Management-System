@@ -1,123 +1,133 @@
 <?php
 require_once('../controller/sessionCheck.php');
+require_once('../model/medicalRecordModel.php');
+require_once('../model/patientModel.php');
+require_once('../model/userModel.php');
+
+$role = $_SESSION['role'];
+
+// Get record ID from URL
+$record_id = isset($_GET['id']) ? $_GET['id'] : 0;
+
+// Fetch record data
+$record = getMedicalRecordById($record_id);
+if (!$record) {
+    header('location: record_list.php');
+    exit;
+}
+
+// Fetch patient and uploader data
+$patient = getPatientById($record['patient_id']);
+$patient_user = $patient ? getUserById($patient['user_id']) : null;
+
+$uploader = getUserById($record['uploaded_by']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <title>View Record - Hospital Management System</title>
+    <title>Medical Record Details - Hospital Management System</title>
     <link rel="stylesheet" href="../assets/css/style.css">
-    <script src="../assets/js/validation-helpers.js"></script>
-    <script src="../assets/js/validation-fields.js"></script>
-    <script src="../assets/js/validation-patient.js"></script>
-    <script src="../assets/js/validation-appointment.js"></script>
-    <script src="../assets/js/validation-prescription.js"></script>
-    <script src="../assets/js/validation-record.js"></script>
-    <script src="../assets/js/validation-init.js"></script>
 </head>
 
 <body>
     <!-- Navbar -->
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
-        <a href="#" class="navbar-link">Dashboard</a>
-        <a href="#" class="navbar-link">My Profile</a>
-        <a href="#" class="navbar-link" id="logout-btn">Logout</a>
+        <?php if ($role == 'admin'): ?>
+            <a href="dashboard_admin.php" class="navbar-link">Dashboard</a>
+        <?php elseif ($role == 'doctor'): ?>
+            <a href="dashboard_doctor.php" class="navbar-link">Dashboard</a>
+        <?php else: ?>
+            <a href="dashboard_patient.php" class="navbar-link">Dashboard</a>
+        <?php endif; ?>
+        <a href="profile_view.php" class="navbar-link">My Profile</a>
+        <a href="../controller/logout.php" class="navbar-link">Logout</a>
     </div>
 
-    <!-- Main Content -->
+    <!-- Record Details -->
     <div class="main-container">
         <h2>Medical Record Details</h2>
 
         <div>
-            <a href="record_list.php" class="button">Back to List</a>
-
-            <button class="button" id="delete-record-btn">Delete Record</button>
+            <a href="record_list.php"><button>Back to Records</button></a>
+            <?php if ($role == 'admin'): ?>
+                <a href="../controller/delete_record.php?id=<?php echo $record['id']; ?>"
+                    onclick="return confirm('Are you sure?');"><button>Delete</button></a>
+            <?php endif; ?>
         </div>
 
-        <div>
-            <fieldset>
-                <legend>Record Info</legend>
-                <table cellpadding="8" width="100%">
-                    <tr>
-                        <td><b>Record ID:</b></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td><b>Type:</b></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td><b>Date:</b></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td><b>Uploaded By:</b></td>
-                        <td></td>
-                    </tr>
-                </table>
-            </fieldset>
+        <br>
 
-            <br>
+        <fieldset>
+            <legend>Record Information</legend>
+            <table cellpadding="8" width="100%">
+                <tr>
+                    <td width="20%"><b>Record ID:</b></td>
+                    <td><?php echo $record['id']; ?></td>
+                </tr>
+                <tr>
+                    <td><b>Record Type:</b></td>
+                    <td><?php echo $record['record_type']; ?></td>
+                </tr>
+                <tr>
+                    <td><b>Record Date:</b></td>
+                    <td><?php echo $record['record_date']; ?></td>
+                </tr>
+            </table>
+        </fieldset>
 
-            <fieldset>
-                <legend>Patient Info</legend>
-                <table cellpadding="8" width="100%">
-                    <tr>
-                        <td><b>Name:</b></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td><b>Age/Gender:</b></td>
-                        <td></td>
-                    </tr>
-                </table>
-            </fieldset>
+        <br>
 
-            <br>
+        <fieldset>
+            <legend>Patient Information</legend>
+            <table cellpadding="8" width="100%">
+                <tr>
+                    <td width="20%"><b>Patient Name:</b></td>
+                    <td><?php echo $patient_user ? $patient_user['full_name'] : 'N/A'; ?></td>
+                </tr>
+                <tr>
+                    <td><b>Patient ID:</b></td>
+                    <td><?php echo $record['patient_id']; ?></td>
+                </tr>
+            </table>
+        </fieldset>
 
-            <fieldset>
-                <legend>Description</legend>
+        <br>
+
+        <fieldset>
+            <legend>Description</legend>
+            <p><?php echo nl2br($record['description']); ?></p>
+        </fieldset>
+
+        <br>
+
+        <fieldset>
+            <legend>Attached File</legend>
+            <?php if ($record['file_path']): ?>
                 <p>
-
+                    <a href="<?php echo $record['file_path']; ?>" target="_blank"><button>View/Download File</button></a>
                 </p>
-            </fieldset>
+            <?php else: ?>
+                <p>No file attached to this record.</p>
+            <?php endif; ?>
+        </fieldset>
 
-            <br>
+        <br>
 
-            <fieldset>
-                <legend>Files</legend>
-
-                <div class="file-preview-item">
-                    <span>
-                        <b>report_sample.pdf</b>
-                    </span>
-                    <a href="#" class="button">Download</a>
-                </div>
-
-            </fieldset>
-        </div>
-    </div>
-
-    <!-- Delete Modal -->
-    <div class="logout-modal" id="delete-record-modal" style="display: none;">
-        <div class="modal-content">
-            <h3>Delete Record</h3>
-            <p>Are you sure you want to delete this medical record? This action cannot be undone.</p>
-            <br>
-            <button id="confirm-delete-record">Yes, Delete</button>
-            <button id="cancel-delete-record" class="btn-cancel">Cancel</button>
-        </div>
-    </div>
-
-    <!-- Logout Modal -->
-    <div class="logout-modal" id="logout-modal">
-        <div class="modal-content">
-            <p>Are you sure you want to logout?</p>
-            <br>
-            <button id="confirm-logout">Yes</button>
-            <button id="cancel-logout" class="btn-cancel">Cancel</button>
-        </div>
+        <fieldset>
+            <legend>Metadata</legend>
+            <table cellpadding="8" width="100%">
+                <tr>
+                    <td width="20%"><b>Uploaded By:</b></td>
+                    <td><?php echo $uploader ? $uploader['full_name'] : 'N/A'; ?></td>
+                </tr>
+                <tr>
+                    <td><b>Upload Date:</b></td>
+                    <td><?php echo $record['upload_date']; ?></td>
+                </tr>
+            </table>
+        </fieldset>
     </div>
 </body>
 

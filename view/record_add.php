@@ -1,5 +1,18 @@
 <?php
 require_once('../controller/sessionCheck.php');
+require_once('../model/patientModel.php');
+require_once('../model/userModel.php');
+
+$role = $_SESSION['role'];
+
+// Only admin and doctor can add records
+if ($role != 'admin' && $role != 'doctor') {
+    header('location: record_list.php');
+    exit;
+}
+
+// Fetch all patients for dropdown
+$patients = getAllPatients();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -7,39 +20,38 @@ require_once('../controller/sessionCheck.php');
 <head>
     <title>Upload Medical Record - Hospital Management System</title>
     <link rel="stylesheet" href="../assets/css/style.css">
-    <script src="../assets/js/validation-helpers.js"></script>
-    <script src="../assets/js/validation-fields.js"></script>
-    <script src="../assets/js/validation-patient.js"></script>
-    <script src="../assets/js/validation-appointment.js"></script>
-    <script src="../assets/js/validation-prescription.js"></script>
-    <script src="../assets/js/validation-record.js"></script>
-    <script src="../assets/js/validation-init.js"></script>
 </head>
 
 <body>
     <!-- Navbar -->
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
-        <a href="#" class="navbar-link">Dashboard</a>
-        <a href="#" class="navbar-link">My Profile</a>
-        <a href="#" class="navbar-link" id="logout-btn">Logout</a>
+        <?php if ($role == 'admin'): ?>
+            <a href="dashboard_admin.php" class="navbar-link">Dashboard</a>
+        <?php else: ?>
+            <a href="dashboard_doctor.php" class="navbar-link">Dashboard</a>
+        <?php endif; ?>
+        <a href="profile_view.php" class="navbar-link">My Profile</a>
+        <a href="../controller/logout.php" class="navbar-link">Logout</a>
     </div>
 
-    <!-- Main Content -->
+    <!-- Upload Record Form -->
     <div class="main-container">
         <h2>Upload Medical Record</h2>
 
-        <form action="" method="POST" enctype="multipart/form-data" onsubmit="return validateRecordForm(this)">
+        <form method="POST" action="../controller/add_record.php" enctype="multipart/form-data">
             <fieldset>
-                <legend>Record Details</legend>
-                <table cellpadding="10" width="100%">
+                <legend>Record Information</legend>
+                <table cellpadding="8" width="100%">
                     <tr>
                         <td>Patient:</td>
                         <td>
-
                             <select name="patient_id" required>
                                 <option value="">-- Select Patient --</option>
-
+                                <?php foreach ($patients as $p): ?>
+                                    <?php $p_user = getUserById($p['user_id']); ?>
+                                    <option value="<?php echo $p['id']; ?>"><?php echo $p_user['full_name']; ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </td>
                     </tr>
@@ -47,22 +59,30 @@ require_once('../controller/sessionCheck.php');
                         <td>Record Type:</td>
                         <td>
                             <select name="record_type" required>
-
+                                <option value="">-- Select Type --</option>
+                                <option value="Lab Report">Lab Report</option>
+                                <option value="X-Ray">X-Ray</option>
+                                <option value="MRI">MRI</option>
+                                <option value="CT Scan">CT Scan</option>
+                                <option value="Prescription">Prescription</option>
+                                <option value="Diagnosis">Diagnosis</option>
+                                <option value="Other">Other</option>
                             </select>
                         </td>
                     </tr>
                     <tr>
                         <td>Record Date:</td>
-                        <td>
-                            <input type="date" name="record_date" required>
-
-                        </td>
+                        <td><input type="date" name="record_date" value="<?php echo date('Y-m-d'); ?>" required></td>
                     </tr>
                     <tr>
-                        <td valign="top">Description:</td>
+                        <td>Description:</td>
+                        <td><textarea name="description" rows="4" cols="50" required></textarea></td>
+                    </tr>
+                    <tr>
+                        <td>Upload File:</td>
                         <td>
-                            <textarea name="description" rows="4"
-                                placeholder="Enter details about the record..."></textarea>
+                            <input type="file" name="record_file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+                            <br><small>Accepted: PDF, Images, Word documents (Max 5MB)</small>
                         </td>
                     </tr>
                 </table>
@@ -70,34 +90,11 @@ require_once('../controller/sessionCheck.php');
 
             <br>
 
-            <fieldset>
-                <legend>Attachments</legend>
-                <p>Select files to upload (Max 5 files, 10MB each). Supported formats: PDF, JPG, PNG.</p>
-                <br>
-                <input type="file" name="record_files[]" id="record-file-input" multiple accept=".pdf,.jpg,.jpeg,.png">
-
-                <div class="file-preview-area" id="file-preview-container" style="display: none;">
-                    <!-- JS will populate preview here -->
-                </div>
-            </fieldset>
-
-            <br>
-
             <div>
-                <button type="submit" name="upload_record" class="button">Upload Record</button>
-                <a href="record_list.php" class="button btn-cancel">Cancel</a>
+                <input type="submit" name="submit" value="Upload Record">
+                <a href="record_list.php"><button type="button">Cancel</button></a>
             </div>
         </form>
-    </div>
-
-    <!-- Logout Modal -->
-    <div class="logout-modal" id="logout-modal">
-        <div class="modal-content">
-            <p>Are you sure you want to logout?</p>
-            <br>
-            <button id="confirm-logout">Yes</button>
-            <button id="cancel-logout" class="btn-cancel">Cancel</button>
-        </div>
     </div>
 </body>
 
