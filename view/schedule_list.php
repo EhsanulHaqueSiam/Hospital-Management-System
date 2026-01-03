@@ -1,105 +1,133 @@
 <?php
-require_once('../controller/sessionCheck.php');
+require_once('../controller/doctorCheck.php');
+require_once('../model/appointmentModel.php');
+require_once('../model/patientModel.php');
+require_once('../model/doctorModel.php');
+require_once('../model/userModel.php');
+
+$user_id = $_SESSION['user_id'];
+
+// Get doctor for current user
+$doctor = getDoctorByUserId($user_id);
+
+// Fetch all appointments for this doctor
+$appointments = $doctor ? getAppointmentsByDoctor($doctor['id']) : [];
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <title>Appointment Schedule - Hospital Management System</title>
+    <title>My Schedule - Hospital Management System</title>
     <link rel="stylesheet" href="../assets/css/style.css">
-    <script src="../assets/js/validation-helpers.js"></script>
-    <script src="../assets/js/validation-fields.js"></script>
-    <script src="../assets/js/validation-patient.js"></script>
-    <script src="../assets/js/validation-appointment.js"></script>
-    <script src="../assets/js/validation-prescription.js"></script>
-    <script src="../assets/js/validation-record.js"></script>
-    <script src="../assets/js/validation-init.js"></script>
 </head>
 
 <body>
     <!-- Navbar -->
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
-        <a href="#" class="navbar-link">Dashboard</a>
-        <a href="#" class="navbar-link">My Profile</a>
-        <a href="#" class="navbar-link" id="logout-btn">Logout</a>
+        <a href="dashboard_doctor.php" class="navbar-link">Dashboard</a>
+        <a href="profile_view.php" class="navbar-link">My Profile</a>
+        <a href="../controller/logout.php" class="navbar-link">Logout</a>
     </div>
 
-    <!-- Main Content -->
+    <!-- Schedule List -->
     <div class="main-container">
-        <h2>Appointment Schedule</h2>
+        <h2>My Appointment Schedule</h2>
 
-        <div>
-            <a href="schedule_today.php" class="button">View Today's Timeline</a>
-            <button class="button" id="print-btn">Print Schedule</button>
-        </div>
-
+        <!-- Filter -->
         <fieldset>
-            <legend>Filter Options</legend>
-            <form action="" method="GET">
-                <table width="100%">
+            <legend>Filter</legend>
+            <form method="GET" action="">
+                <table>
                     <tr>
                         <td>
-
-                            <select name="doctor_id">
-                                <option value="">-- All Doctors --</option>
-
+                            Date: <input type="date" name="date" value="">
+                        </td>
+                        <td>
+                            Status:
+                            <select name="status">
+                                <option value="">All</option>
+                                <option value="pending">Pending</option>
+                                <option value="confirmed">Confirmed</option>
+                                <option value="completed">Completed</option>
+                                <option value="cancelled">Cancelled</option>
                             </select>
                         </td>
                         <td>
-                            <label>From:</label>
-                            <input type="date" name="date_from">
-                        </td>
-                        <td>
-                            <label>To:</label>
-                            <input type="date" name="date_to">
-                        </td>
-                        <td>
-                            <button type="submit" class="button">Apply Filter</button>
-                            <a href="schedule_list.php" class="button">Reset</a>
+                            <input type="submit" value="Filter">
                         </td>
                     </tr>
                 </table>
             </form>
-
-            <br>
-
-            <button class="filter-btn active">All</button>
         </fieldset>
 
         <br>
 
+        <!-- Schedule Table -->
         <fieldset>
-            <legend>Schedule Results</legend>
-
-            <p>Showing appointments for: <b>All Dates</b></p>
-
-            <table border="1" cellpadding="10" width="100%">
-                <thead>
+            <legend>All Appointments</legend>
+            <table border="1" cellpadding="8" width="100%">
+                <tr>
+                    <th>ID</th>
+                    <th>Patient Name</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Reason</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+                <?php if (count($appointments) > 0): ?>
+                    <?php foreach ($appointments as $appointment): ?>
+                        <?php
+                        $patient = getPatientById($appointment['patient_id']);
+                        $patient_user = $patient ? getUserById($patient['user_id']) : null;
+                        ?>
+                        <tr>
+                            <td><?php echo $appointment['id']; ?></td>
+                            <td><?php echo $patient_user ? $patient_user['full_name'] : 'N/A'; ?></td>
+                            <td><?php echo $appointment['appointment_date']; ?></td>
+                            <td><?php echo $appointment['appointment_time']; ?></td>
+                            <td><?php echo substr($appointment['reason'], 0, 30) . '...'; ?></td>
+                            <td>
+                                <span style="font-weight: bold; color: 
+                                    <?php
+                                    switch ($appointment['status']) {
+                                        case 'pending':
+                                            echo 'orange';
+                                            break;
+                                        case 'confirmed':
+                                            echo 'blue';
+                                            break;
+                                        case 'completed':
+                                            echo 'green';
+                                            break;
+                                        case 'cancelled':
+                                            echo 'red';
+                                            break;
+                                        default:
+                                            echo 'black';
+                                    }
+                                    ?>;">
+                                    <?php echo ucfirst($appointment['status']); ?>
+                                </span>
+                            </td>
+                            <td>
+                                <a href="appointment_view.php?id=<?php echo $appointment['id']; ?>"><button>View</button></a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
                     <tr>
-                        <th>Time</th>
-                        <th>Patient Name</th>
-                        <th>Doctor</th>
-                        <th>Type</th>
-                        <th>Status</th>
-                        <th>Actions</th>
+                        <td colspan="7" align="center">No appointments scheduled</td>
                     </tr>
-                </thead>
-                <tbody>
-
-                </tbody>
+                <?php endif; ?>
             </table>
-        </fieldset>
-    </div>
 
-    <!-- Logout Modal -->
-    <div class="logout-modal" id="logout-modal">
-        <div class="modal-content">
-            <p>Are you sure you want to logout?</p>
             <br>
-            <button id="confirm-logout">Yes</button>
-            <button id="cancel-logout" class="btn-cancel">Cancel</button>
-        </div>
+
+            <div class="pagination-container">
+            </div>
+        </fieldset>
     </div>
 </body>
 
