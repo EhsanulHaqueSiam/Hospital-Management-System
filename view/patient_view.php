@@ -1,7 +1,15 @@
 <?php
-require_once('../controller/adminCheck.php');
+require_once('../controller/sessionCheck.php');
 require_once('../model/patientModel.php');
 require_once('../model/userModel.php');
+
+$role = $_SESSION['role'];
+
+// Only admin and doctor can access this page
+if ($role != 'admin' && $role != 'doctor') {
+    header('location: dashboard_patient.php');
+    exit;
+}
 
 // Get patient ID from URL
 $patient_id = isset($_GET['id']) ? $_GET['id'] : 0;
@@ -25,10 +33,14 @@ $user = getUserById($patient['user_id']);
 </head>
 
 <body>
-    <!-- Navbar -->
+
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
-        <a href="dashboard_admin.php" class="navbar-link">Dashboard</a>
+        <?php if ($role == 'admin'): ?>
+            <a href="dashboard_admin.php" class="navbar-link">Dashboard</a>
+        <?php else: ?>
+            <a href="dashboard_doctor.php" class="navbar-link">Dashboard</a>
+        <?php endif; ?>
         <a href="profile_view.php" class="navbar-link">My Profile</a>
         <a href="../controller/logout.php" class="navbar-link">Logout</a>
     </div>
@@ -39,9 +51,11 @@ $user = getUserById($patient['user_id']);
 
         <div>
             <a href="patient_list.php"><button>Back to List</button></a>
-            <a href="patient_edit.php?id=<?php echo $patient['id']; ?>"><button>Edit Patient</button></a>
-            <a href="../controller/delete_patient.php?id=<?php echo $patient['id']; ?>"
-                onclick="return confirm('Are you sure?');"><button>Delete</button></a>
+            <?php if ($role == 'admin'): ?>
+                <a href="patient_edit.php?id=<?php echo $patient['id']; ?>"><button>Edit Patient</button></a>
+                <a href="../controller/delete_patient.php?id=<?php echo $patient['id']; ?>"
+                    onclick="return confirm('Are you sure?');"><button>Delete</button></a>
+            <?php endif; ?>
         </div>
 
         <br>
