@@ -8,7 +8,9 @@ if (isset($_POST['submit'])) {
     if (isset($_FILES['myfile']) && $_FILES['myfile']['error'] == 0) {
         $src = $_FILES['myfile']['tmp_name'];
         $original_filename = $_FILES['myfile']['name'];
-        $ext = explode('.', $original_filename);
+
+        // Use pathinfo to reliably get extension
+        $file_ext = strtolower(pathinfo($original_filename, PATHINFO_EXTENSION));
 
         $target_dir = "../assets/uploads/profiles/";
 
@@ -16,12 +18,14 @@ if (isset($_POST['submit'])) {
             mkdir($target_dir, 0777, true);
         }
 
-        $random_filename = time() . "." . $ext[1];
+        $random_filename = time() . "." . $file_ext;
         $des = $target_dir . $random_filename;
 
         $allowed_types = array('jpg', 'jpeg', 'png', 'gif');
-        if (!in_array(strtolower($ext[1]), $allowed_types)) {
+        if (!in_array($file_ext, $allowed_types)) {
             echo "Only JPG, JPEG, PNG & GIF files are allowed!";
+            echo "<br>Debug: Detected extension = '$file_ext'";
+            echo "<br><a href='../view/profile_upload_picture.php'>Go Back</a>";
             exit;
         }
 

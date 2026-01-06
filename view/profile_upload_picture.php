@@ -43,7 +43,7 @@ require_once('../controller/sessionCheck.php');
                 <table>
                     <tr>
                         <td>Image:</td>
-                        <td><input type="file" name="myfile" /></td>
+                        <td><input type="file" name="myfile" accept=".jpg,.jpeg,.png,.gif,image/*" /></td>
                     </tr>
                     <tr>
                         <td></td>
