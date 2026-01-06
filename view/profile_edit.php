@@ -36,13 +36,18 @@ require_once('../controller/sessionCheck.php');
 
         <span class="success-message" id="success-message"></span>
 
+        <?php
+        require_once('../model/userModel.php');
+        $user = getUserById($_SESSION['user_id']);
+        ?>
+
         <form method="POST" action="../controller/edit_profile.php" onsubmit="return validateEditProfile()">
             <fieldset>
                 <legend>Update Information</legend>
                 <table>
                     <tr>
                         <td>Full Name:</td>
-                        <td><input type="text" name="full_name" value="Md Ehsanul Haque"
+                        <td><input type="text" name="full_name" value="<?php echo htmlspecialchars($user['full_name']); ?>"
                                 onblur="validateProfileNameBlur()" required></td>
                     </tr>
                     <tr>
@@ -50,8 +55,12 @@ require_once('../controller/sessionCheck.php');
                         <td><span class="error-message" id="fullname-error"></span></td>
                     </tr>
                     <tr>
+                        <td>Email:</td>
+                        <td><input type="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required></td>
+                    </tr>
+                    <tr>
                         <td>Phone:</td>
-                        <td><input type="tel" name="phone" value="01712378901" onblur="validateProfilePhoneBlur()"
+                        <td><input type="tel" name="phone" value="<?php echo htmlspecialchars($user['phone']); ?>" onblur="validateProfilePhoneBlur()"
                                 required></td>
                     </tr>
                     <tr>
@@ -60,9 +69,10 @@ require_once('../controller/sessionCheck.php');
                     </tr>
                     <tr>
                         <td>Address:</td>
-                        <td><input type="text" name="address" value="1 Kuratoli, Dhaka 1229"></td>
+                        <td><input type="text" name="address" value="<?php echo htmlspecialchars($user['address'] ?? ''); ?>"></td>
                     </tr>
 
+                    <?php if ($_SESSION['role'] == 'doctor'): ?>
                     <tr class="doctor-only-field">
                         <td>Specialization:</td>
                         <td><input type="text" name="specialization" value=""></td>
@@ -75,11 +85,12 @@ require_once('../controller/sessionCheck.php');
                         <td>Bio:</td>
                         <td><textarea name="bio" rows="4" cols="30"></textarea></td>
                     </tr>
+                    <?php endif; ?>
 
                     <tr>
                         <td></td>
                         <td>
-                            <input type="submit" name="update_profile" value="Update Profile">
+                            <input type="submit" name="submit" value="Update Profile">
                             <a href="profile_view.php"><button type="button">Cancel</button></a>
                         </td>
                     </tr>
