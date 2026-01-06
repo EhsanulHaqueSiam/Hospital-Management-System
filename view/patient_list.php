@@ -1,10 +1,21 @@
 <?php
-require_once('../controller/adminCheck.php');
+require_once('../controller/sessionCheck.php');
 require_once('../model/patientModel.php');
 require_once('../model/userModel.php');
 
-// Fetch all patients
-$patients = getAllPatients();
+$role = $_SESSION['role'];
+
+if ($role != 'admin' && $role != 'doctor') {
+    header('location: dashboard_patient.php');
+    exit;
+}
+
+$search = isset($_GET['search']) ? $_GET['search'] : '';
+if ($search != '') {
+    $patients = searchPatients($search);
+} else {
+    $patients = getAllPatients();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,32 +26,38 @@ $patients = getAllPatients();
 </head>
 
 <body>
-    <!-- Navbar -->
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
-        <a href="dashboard_admin.php" class="navbar-link">Dashboard</a>
+        <?php if ($role == 'admin'): ?>
+            <a href="dashboard_admin.php" class="navbar-link">Dashboard</a>
+        <?php else: ?>
+            <a href="dashboard_doctor.php" class="navbar-link">Dashboard</a>
+        <?php endif; ?>
         <a href="profile_view.php" class="navbar-link">My Profile</a>
         <a href="../controller/logout.php" class="navbar-link">Logout</a>
     </div>
 
-    <!-- Patient List -->
     <div class="main-container">
         <h2>Patient Management</h2>
 
-        <!-- Actions -->
         <fieldset>
             <legend>Actions</legend>
             <table>
                 <tr>
                     <td>
                         <form method="GET" action="">
-                            Search: <input type="text" name="search" value="">
+                            Search: <input type="text" name="search" value="<?php echo htmlspecialchars($search); ?>">
                             <input type="submit" value="Search">
+                            <?php if ($search != ''): ?>
+                                <a href="patient_list.php"><button type="button">Clear</button></a>
+                            <?php endif; ?>
                         </form>
                     </td>
-                    <td>
-                        <a href="patient_add.php"><button type="button">Add New Patient</button></a>
-                    </td>
+                    <?php if ($role == 'admin'): ?>
+                        <td>
+                            <a href="patient_add.php"><button type="button">Add New Patient</button></a>
+                        </td>
+                    <?php endif; ?>
                 </tr>
             </table>
         </fieldset>
@@ -75,9 +92,11 @@ $patients = getAllPatients();
                             <td><?php echo $patient['blood_group']; ?></td>
                             <td>
                                 <a href="patient_view.php?id=<?php echo $patient['id']; ?>"><button>View</button></a>
-                                <a href="patient_edit.php?id=<?php echo $patient['id']; ?>"><button>Edit</button></a>
-                                <a href="../controller/delete_patient.php?id=<?php echo $patient['id']; ?>"
-                                    onclick="return confirm('Are you sure?');"><button>Delete</button></a>
+                                <?php if ($role == 'admin'): ?>
+                                    <a href="patient_edit.php?id=<?php echo $patient['id']; ?>"><button>Edit</button></a>
+                                    <a href="../controller/delete_patient.php?id=<?php echo $patient['id']; ?>"
+                                        onclick="return confirm('Are you sure?');"><button>Delete</button></a>
+                                <?php endif; ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -90,7 +109,6 @@ $patients = getAllPatients();
 
             <br>
 
-            <!-- Pagination -->
             <div class="pagination-container">
             </div>
         </fieldset>
