@@ -41,7 +41,7 @@ require_once('../controller/adminCheck.php');
                     <tr>
                         <td></td>
                         <td>
-                            <input type="submit" name="add_department" value="Add Department">
+                            <input type="submit" name="submit" value="Add Department">
                             <a href="admin_department_list.php"><button type="button">Cancel</button></a>
                         </td>
                     </tr>

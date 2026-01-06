@@ -7,10 +7,12 @@ if (isset($_POST['submit'])) {
     $full_name = $_POST['full_name'];
     $email = $_POST['email'];
     $phone = $_POST['phone'];
-    $address = $_POST['address'];
+    $address = isset($_POST['address']) ? $_POST['address'] : '';
 
     if ($full_name == "" || $email == "" || $phone == "") {
         echo "All fields are required";
+        echo "<br><a href='../view/profile_edit.php'>Go Back</a>";
+        exit;
     } else {
         $user = [
             'id' => $user_id,
@@ -23,14 +25,17 @@ if (isset($_POST['submit'])) {
         $status = updateUser($user);
 
         if ($status) {
-            // Update session data
             $_SESSION['full_name'] = $full_name;
             header('location: ../view/profile_view.php');
+            exit;
         } else {
             echo "Failed to update profile";
+            echo "<br><a href='../view/profile_edit.php'>Go Back</a>";
+            exit;
         }
     }
 } else {
     header('location: ../view/profile_edit.php');
+    exit;
 }
 ?>

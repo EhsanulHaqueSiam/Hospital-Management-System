@@ -42,6 +42,16 @@ function getAllDepartments()
     return $departments;
 }
 
+function searchDepartments($term)
+{
+    $con = getConnection();
+    $term = mysqli_real_escape_string($con, $term);
+    $sql = "SELECT * FROM departments WHERE department_name LIKE '%{$term}%' OR description LIKE '%{$term}%'";
+    $result = mysqli_query($con, $sql);
+
+    return mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
+
 
 function addDepartment($department)
 {

@@ -2,8 +2,12 @@
 require_once('../controller/adminCheck.php');
 require_once('../model/departmentModel.php');
 
-// Fetch all departments
-$departments = getAllDepartments();
+$search = isset($_GET['search']) ? $_GET['search'] : '';
+if ($search != '') {
+    $departments = searchDepartments($search);
+} else {
+    $departments = getAllDepartments();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,7 +18,6 @@ $departments = getAllDepartments();
 </head>
 
 <body>
-    <!-- Navbar -->
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
         <a href="dashboard_admin.php" class="navbar-link">Dashboard</a>
@@ -22,21 +25,22 @@ $departments = getAllDepartments();
         <a href="../controller/logout.php" class="navbar-link">Logout</a>
     </div>
 
-    <!-- Department List -->
     <div class="main-container">
         <h2>Department List</h2>
 
         <span class="success-message"></span>
 
-        <!-- Actions -->
         <fieldset>
             <legend>Actions</legend>
             <table>
                 <tr>
                     <td>
                         <form method="GET" action="">
-                            Search: <input type="text" name="search" value="">
+                            Search: <input type="text" name="search" value="<?php echo htmlspecialchars($search); ?>">
                             <input type="submit" value="Search">
+                            <?php if ($search != ''): ?>
+                                <a href="admin_department_list.php"><button type="button">Clear</button></a>
+                            <?php endif; ?>
                         </form>
                     </td>
                     <td>
