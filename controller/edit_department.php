@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once('adminCheck.php');
 require_once('../model/departmentModel.php');
 
 if (isset($_POST['submit'])) {

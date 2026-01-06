@@ -1,5 +1,14 @@
 <?php
 require_once('../controller/adminCheck.php');
+require_once('../model/departmentModel.php');
+
+$id = isset($_GET['id']) ? $_GET['id'] : 0;
+$department = getDepartmentById($id);
+
+if (!$department) {
+    header('location: admin_department_list.php');
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,36 +29,30 @@ require_once('../controller/adminCheck.php');
     <div class="main-container">
         <h2>Edit Department</h2>
 
-        <span class="success-message"></span>
-
-        <form method="POST" action="../controller/edit_department.php" onsubmit="return validateDepartment()">
-            <input type="hidden" name="id" value="1">
+        <form method="POST" action="../controller/edit_department.php">
+            <input type="hidden" name="id" value="<?php echo $department['id']; ?>">
 
             <fieldset>
                 <legend>Department Information</legend>
                 <table>
                     <tr>
                         <td>Department ID:</td>
-                        <td><b>1</b></td>
+                        <td><b><?php echo $department['id']; ?></b></td>
                     </tr>
                     <tr>
                         <td>Department Name:</td>
-                        <td><input type="text" name="department_name" value="Cardiology" onblur="validateDeptNameBlur()"
-                                required></td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td><span class="error-message" id="department-name-error"></span></td>
+                        <td><input type="text" name="department_name"
+                                value="<?php echo $department['department_name']; ?>" required></td>
                     </tr>
                     <tr>
                         <td>Description:</td>
-                        <td><textarea name="description" rows="4" cols="40">Heart and cardiovascular care</textarea>
-                        </td>
+                        <td><textarea name="description" rows="4"
+                                cols="40"><?php echo $department['description']; ?></textarea></td>
                     </tr>
                     <tr>
                         <td></td>
                         <td>
-                            <input type="submit" name="update_department" value="Update Department">
+                            <input type="submit" name="submit" value="Update Department">
                             <a href="admin_department_list.php"><button type="button">Cancel</button></a>
                         </td>
                     </tr>
@@ -57,8 +60,6 @@ require_once('../controller/adminCheck.php');
             </fieldset>
         </form>
     </div>
-
-    <script src="../assets/js/admin.js"></script>
 </body>
 
 </html>
