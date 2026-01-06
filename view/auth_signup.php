@@ -70,9 +70,9 @@
                         <td>
                             <select name="role" required>
                                 <option value="">-- Select Role --</option>
-                                <option value="Patient">Patient</option>
-                                <option value="Doctor">Doctor</option>
-                                <option value="Admin">Admin</option>
+                                <option value="patient">Patient</option>
+                                <option value="doctor">Doctor</option>
+                                <option value="admin">Admin</option>
                             </select>
                         </td>
                     </tr>
