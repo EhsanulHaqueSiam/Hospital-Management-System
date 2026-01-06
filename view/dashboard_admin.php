@@ -54,6 +54,17 @@ $totalAppointments = count($appointments);
             <legend>Quick Actions</legend>
             <a href="admin_department_list.php"><button>Manage Departments</button></a>
             <a href="admin_doctor_list.php"><button>Manage Doctors</button></a>
+            <a href="patient_list.php"><button>Manage Patients</button></a>
+            <a href="appointment_list.php"><button>Manage Appointments</button></a>
+            <a href="schedule_today.php"><button>Today's Schedule</button></a>
+            <a href="schedule_list.php"><button>Full Schedule</button></a>
+            <a href="prescription_list.php"><button>Manage Prescriptions</button></a>
+            <a href="record_list.php"><button>Medical Records</button></a>
+            <!-- New Features -->
+            <a href="medicine_list.php"><button>Manage Medicines</button></a>
+            <a href="bill_list.php"><button>Billing & Invoices</button></a>
+            <a href="payment_list.php"><button>Payments</button></a>
+            <a href="room_list.php"><button>Manage Rooms</button></a>
         </fieldset>
 
         <br>
