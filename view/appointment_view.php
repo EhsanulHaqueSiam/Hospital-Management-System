@@ -6,6 +6,7 @@ require_once('../model/doctorModel.php');
 require_once('../model/userModel.php');
 
 $role = $_SESSION['role'];
+$user_id = $_SESSION['user_id'];
 
 // Get appointment ID from URL
 $appointment_id = isset($_GET['id']) ? $_GET['id'] : 0;
@@ -23,6 +24,24 @@ $patient_user = $patient ? getUserById($patient['user_id']) : null;
 
 $doctor = getDoctorById($appointment['doctor_id']);
 $doctor_user = $doctor ? getUserById($doctor['user_id']) : null;
+
+// Check if patient can cancel
+$canCancel = false;
+if ($role == 'patient') {
+    $current_patient = getPatientByUserId($user_id);
+    if ($current_patient && $current_patient['id'] == $appointment['patient_id']) {
+        $canCancel = true;
+    }
+}
+
+// Check if doctor can add prescription
+$canAddPrescription = false;
+if ($role == 'doctor') {
+    $current_doctor = getDoctorByUserId($user_id);
+    if ($current_doctor && $current_doctor['id'] == $appointment['doctor_id']) {
+        $canAddPrescription = true;
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,7 +52,7 @@ $doctor_user = $doctor ? getUserById($doctor['user_id']) : null;
 </head>
 
 <body>
-    <!-- Navbar -->
+
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
         <?php if ($role == 'admin'): ?>
@@ -53,10 +72,23 @@ $doctor_user = $doctor ? getUserById($doctor['user_id']) : null;
 
         <div>
             <a href="appointment_list.php"><button>Back to List</button></a>
+
             <?php if ($role == 'admin'): ?>
                 <a href="appointment_edit.php?id=<?php echo $appointment['id']; ?>"><button>Edit</button></a>
                 <a href="../controller/delete_appointment.php?id=<?php echo $appointment['id']; ?>"
                     onclick="return confirm('Are you sure?');"><button>Delete</button></a>
+            <?php endif; ?>
+
+            <?php if ($canCancel && in_array($appointment['status'], ['pending', 'confirmed'])): ?>
+                <a href="../controller/cancel_appointment.php?id=<?php echo $appointment['id']; ?>"
+                    onclick="return confirm('Are you sure you want to cancel this appointment?');"><button>Cancel
+                        Appointment</button></a>
+            <?php endif; ?>
+
+            <?php if ($canAddPrescription && in_array($appointment['status'], ['confirmed', 'completed'])): ?>
+                <a
+                    href="prescription_add.php?appointment_id=<?php echo $appointment['id']; ?>&patient_id=<?php echo $appointment['patient_id']; ?>"><button>Add
+                        Prescription</button></a>
             <?php endif; ?>
         </div>
 
