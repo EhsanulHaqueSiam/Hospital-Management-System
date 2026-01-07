@@ -1,5 +1,3 @@
-<<<<<<< Updated upstream:view/prescription_view.html
-=======
 <?php
 require_once('../controller/sessionCheck.php');
 require_once('../model/prescriptionModel.php');
@@ -8,6 +6,7 @@ require_once('../model/doctorModel.php');
 require_once('../model/userModel.php');
 
 $role = $_SESSION['role'];
+$user_id = $_SESSION['user_id'];
 
 // Get prescription ID from URL
 $prescription_id = isset($_GET['id']) ? $_GET['id'] : 0;
@@ -28,18 +27,40 @@ $doctor_user = $doctor ? getUserById($doctor['user_id']) : null;
 
 // Fetch medicines for this prescription
 $medicines = getPrescriptionMedicines($prescription_id);
+
+// Check if current doctor owns this prescription
+$current_doctor_id = null;
+$isOwnPrescription = false;
+if ($role == 'doctor') {
+    $current_doctor = getDoctorByUserId($user_id);
+    $current_doctor_id = $current_doctor ? $current_doctor['id'] : null;
+    $isOwnPrescription = ($current_doctor_id == $prescription['doctor_id']);
+}
 ?>
->>>>>>> Stashed changes:view/prescription_view.php
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <title>Prescription Details - Hospital Management System</title>
     <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        @media print {
+
+            .navbar,
+            .no-print {
+                display: none !important;
+            }
+
+            .main-container {
+                margin: 0;
+                padding: 20px;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <!-- Navbar -->
+
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
         <?php if ($role == 'admin'): ?>
@@ -57,23 +78,19 @@ $medicines = getPrescriptionMedicines($prescription_id);
     <div class="main-container">
         <h2>Prescription Details</h2>
 
-        <div>
+        <div class="no-print">
             <a href="prescription_list.php"><button>Back to List</button></a>
-            <?php if ($role == 'admin'): ?>
+
+            <?php if ($role == 'admin' || $isOwnPrescription): ?>
+                <a href="prescription_edit.php?id=<?php echo $prescription['id']; ?>"><button>Edit</button></a>
                 <a href="../controller/delete_prescription.php?id=<?php echo $prescription['id']; ?>"
                     onclick="return confirm('Are you sure?');"><button>Delete</button></a>
             <?php endif; ?>
+
             <button onclick="window.print();">Print</button>
         </div>
 
-<<<<<<< Updated upstream:view/prescription_view.html
-        <div>
-            <a href="prescription_list.html" class="button">Back to List</a>
-            <button class="button" onclick="window.print()">🖨️ Print Prescription</button>
-            <button class="button">Download PDF</button>
-=======
         <br>
->>>>>>> Stashed changes:view/prescription_view.php
 
         <fieldset>
             <legend>Prescription Information</legend>
@@ -107,6 +124,16 @@ $medicines = getPrescriptionMedicines($prescription_id);
                     <td><b>Patient ID:</b></td>
                     <td><?php echo $prescription['patient_id']; ?></td>
                 </tr>
+                <?php if ($patient): ?>
+                    <tr>
+                        <td><b>Gender:</b></td>
+                        <td><?php echo $patient['gender']; ?></td>
+                    </tr>
+                    <tr>
+                        <td><b>Blood Group:</b></td>
+                        <td><?php echo $patient['blood_group']; ?></td>
+                    </tr>
+                <?php endif; ?>
             </table>
         </fieldset>
 
