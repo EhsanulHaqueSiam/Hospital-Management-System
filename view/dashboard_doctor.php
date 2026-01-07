@@ -50,7 +50,19 @@ if ($doctor) {
 
         <br>
 
-        <!-- Today's Schedule -->
+        <!-- Quick Links -->
+        <fieldset>
+            <legend>Quick Actions</legend>
+            <a href="schedule_today.php"><button>Today's Schedule</button></a>
+            <a href="schedule_list.php"><button>View Full Schedule</button></a>
+            <a href="appointment_list.php"><button>My Appointments</button></a>
+            <a href="patient_list.php"><button>View Patients</button></a>
+            <a href="prescription_list.php"><button>My Prescriptions</button></a>
+            <a href="prescription_add.php"><button>Create Prescription</button></a>
+            <a href="record_list.php"><button>Medical Records</button></a>
+        </fieldset>
+
+        <br>
         <fieldset>
             <legend>Your Appointments</legend>
             <table border="1" cellpadding="8" width="100%">
