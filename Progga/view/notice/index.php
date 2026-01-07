@@ -17,7 +17,7 @@ if (!isset($_SESSION['role'])) {
 
 <?php if ($_SESSION['role'] === 'Admin') { ?>
     <p>
-        <a href="../../controller/NoticeController.php?action=create">
+        <a href="../../controller/notice_controller.php?action=create">
             <button>Create Notice</button>
         </a>
     </p>
@@ -44,13 +44,13 @@ if (!isset($_SESSION['role'])) {
             <td><?php echo date("d M Y", strtotime($notice['created_at'])); ?></td>
             <td><?php echo $notice['is_important'] ? 'YES' : 'NO'; ?></td>
             <td>
-                <a href="../../controller/NoticeController.php?action=details&id=<?=$notice['id']?>">Read</a>
+                <a href="../../controller/notice_controller.php?action=details&id=<?=$notice['id']?>">Read</a>
 
                 <?php if ($_SESSION['role'] === 'Admin') { ?>
                     |
-                    <a href="../../controller/NoticeController.php?action=edit&id=<?=$notice['id']?>">Edit</a>
+                    <a href="../../controller/notice_controller.php?action=edit&id=<?=$notice['id']?>">Edit</a>
                     |
-                    <a href="../../controller/NoticeController.php?action=delete&id=<?=$notice['id']?>"
+                    <a href="../../controller/notice_controller.php?action=delete&id=<?=$notice['id']?>"
                        onclick="return confirm('Delete this notice?')">Delete</a>
                 <?php } ?>
             </td>
