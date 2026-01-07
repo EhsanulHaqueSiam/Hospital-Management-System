@@ -1,47 +1,86 @@
 <?php
-require_once('../controller/doctorCheck.php');
+require_once('../controller/sessionCheck.php');
 require_once('../model/appointmentModel.php');
 require_once('../model/patientModel.php');
 require_once('../model/doctorModel.php');
 require_once('../model/userModel.php');
 
+$role = $_SESSION['role'];
 $user_id = $_SESSION['user_id'];
 
-// Get doctor for current user
-$doctor = getDoctorByUserId($user_id);
+// Only doctor and admin can access this page
+if ($role != 'doctor' && $role != 'admin') {
+    header('location: dashboard_patient.php');
+    exit;
+}
 
-// Fetch all appointments for this doctor
-$appointments = $doctor ? getAppointmentsByDoctor($doctor['id']) : [];
+// Fetch appointments based on role
+if ($role == 'admin') {
+    $appointments = getAllAppointments();
+} else {
+    // Get doctor for current user
+    $doctor = getDoctorByUserId($user_id);
+    $appointments = $doctor ? getAppointmentsByDoctor($doctor['id']) : [];
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <title>My Schedule - Hospital Management System</title>
+    <title>Appointment Schedule - Hospital Management System</title>
     <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        @media print {
+
+            .navbar,
+            .no-print {
+                display: none !important;
+            }
+
+            .main-container {
+                margin: 0;
+                padding: 20px;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <!-- Navbar -->
+
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
-        <a href="dashboard_doctor.php" class="navbar-link">Dashboard</a>
+        <?php if ($role == 'admin'): ?>
+            <a href="dashboard_admin.php" class="navbar-link">Dashboard</a>
+        <?php else: ?>
+            <a href="dashboard_doctor.php" class="navbar-link">Dashboard</a>
+        <?php endif; ?>
         <a href="profile_view.php" class="navbar-link">My Profile</a>
         <a href="../controller/logout.php" class="navbar-link">Logout</a>
     </div>
 
     <!-- Schedule List -->
     <div class="main-container">
-        <h2>My Appointment Schedule</h2>
+        <h2>Appointment Schedule</h2>
+
+
+        <div class="no-print">
+            <a href="schedule_today.php"><button>Today's Schedule</button></a>
+            <button onclick="window.print();">Print Schedule</button>
+        </div>
+
+        <br>
 
         <!-- Filter -->
-        <fieldset>
+        <fieldset class="no-print">
             <legend>Filter</legend>
             <form method="GET" action="">
                 <table>
                     <tr>
                         <td>
-                            Date: <input type="date" name="date" value="">
+                            From: <input type="date" name="date_from" value="">
+                        </td>
+                        <td>
+                            To: <input type="date" name="date_to" value="">
                         </td>
                         <td>
                             Status:
@@ -70,21 +109,32 @@ $appointments = $doctor ? getAppointmentsByDoctor($doctor['id']) : [];
                 <tr>
                     <th>ID</th>
                     <th>Patient Name</th>
+                    <?php if ($role == 'admin'): ?>
+                        <th>Doctor Name</th>
+                    <?php endif; ?>
                     <th>Date</th>
                     <th>Time</th>
                     <th>Reason</th>
                     <th>Status</th>
-                    <th>Actions</th>
+                    <th class="no-print">Actions</th>
                 </tr>
                 <?php if (count($appointments) > 0): ?>
                     <?php foreach ($appointments as $appointment): ?>
                         <?php
-                        $patient = getPatientById($appointment['patient_id']);
-                        $patient_user = $patient ? getUserById($patient['user_id']) : null;
+                        $appt_patient = getPatientById($appointment['patient_id']);
+                        $patient_user = $appt_patient ? getUserById($appt_patient['user_id']) : null;
+
+                        if ($role == 'admin') {
+                            $appt_doctor = getDoctorById($appointment['doctor_id']);
+                            $doctor_user = $appt_doctor ? getUserById($appt_doctor['user_id']) : null;
+                        }
                         ?>
                         <tr>
                             <td><?php echo $appointment['id']; ?></td>
                             <td><?php echo $patient_user ? $patient_user['full_name'] : 'N/A'; ?></td>
+                            <?php if ($role == 'admin'): ?>
+                                <td><?php echo $doctor_user ? $doctor_user['full_name'] : 'N/A'; ?></td>
+                            <?php endif; ?>
                             <td><?php echo $appointment['appointment_date']; ?></td>
                             <td><?php echo $appointment['appointment_time']; ?></td>
                             <td><?php echo substr($appointment['reason'], 0, 30) . '...'; ?></td>
@@ -111,14 +161,15 @@ $appointments = $doctor ? getAppointmentsByDoctor($doctor['id']) : [];
                                     <?php echo ucfirst($appointment['status']); ?>
                                 </span>
                             </td>
-                            <td>
+                            <td class="no-print">
                                 <a href="appointment_view.php?id=<?php echo $appointment['id']; ?>"><button>View</button></a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="7" align="center">No appointments scheduled</td>
+                        <td colspan="<?php echo $role == 'admin' ? '8' : '7'; ?>" align="center">No appointments scheduled
+                        </td>
                     </tr>
                 <?php endif; ?>
             </table>
