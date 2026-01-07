@@ -60,7 +60,7 @@ CREATE TABLE appointments (
 
 CREATE TABLE medicines (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  medicine_name VARCHAR(100) NOT NULL UNIQUE,
+  medicine_name VARCHAR(100) NOT NULL,
   generic_name VARCHAR(100),
   category VARCHAR(50),
   description TEXT,

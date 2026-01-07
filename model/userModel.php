@@ -5,7 +5,9 @@ require_once('db.php');
 function login($credentials)
 {
     $con = getConnection();
-    $sql = "SELECT * FROM users WHERE username='{$credentials['username']}' AND password='{$credentials['password']}'";
+    $username = mysqli_real_escape_string($con, $credentials['username']);
+    $password = mysqli_real_escape_string($con, $credentials['password']);
+    $sql = "SELECT * FROM users WHERE username='{$username}' AND password='{$password}'";
     $result = mysqli_query($con, $sql);
 
     if (mysqli_num_rows($result) == 1) {
@@ -75,7 +77,7 @@ function addUser($user)
             VALUES ('{$full_name}', '{$email}', '{$phone}', '{$username}', '{$password}', '{$role}', '{$address}')";
 
     if (mysqli_query($con, $sql)) {
-        return true;
+        return mysqli_insert_id($con);
     } else {
         return false;
     }
@@ -85,6 +87,7 @@ function updateUser($user)
 {
     $con = getConnection();
 
+    $id = intval($user['id']);
     $full_name = mysqli_real_escape_string($con, $user['full_name']);
     $email = mysqli_real_escape_string($con, $user['email']);
     $phone = mysqli_real_escape_string($con, $user['phone']);
@@ -96,13 +99,10 @@ function updateUser($user)
         $sql .= ", address='{$address}'";
     }
 
-    $sql .= " WHERE id='{$user['id']}'";
+    $sql .= " WHERE id={$id}";
 
-    if (mysqli_query($con, $sql)) {
-        return true;
-    } else {
-        return false;
-    }
+    $result = mysqli_query($con, $sql);
+    return $result;
 }
 
 function updatePassword($user_id, $password)
