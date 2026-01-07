@@ -35,6 +35,20 @@ $notifications = isset($notifications) ? $notifications : [];
     <button id="clearAllRead">Clear All Read</button>
 </div>
 
+<div id="successMsg" style="display:none;padding:8px;background:#e6ffed;border:1px solid #b7f0c6;margin:8px 0;color:#114b22;"></div>
+
+<!-- Confirmation Modal -->
+<div id="confirmModal" style="display:none;position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,0.4);align-items:center;justify-content:center;z-index:2000;">
+    <div style="background:white;padding:18px;border-radius:6px;max-width:420px;margin:auto;box-shadow:0 8px 24px rgba(0,0,0,0.2);">
+        <h3 style="margin-top:0">Delete all read notifications?</h3>
+        <p>Are you sure you want to permanently delete all read notifications? This cannot be undone.</p>
+        <div style="text-align:right;margin-top:12px;display:flex;gap:8px;justify-content:flex-end;">
+            <button id="confirmCancel" style="background:#f1f1f1;border:1px solid #ddd;padding:6px 10px;border-radius:4px;">Cancel</button>
+            <button id="confirmOk" style="background:#e74c3c;color:#fff;border:none;padding:6px 10px;border-radius:4px;">Delete</button>
+        </div>
+    </div>
+</div>
+
 <div id="list">
 <?php if (empty($notifications)) { ?>
     <div>No notifications</div>
