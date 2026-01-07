@@ -44,6 +44,24 @@ function getAllDoctors()
     return $doctors;
 }
 
+function searchDoctors($term)
+{
+    $con = getConnection();
+    $term = mysqli_real_escape_string($con, $term);
+    $sql = "SELECT d.* FROM doctors d 
+            JOIN users u ON d.user_id = u.id 
+            WHERE u.full_name LIKE '%{$term}%' 
+            OR d.specialization LIKE '%{$term}%'
+            ORDER BY d.id ASC";
+    $result = mysqli_query($con, $sql);
+
+    $doctors = array();
+    while ($row = mysqli_fetch_assoc($result)) {
+        $doctors[] = $row;
+    }
+    return $doctors;
+}
+
 function getDoctorsByDepartment($department_id)
 {
     $con = getConnection();
@@ -98,6 +116,21 @@ function updateDoctor($doctor)
 
     $sql = "UPDATE doctors SET department_id='{$doctor['department_id']}', specialization='{$specialization}', bio='{$bio}' 
             WHERE id='{$doctor['id']}'";
+
+    if (mysqli_query($con, $sql)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function updateDoctorDepartment($doctor_id, $department_id)
+{
+    $con = getConnection();
+    $doctor_id = mysqli_real_escape_string($con, $doctor_id);
+    $department_id = mysqli_real_escape_string($con, $department_id);
+
+    $sql = "UPDATE doctors SET department_id='{$department_id}' WHERE id='{$doctor_id}'";
 
     if (mysqli_query($con, $sql)) {
         return true;
