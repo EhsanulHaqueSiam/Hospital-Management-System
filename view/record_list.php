@@ -6,14 +6,24 @@ require_once('../model/userModel.php');
 
 $role = $_SESSION['role'];
 $user_id = $_SESSION['user_id'];
+$type_filter = isset($_GET['type']) ? $_GET['type'] : '';
 
-// Fetch medical records based on role
 if ($role == 'admin' || $role == 'doctor') {
     $records = getAllMedicalRecords();
 } else {
-    // Patient can only see their own records
     $patient = getPatientByUserId($user_id);
     $records = $patient ? getMedicalRecordsByPatient($patient['id']) : [];
+}
+
+// Filter by type if selected
+if ($type_filter != '') {
+    $filtered = [];
+    foreach ($records as $record) {
+        if ($record['record_type'] == $type_filter) {
+            $filtered[] = $record;
+        }
+    }
+    $records = $filtered;
 }
 ?>
 <!DOCTYPE html>
@@ -25,7 +35,6 @@ if ($role == 'admin' || $role == 'doctor') {
 </head>
 
 <body>
-    <!-- Navbar -->
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
         <?php if ($role == 'admin'): ?>
@@ -39,28 +48,42 @@ if ($role == 'admin' || $role == 'doctor') {
         <a href="../controller/logout.php" class="navbar-link">Logout</a>
     </div>
 
-    <!-- Medical Records List -->
     <div class="main-container">
         <h2>Medical Records</h2>
 
-        <!-- Actions -->
         <fieldset>
             <legend>Actions</legend>
             <table>
                 <tr>
                     <td>
                         <form method="GET" action="">
-                            Search: <input type="text" name="search" value="">
+                            Type:
                             <select name="type">
                                 <option value="">All Types</option>
-                                <option value="Lab Report">Lab Report</option>
-                                <option value="X-Ray">X-Ray</option>
-                                <option value="MRI">MRI</option>
-                                <option value="CT Scan">CT Scan</option>
-                                <option value="Prescription">Prescription</option>
-                                <option value="Other">Other</option>
+                                <option value="Lab Report" <?php if ($type_filter == 'Lab Report')
+                                    echo 'selected'; ?>>Lab
+                                    Report</option>
+                                <option value="X-Ray" <?php if ($type_filter == 'X-Ray')
+                                    echo 'selected'; ?>>X-Ray
+                                </option>
+                                <option value="MRI" <?php if ($type_filter == 'MRI')
+                                    echo 'selected'; ?>>MRI</option>
+                                <option value="CT Scan" <?php if ($type_filter == 'CT Scan')
+                                    echo 'selected'; ?>>CT Scan
+                                </option>
+                                <option value="Prescription" <?php if ($type_filter == 'Prescription')
+                                    echo 'selected'; ?>>Prescription</option>
+                                <option value="Blood Test" <?php if ($type_filter == 'Blood Test')
+                                    echo 'selected'; ?>>
+                                    Blood Test</option>
+                                <option value="Other" <?php if ($type_filter == 'Other')
+                                    echo 'selected'; ?>>Other
+                                </option>
                             </select>
                             <input type="submit" value="Filter">
+                            <?php if ($type_filter != ''): ?>
+                                <a href="record_list.php"><button type="button">Clear</button></a>
+                            <?php endif; ?>
                         </form>
                     </td>
                     <?php if ($role == 'admin' || $role == 'doctor'): ?>
@@ -89,8 +112,8 @@ if ($role == 'admin' || $role == 'doctor') {
                 <?php if (count($records) > 0): ?>
                     <?php foreach ($records as $record): ?>
                         <?php
-                        $patient = getPatientById($record['patient_id']);
-                        $patient_user = $patient ? getUserById($patient['user_id']) : null;
+                        $rec_patient = getPatientById($record['patient_id']);
+                        $patient_user = $rec_patient ? getUserById($rec_patient['user_id']) : null;
                         ?>
                         <tr>
                             <td><?php echo $record['id']; ?></td>
@@ -100,6 +123,12 @@ if ($role == 'admin' || $role == 'doctor') {
                             <td><?php echo $record['record_date']; ?></td>
                             <td>
                                 <a href="record_view.php?id=<?php echo $record['id']; ?>"><button>View</button></a>
+
+                                <?php if ($record['file_path']): ?>
+                                    <a
+                                        href="../controller/download_record.php?id=<?php echo $record['id']; ?>"><button>Download</button></a>
+                                <?php endif; ?>
+
                                 <?php if ($role == 'admin'): ?>
                                     <a href="../controller/delete_record.php?id=<?php echo $record['id']; ?>"
                                         onclick="return confirm('Are you sure?');"><button>Delete</button></a>

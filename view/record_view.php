@@ -31,7 +31,7 @@ $uploader = getUserById($record['uploaded_by']);
 </head>
 
 <body>
-    <!-- Navbar -->
+
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
         <?php if ($role == 'admin'): ?>
@@ -51,10 +51,18 @@ $uploader = getUserById($record['uploaded_by']);
 
         <div>
             <a href="record_list.php"><button>Back to Records</button></a>
+
+            <?php if ($record['file_path']): ?>
+                <a href="../controller/download_record.php?id=<?php echo $record['id']; ?>"><button>Download
+                        File</button></a>
+            <?php endif; ?>
+
             <?php if ($role == 'admin'): ?>
                 <a href="../controller/delete_record.php?id=<?php echo $record['id']; ?>"
                     onclick="return confirm('Are you sure?');"><button>Delete</button></a>
             <?php endif; ?>
+
+            <button onclick="window.print();">Print</button>
         </div>
 
         <br>
@@ -106,7 +114,8 @@ $uploader = getUserById($record['uploaded_by']);
             <legend>Attached File</legend>
             <?php if ($record['file_path']): ?>
                 <p>
-                    <a href="<?php echo $record['file_path']; ?>" target="_blank"><button>View/Download File</button></a>
+                    <a href="../controller/download_record.php?id=<?php echo $record['id']; ?>"><button>Download
+                            File</button></a>
                 </p>
             <?php else: ?>
                 <p>No file attached to this record.</p>
