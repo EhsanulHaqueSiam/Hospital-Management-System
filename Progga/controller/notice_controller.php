@@ -26,4 +26,15 @@ if ($action == 'index') {
 } elseif ($action == 'delete') {
     deleteNotice($_GET['id']);
     header("Location: notice_controller.php");
+} elseif ($action == 'search') {
+    $key = $_GET['key'];
+    $con = getConnection();
+    $sql = "SELECT * FROM notices WHERE title LIKE '%$key%'";
+    $result = mysqli_query($con, $sql);
+    $data = [];
+    while($row = mysqli_fetch_assoc($result)){
+        $data[] = $row;
+    }
+    header('Content-Type: application/json');
+    echo json_encode($data);
 }

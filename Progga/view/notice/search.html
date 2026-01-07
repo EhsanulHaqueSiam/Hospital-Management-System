@@ -1,0 +1,10 @@
+<input type="text" id="search" onkeyup="searchNotice()">
+
+<script>
+function searchNotice() {
+    const key = document.getElementById('search').value;
+    fetch('notice_controller.php?action=search&key=' + key)
+    .then(res => res.json())
+    .then(data => console.log(data));
+}
+</script>
