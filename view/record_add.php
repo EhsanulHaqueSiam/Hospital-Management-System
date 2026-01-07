@@ -23,7 +23,7 @@ $patients = getAllPatients();
 </head>
 
 <body>
-    <!-- Navbar -->
+
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
         <?php if ($role == 'admin'): ?>
