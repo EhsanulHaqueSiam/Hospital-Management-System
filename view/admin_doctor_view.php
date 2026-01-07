@@ -81,6 +81,9 @@ if ($doctor) {
 
             <br>
             <a href="admin_doctor_edit.php?id=<?php echo $doctor['id']; ?>"><button>Edit Doctor</button></a>
+            <a href="admin_doctor_assign.php?id=<?php echo $doctor['id']; ?>"><button>Assign Dept</button></a>
+            <a href="../controller/delete_doctor.php?id=<?php echo $doctor['id']; ?>"
+                onclick="return confirm('Are you sure you want to delete this doctor?');"><button>Delete</button></a>
             <a href="admin_doctor_list.php"><button>Back to List</button></a>
         <?php else: ?>
             <p>Doctor not found.</p>
