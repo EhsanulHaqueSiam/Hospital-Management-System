@@ -16,7 +16,7 @@ if (!isset($_SESSION['role'])) {
 
 <?php if ($_SESSION['role'] === 'Admin') { ?>
     <p>
-        <a href="../../controller/notice_controller.php?action=create">
+        <a href="notice_controller.php?action=create">
             <button>Create Notice</button>
         </a>
     </p>

@@ -1,4 +1,4 @@
-<form method="post" action="../../controller/notice_controller.php?action=store">
+<form method="post" action="notice_controller.php?action=store">
     Title: <input type="text" name="title"><br>
     Category: <input type="text" name="category"><br>
     Content: <textarea name="content"></textarea><br>
