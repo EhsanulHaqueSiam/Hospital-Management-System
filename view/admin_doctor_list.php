@@ -4,8 +4,12 @@ require_once('../model/doctorModel.php');
 require_once('../model/userModel.php');
 require_once('../model/departmentModel.php');
 
-// Fetch all doctors
-$doctors = getAllDoctors();
+$search = isset($_GET['search']) ? $_GET['search'] : '';
+if ($search != '') {
+    $doctors = searchDoctors($search);
+} else {
+    $doctors = getAllDoctors();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -16,7 +20,6 @@ $doctors = getAllDoctors();
 </head>
 
 <body>
-    <!-- Navbar -->
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
         <a href="dashboard_admin.php" class="navbar-link">Dashboard</a>
@@ -24,19 +27,20 @@ $doctors = getAllDoctors();
         <a href="../controller/logout.php" class="navbar-link">Logout</a>
     </div>
 
-    <!-- Doctor List -->
     <div class="main-container">
         <h2>Doctor List</h2>
 
-        <!-- Actions -->
         <fieldset>
             <legend>Actions</legend>
             <table>
                 <tr>
                     <td>
                         <form method="GET" action="">
-                            Search: <input type="text" name="search" value="">
+                            Search: <input type="text" name="search" value="<?php echo htmlspecialchars($search); ?>">
                             <input type="submit" value="Search">
+                            <?php if ($search != ''): ?>
+                                <a href="admin_doctor_list.php"><button type="button">Clear</button></a>
+                            <?php endif; ?>
                         </form>
                     </td>
                     <td>
@@ -80,6 +84,8 @@ $doctors = getAllDoctors();
                             <td>
                                 <a href="admin_doctor_view.php?id=<?php echo $doctor['id']; ?>"><button>View</button></a>
                                 <a href="admin_doctor_edit.php?id=<?php echo $doctor['id']; ?>"><button>Edit</button></a>
+                                <a href="admin_doctor_assign.php?id=<?php echo $doctor['id']; ?>"><button>Assign
+                                        Dept</button></a>
                                 <a href="../controller/delete_doctor.php?id=<?php echo $doctor['id']; ?>"
                                     onclick="return confirm('Are you sure?');"><button>Delete</button></a>
                             </td>
