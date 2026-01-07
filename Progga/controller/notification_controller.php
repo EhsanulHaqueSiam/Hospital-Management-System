@@ -35,7 +35,6 @@ if ($action == 'fetch') {
 }
 
 if ($action == 'dropdown') {
-    // return latest 5 notifications and unread count for dropdown
     $notifications = getNotificationsByUser($user_id, 5, 0, 'all');
     $unread = countNotificationsByUser($user_id, 'unread');
     header('Content-Type: application/json');

@@ -24,7 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($username === '' || $email === '' || $password === '') {
         $error = 'All fields are required.';
     } else {
-        // check duplicates
         foreach ($admins as $a) {
             if (strtolower($a['username']) === strtolower($username) || strtolower($a['email']) === strtolower($email)) {
                 $error = 'An admin with that username or email already exists.';

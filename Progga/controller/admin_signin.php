@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// simple admin credentials (hardcoded)
 $adminUsername = 'admin';
 $adminEmail = 'admin@hospital.com';
 $adminPassword = 'admin123';
@@ -11,16 +10,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
 
     if ((strtolower($user) === strtolower($adminUsername) || strtolower($user) === strtolower($adminEmail)) && $password === $adminPassword) {
-        // set admin session only within Progga
         $_SESSION['username'] = $adminUsername;
         $_SESSION['role'] = 'Admin';
         $_SESSION['user_id'] = 1;
 
-        // redirect to admin notice controller (or admin dashboard)
         header('Location: notice_controller.php');
         exit;
     } else {
-        // fallback: check admins.json for additional admin accounts
         $adminsFile = __DIR__ . '/../models/admins.json';
         if (!file_exists($adminsFile)) {
             $default = [
@@ -56,5 +52,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 }
 
-// show signin view
 require_once('../view/admin_signin.php');
