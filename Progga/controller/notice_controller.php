@@ -4,6 +4,12 @@ require_once('../models/notice_model.php');
 
 $action = isset($_GET['action']) ? $_GET['action'] : 'index';
 
+// Only allow admins to use this controller. Others go to public board.
+if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role'] !== 'Admin') {
+    header('Location: notice_user_controller.php');
+    exit;
+}
+
 if ($action == 'index') {
     $notices = getAllNotices();
     require_once('../view/notice/index.php');
@@ -18,6 +24,7 @@ if ($action == 'index') {
         'expiry_date' => $_POST['expiry_date'],
         'created_by' => $_SESSION['user_id']
     ];
+
     createNotice($notice);
     header("Location: notice_controller.php");
 } elseif ($action == 'details') {
@@ -41,7 +48,7 @@ if ($action == 'index') {
     deleteNotice($_GET['id']);
     header("Location: notice_controller.php");
 } elseif ($action == 'search') {
-    $key = $_GET['key'];
+    $key = $_GET['key'] ?? '';
     $con = getConnection();
     $sql = "SELECT * FROM notices WHERE title LIKE '%$key%'";
     $result = mysqli_query($con, $sql);

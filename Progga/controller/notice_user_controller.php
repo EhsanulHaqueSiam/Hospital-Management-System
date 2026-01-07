@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once('../models/notice_model.php');
 
 $action = isset($_GET['action']) ? $_GET['action'] : 'list';
