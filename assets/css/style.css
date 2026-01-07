@@ -1,20 +1,18 @@
-/* Hospital Management System */
-
 body {
     margin: 0;
     padding: 20px;
-    background-color: white;
+    background-color: #fafafa;
+    font-family: Arial, sans-serif;
 }
 
-/* Main Container */
 .main-container {
-    width: 600px;
+    width: 700px;
     margin: 20px auto;
     padding: 20px;
     background-color: white;
+    border: 1px solid #ddd;
 }
 
-/* Navbar */
 .navbar {
     background-color: #333;
     color: white;
@@ -32,10 +30,14 @@ body {
     margin-left: 20px;
 }
 
-/* Fieldset and Legend */
+.navbar-link:hover {
+    text-decoration: underline;
+}
+
 fieldset {
     padding: 15px;
     margin: 10px 0;
+    border: 1px solid #ccc;
 }
 
 legend {
@@ -43,44 +45,50 @@ legend {
     padding: 5px;
 }
 
-/* Table */
 table {
     width: 100%;
+    border-collapse: collapse;
 }
 
 td {
-    padding: 5px;
+    padding: 8px;
 }
 
 th {
     padding: 8px;
     text-align: left;
-    background-color: white;
+    background-color: #f5f5f5;
 }
 
-/* Form elements */
 input[type="text"],
 input[type="email"],
 input[type="password"],
 input[type="tel"],
+input[type="number"],
+input[type="date"],
 textarea,
 select {
     width: 200px;
-    padding: 5px;
+    padding: 6px;
+    border: 1px solid #ccc;
 }
 
 input[type="submit"],
 button {
     padding: 8px 15px;
     margin: 5px;
+    cursor: pointer;
 }
 
-/* Links */
+input[type="submit"]:hover,
+button:hover {
+    opacity: 0.9;
+}
+
 a {
     color: blue;
 }
 
-/* Error and Success messages */
 .error-message {
     color: red;
     font-size: 12px;
@@ -96,23 +104,19 @@ a {
     padding: 10px;
 }
 
-/* Pagination */
 .pagination-container {
     margin-top: 10px;
     padding: 10px;
 }
 
-/* Hide/Show class */
 .hidden {
     display: none;
 }
 
-/* Doctor only fields - hidden by default */
 .doctor-only-field {
     display: none;
 }
 
-/* Button */
 .button {
     padding: 8px 15px;
     margin: 5px;
@@ -128,7 +132,6 @@ a {
     background-color: #666;
 }
 
-/* Modal */
 .logout-modal {
     display: none;
     position: fixed;
@@ -147,7 +150,6 @@ a {
     text-align: center;
 }
 
-/* Pagination */
 .pagination {
     margin-top: 10px;
 }
@@ -156,19 +158,101 @@ a {
     margin-left: 10px;
 }
 
-
 .addbtn {
     background-color: darkgreen;
+    color: white;
 }
 
 .edit {
     background-color: blue;
+    color: white;
 }
 
 .delete {
     background-color: red;
+    color: white;
 }
 
 .restock {
     background-color: green;
+    color: white;
+}
+
+.status-paid {
+    color: green;
+    font-weight: bold;
+}
+
+.status-partial {
+    color: orange;
+    font-weight: bold;
+}
+
+.status-unpaid {
+    color: red;
+    font-weight: bold;
+}
+
+.invoice-box {
+    max-width: 800px;
+    margin: auto;
+    padding: 30px;
+    border: 1px solid #eee;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    font-size: 16px;
+    line-height: 24px;
+    font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+    color: #555;
+    background-color: white;
+}
+
+.invoice-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.invoice-table {
+    width: 100%;
+    line-height: inherit;
+    text-align: left;
+    border-collapse: collapse;
+}
+
+.invoice-table td {
+    padding: 5px;
+    vertical-align: top;
+}
+
+.invoice-table tr td:nth-child(2) {
+    text-align: right;
+}
+
+.item-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.item-table th,
+.item-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.total-section {
+    text-align: right;
+    margin-top: 20px;
+}
+
+@media print {
+    .no-print {
+        display: none;
+    }
+
+    .invoice-box {
+        box-shadow: none;
+        border: none;
+    }
 }

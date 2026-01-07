@@ -7,7 +7,6 @@
 </head>
 
 <body>
-    <!-- Main Container -->
     <div class="main-container">
         <h1>Hospital Management System</h1>
         <p>Welcome to our Hospital Management System</p>

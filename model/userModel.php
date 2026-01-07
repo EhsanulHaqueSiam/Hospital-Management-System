@@ -89,10 +89,8 @@ function updateUser($user)
     $email = mysqli_real_escape_string($con, $user['email']);
     $phone = mysqli_real_escape_string($con, $user['phone']);
 
-    // Build update query - only update provided fields
     $sql = "UPDATE users SET full_name='{$full_name}', email='{$email}', phone='{$phone}'";
 
-    // Add optional address field if provided
     if (isset($user['address'])) {
         $address = mysqli_real_escape_string($con, $user['address']);
         $sql .= ", address='{$address}'";

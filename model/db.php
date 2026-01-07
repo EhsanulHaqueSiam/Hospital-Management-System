@@ -2,7 +2,6 @@
 
 function getConnection()
 {
-    // Late binding: Configuration defined inside function, no global keyword
     $host = "127.0.0.1";
     $dbname = "hospital_db";
     $dbuser = "root";
