@@ -117,13 +117,32 @@ if (!isset($_SESSION)) session_start();
         const item = e.target.closest('.notif-item');
         if (!item) return;
         const id = item.getAttribute('data-id');
+        const wasUnread = item.classList.contains('unread');
+        
         // mark read then redirect to view endpoint which will redirect to real link
         fetch('notification_controller.php?action=mark_read', { method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:'id='+encodeURIComponent(id) })
-        .then(()=>{
+        .then(r=>r.json())
+        .then(j=>{
+            if (j.success) {
+                // Update item styling in menu
+                item.classList.remove('unread');
+                item.classList.add('read');
+                
+                // Decrement badge if it was unread
+                if (wasUnread && j.unread_count !== undefined) {
+                    updateBadge(j.unread_count);
+                }
+            }
             // close menu and go to view (controller view will redirect to link if exists)
             closeMenu();
             window.location.href = 'notification_controller.php?action=view&id='+encodeURIComponent(id);
-        }).catch(()=>{ window.location.href = 'notification_controller.php?action=view&id='+encodeURIComponent(id); });
+        })
+        .catch(err=>{
+            console.error('Mark read error:', err);
+            // close menu and go to view (controller view will redirect to link if exists)
+            closeMenu();
+            window.location.href = 'notification_controller.php?action=view&id='+encodeURIComponent(id);
+        });
     });
 
     // auto update badge every 30s
