@@ -15,11 +15,11 @@ if (!$appointment) {
     exit;
 }
 
-// Fetch all patients and doctors for dropdowns
+// Fetch all for dropdowns
 $patients = getAllPatients();
 $doctors = getAllDoctors();
 
-// Fetch current patient and doctor data
+// Fetch current data
 $current_patient = getPatientById($appointment['patient_id']);
 $current_patient_user = $current_patient ? getUserById($current_patient['user_id']) : null;
 
@@ -35,7 +35,7 @@ $current_doctor_user = $current_doctor ? getUserById($current_doctor['user_id'])
 </head>
 
 <body>
-    <!-- Navbar -->
+
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
         <a href="dashboard_admin.php" class="navbar-link">Dashboard</a>
@@ -140,7 +140,8 @@ $current_doctor_user = $current_doctor ? getUserById($current_doctor['user_id'])
 
             <div>
                 <input type="submit" name="submit" value="Update Appointment">
-                <a href="appointment_list.php"><button type="button">Cancel</button></a>
+                <a href="appointment_view.php?id=<?php echo $appointment['id']; ?>"><button
+                        type="button">Cancel</button></a>
             </div>
         </form>
     </div>
