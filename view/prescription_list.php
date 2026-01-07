@@ -1,5 +1,3 @@
-<<<<<<< Updated upstream:view/prescription_list.html
-=======
 <?php
 require_once('../controller/sessionCheck.php');
 require_once('../model/prescriptionModel.php');
@@ -10,18 +8,23 @@ require_once('../model/userModel.php');
 $role = $_SESSION['role'];
 $user_id = $_SESSION['user_id'];
 
+// Get current doctor ID if role is doctor
+$current_doctor_id = null;
+if ($role == 'doctor') {
+    $current_doctor = getDoctorByUserId($user_id);
+    $current_doctor_id = $current_doctor ? $current_doctor['id'] : null;
+}
+
 // Fetch prescriptions based on role
 if ($role == 'admin') {
     $prescriptions = getAllPrescriptions();
 } elseif ($role == 'doctor') {
-    $doctor = getDoctorByUserId($user_id);
-    $prescriptions = $doctor ? getPrescriptionsByDoctor($doctor['id']) : [];
+    $prescriptions = $current_doctor_id ? getPrescriptionsByDoctor($current_doctor_id) : [];
 } else {
     $patient = getPatientByUserId($user_id);
     $prescriptions = $patient ? getPrescriptionsByPatient($patient['id']) : [];
 }
 ?>
->>>>>>> Stashed changes:view/prescription_list.php
 <!DOCTYPE html>
 <html lang="en">
 
@@ -31,7 +34,7 @@ if ($role == 'admin') {
 </head>
 
 <body>
-    <!-- Navbar -->
+
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
         <?php if ($role == 'admin'): ?>
@@ -49,50 +52,18 @@ if ($role == 'admin') {
     <div class="main-container">
         <h2>Prescription Management</h2>
 
-<<<<<<< Updated upstream:view/prescription_list.html
-        <div>
 
-            <a href="prescription_add.html" class="button">Create New Prescription</a>
-            <button class="button" id="export-xml-btn">Export to XML</button>
-        </div>
-
-=======
-        <!-- Actions -->
->>>>>>> Stashed changes:view/prescription_list.php
         <fieldset>
             <legend>Actions</legend>
             <table>
                 <tr>
-                    <td>
-                        <form method="GET" action="">
-                            Search: <input type="text" name="search" value="">
-                            <input type="submit" value="Search">
-                        </form>
-                    </td>
                     <?php if ($role == 'doctor'): ?>
                         <td>
                             <a href="prescription_add.php"><button type="button">Create Prescription</button></a>
                         </td>
-<<<<<<< Updated upstream:view/prescription_list.html
-                        <td>
-
-                            <select name="patient_id">
-                                <option value="">-- Filter by Patient --</option>
-
-                            </select>
-                        </td>
-                        <td>
-                            <button type="submit" class="button">Search</button>
-                            <a href="prescription_list.html" class="button">Reset</a>
-                        </td>
-                    </tr>
-                </table>
-            </form>
-=======
                     <?php endif; ?>
                 </tr>
             </table>
->>>>>>> Stashed changes:view/prescription_list.php
         </fieldset>
 
         <br>
@@ -112,11 +83,14 @@ if ($role == 'admin') {
                 <?php if (count($prescriptions) > 0): ?>
                     <?php foreach ($prescriptions as $prescription): ?>
                         <?php
-                        $patient = getPatientById($prescription['patient_id']);
-                        $patient_user = $patient ? getUserById($patient['user_id']) : null;
+                        $presc_patient = getPatientById($prescription['patient_id']);
+                        $patient_user = $presc_patient ? getUserById($presc_patient['user_id']) : null;
 
-                        $doctor = getDoctorById($prescription['doctor_id']);
-                        $doctor_user = $doctor ? getUserById($doctor['user_id']) : null;
+                        $presc_doctor = getDoctorById($prescription['doctor_id']);
+                        $doctor_user = $presc_doctor ? getUserById($presc_doctor['user_id']) : null;
+
+                        // Check if current doctor owns this prescription
+                        $isOwnPrescription = ($role == 'doctor' && $current_doctor_id == $prescription['doctor_id']);
                         ?>
                         <tr>
                             <td><?php echo $prescription['id']; ?></td>
@@ -126,10 +100,15 @@ if ($role == 'admin') {
                             <td><?php echo $prescription['created_date']; ?></td>
                             <td>
                                 <a href="prescription_view.php?id=<?php echo $prescription['id']; ?>"><button>View</button></a>
-                                <?php if ($role == 'admin'): ?>
+
+                                <?php if ($role == 'admin' || $isOwnPrescription): ?>
+                                    <a href="prescription_edit.php?id=<?php echo $prescription['id']; ?>"><button>Edit</button></a>
                                     <a href="../controller/delete_prescription.php?id=<?php echo $prescription['id']; ?>"
                                         onclick="return confirm('Are you sure?');"><button>Delete</button></a>
                                 <?php endif; ?>
+
+                                <button
+                                    onclick="window.open('prescription_view.php?id=<?php echo $prescription['id']; ?>&print=1', '_blank');">Print</button>
                             </td>
                         </tr>
                     <?php endforeach; ?>

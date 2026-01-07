@@ -101,11 +101,11 @@ function deletePrescription($id)
 {
     $con = getConnection();
 
-    // First delete associated medicines
+
     $sql = "DELETE FROM prescription_medicines WHERE prescription_id='{$id}'";
     mysqli_query($con, $sql);
 
-    // Then delete the prescription
+
     $sql = "DELETE FROM prescriptions WHERE id='{$id}'";
 
     if (mysqli_query($con, $sql)) {
@@ -135,7 +135,7 @@ function updatePrescription($prescription)
 }
 
 
-// Prescription Medicines functions
+
 
 function getPrescriptionMedicines($prescription_id)
 {
@@ -182,6 +182,24 @@ function deletePrescriptionMedicines($prescription_id)
     } else {
         return false;
     }
+}
+
+function countPrescriptionsByDoctor($doctor_id)
+{
+    $con = getConnection();
+    $sql = "SELECT COUNT(*) as count FROM prescriptions WHERE doctor_id='{$doctor_id}'";
+    $result = mysqli_query($con, $sql);
+    $row = mysqli_fetch_assoc($result);
+    return $row['count'];
+}
+
+function countPrescriptionsByPatient($patient_id)
+{
+    $con = getConnection();
+    $sql = "SELECT COUNT(*) as count FROM prescriptions WHERE patient_id='{$patient_id}'";
+    $result = mysqli_query($con, $sql);
+    $row = mysqli_fetch_assoc($result);
+    return $row['count'];
 }
 
 ?>
