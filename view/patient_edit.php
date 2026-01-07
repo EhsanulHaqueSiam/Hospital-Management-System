@@ -25,7 +25,7 @@ $user = getUserById($patient['user_id']);
 </head>
 
 <body>
-    <!-- Navbar -->
+
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
         <a href="dashboard_admin.php" class="navbar-link">Dashboard</a>
@@ -125,7 +125,7 @@ $user = getUserById($patient['user_id']);
 
             <div>
                 <input type="submit" name="submit" value="Update Information">
-                <a href="patient_list.php"><button type="button">Cancel</button></a>
+                <a href="patient_view.php?id=<?php echo $patient['id']; ?>"><button type="button">Cancel</button></a>
             </div>
         </form>
     </div>

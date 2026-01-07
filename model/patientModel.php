@@ -44,6 +44,24 @@ function getAllPatients()
     return $patients;
 }
 
+function searchPatients($term)
+{
+    $con = getConnection();
+    $term = mysqli_real_escape_string($con, $term);
+    $sql = "SELECT p.* FROM patients p 
+            JOIN users u ON p.user_id = u.id 
+            WHERE u.full_name LIKE '%{$term}%' 
+            OR u.phone LIKE '%{$term}%'
+            ORDER BY p.id ASC";
+    $result = mysqli_query($con, $sql);
+
+    $patients = array();
+    while ($row = mysqli_fetch_assoc($result)) {
+        $patients[] = $row;
+    }
+    return $patients;
+}
+
 function addPatient($patient)
 {
     $con = getConnection();

@@ -86,12 +86,13 @@ function addAppointment($appointment)
     $con = getConnection();
 
     $appointment_date = mysqli_real_escape_string($con, $appointment['appointment_date']);
+    $appointment_time = isset($appointment['appointment_time']) ? mysqli_real_escape_string($con, $appointment['appointment_time']) : '';
     $status = mysqli_real_escape_string($con, $appointment['status']);
     $reason = mysqli_real_escape_string($con, $appointment['reason']);
     $notes = mysqli_real_escape_string($con, $appointment['notes']);
 
-    $sql = "INSERT INTO appointments (patient_id, doctor_id, appointment_date, status, reason, notes) 
-            VALUES ('{$appointment['patient_id']}', '{$appointment['doctor_id']}', '{$appointment_date}', '{$status}', '{$reason}', '{$notes}')";
+    $sql = "INSERT INTO appointments (patient_id, doctor_id, appointment_date, appointment_time, status, reason, notes) 
+            VALUES ('{$appointment['patient_id']}', '{$appointment['doctor_id']}', '{$appointment_date}', '{$appointment_time}', '{$status}', '{$reason}', '{$notes}')";
 
     if (mysqli_query($con, $sql)) {
         return true;
@@ -144,6 +145,24 @@ function updateAppointmentStatus($id, $status)
     } else {
         return false;
     }
+}
+
+function countAppointmentsByDoctor($doctor_id)
+{
+    $con = getConnection();
+    $sql = "SELECT COUNT(*) as count FROM appointments WHERE doctor_id='{$doctor_id}'";
+    $result = mysqli_query($con, $sql);
+    $row = mysqli_fetch_assoc($result);
+    return $row['count'];
+}
+
+function countAppointmentsByPatient($patient_id)
+{
+    $con = getConnection();
+    $sql = "SELECT COUNT(*) as count FROM appointments WHERE patient_id='{$patient_id}'";
+    $result = mysqli_query($con, $sql);
+    $row = mysqli_fetch_assoc($result);
+    return $row['count'];
 }
 
 ?>
