@@ -20,4 +20,10 @@ if ($action == 'index') {
     ];
     insertNotice($notice);
     header("Location: notice_controller.php");
+} elseif ($action == 'details') {
+    $notice = getNoticeById($_GET['id']);
+    require_once('../view/notice/details.php');
+} elseif ($action == 'delete') {
+    deleteNotice($_GET['id']);
+    header("Location: notice_controller.php");
 }
