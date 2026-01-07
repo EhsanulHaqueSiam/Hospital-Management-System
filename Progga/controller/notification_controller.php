@@ -34,11 +34,21 @@ if ($action == 'fetch') {
     exit;
 }
 
+if ($action == 'dropdown') {
+    // return latest 5 notifications and unread count for dropdown
+    $notifications = getNotificationsByUser($user_id, 5, 0, 'all');
+    $unread = countNotificationsByUser($user_id, 'unread');
+    header('Content-Type: application/json');
+    echo json_encode(['unread_count' => $unread, 'notifications' => $notifications]);
+    exit;
+}
+
 if ($action == 'mark_read' && $_SERVER['REQUEST_METHOD'] === 'POST'){
     $id = (int)($_POST['id'] ?? 0);
     $ok = markNotificationRead($id, $user_id);
+    $unread = countNotificationsByUser($user_id, 'unread');
     header('Content-Type: application/json');
-    echo json_encode(['success' => (bool)$ok]);
+    echo json_encode(['success' => (bool)$ok, 'unread_count' => $unread]);
     exit;
 }
 

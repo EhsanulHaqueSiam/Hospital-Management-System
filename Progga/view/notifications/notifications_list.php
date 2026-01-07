@@ -1,5 +1,14 @@
 <?php
-// $notifications, $totalPages, $page, $status available
+// $notifications, $totalPages, $page, $status may be provided by controller
+if (!isset($_SESSION)) session_start();
+if (!isset($_SESSION['user_id'])) {
+    echo "Please login first.";
+    exit;
+}
+$page = isset($page) ? (int)$page : 1;
+$totalPages = isset($totalPages) ? (int)$totalPages : 1;
+$status = isset($status) ? $status : 'all';
+$notifications = isset($notifications) ? $notifications : [];
 ?>
 <!DOCTYPE html>
 <html>
@@ -36,7 +45,7 @@
             <a href="notification_controller.php?action=view&id=<?=$n['id']?>" class="notif-link"> <?php echo htmlspecialchars($n['message']); ?></a>
             <span class="time" data-ts="<?php echo $n['created_at']; ?>">just now</span>
             <?php if(!$n['is_read']){ ?>
-                <button class="mark-read">Mark read</button>
+                <button class="mark-read" title="Mark as read">✓</button>
             <?php } ?>
         </div>
     <?php } ?>

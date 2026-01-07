@@ -29,13 +29,13 @@ function countNotificationsByUser($user_id, $status='all'){
 
 function markNotificationRead($id, $user_id){
     $con = getConnection();
-    $sql = "UPDATE notifications SET is_read = 1 WHERE id = $id AND user_id = $user_id";
+    $sql = "UPDATE notifications SET is_read = 1, read_at = NOW() WHERE id = $id AND user_id = $user_id";
     return mysqli_query($con, $sql);
 }
 
 function markAllNotificationsRead($user_id){
     $con = getConnection();
-    $sql = "UPDATE notifications SET is_read = 1 WHERE user_id = $user_id AND is_read = 0";
+    $sql = "UPDATE notifications SET is_read = 1, read_at = NOW() WHERE user_id = $user_id AND is_read = 0";
     return mysqli_query($con, $sql);
 }
 
