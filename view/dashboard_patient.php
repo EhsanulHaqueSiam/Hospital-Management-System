@@ -49,6 +49,18 @@ if ($patient) {
 
         <br>
 
+        <!-- Quick Links -->
+        <fieldset>
+            <legend>Quick Actions</legend>
+            <a href="appointment_add.php"><button>Book New Appointment</button></a>
+            <a href="appointment_list.php"><button>View My Appointments</button></a>
+            <a href="prescription_list.php"><button>View My Prescriptions</button></a>
+            <a href="record_list.php"><button>View My Medical Records</button></a>
+            <a href="patient_bill_list.php"><button>My Bills</button></a>
+        </fieldset>
+
+        <br>
+
         <!-- Appointment History -->
         <fieldset>
             <legend>Your Appointments</legend>
