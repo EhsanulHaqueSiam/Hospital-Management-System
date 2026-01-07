@@ -170,10 +170,54 @@ document.getElementById('markAllRead').addEventListener('click', ()=>{
     });
 });
 
+// Clear All Read with confirmation modal and AJAX removal
+const confirmModal = document.getElementById('confirmModal');
+const confirmOk = document.getElementById('confirmOk');
+const confirmCancel = document.getElementById('confirmCancel');
+const successMsg = document.getElementById('successMsg');
+
 document.getElementById('clearAllRead').addEventListener('click', ()=>{
-    if (!confirm('Clear all read notifications?')) return;
+    if (!confirmModal) return;
+    confirmModal.style.display = 'flex';
+});
+
+function closeConfirm(){ if (confirmModal) confirmModal.style.display = 'none'; }
+
+confirmCancel.addEventListener('click', ()=>{ closeConfirm(); });
+
+confirmOk.addEventListener('click', ()=>{
+    confirmOk.disabled = true;
     fetch('notification_controller.php?action=clear_all_read', { method:'POST' })
-    .then(r=>r.json()).then(j=>{ if (j.success) fetchNotifications(); });
+    .then(r=>r.json())
+    .then(j=>{
+        confirmOk.disabled = false;
+        closeConfirm();
+        if (j.success){
+            // Remove all read items from DOM
+            document.querySelectorAll('.notification-item.read').forEach(it=> it.remove());
+
+            // Show success message
+            if (successMsg){
+                successMsg.textContent = 'Read notifications cleared!';
+                successMsg.style.display = 'block';
+                setTimeout(()=>{ successMsg.style.display = 'none'; }, 3500);
+            }
+
+            // Refresh dropdown/badge if present
+            fetch('notification_controller.php?action=dropdown')
+            .then(r=>r.json())
+            .then(d=>{
+                const badge = document.querySelector('#notifBadge');
+                if (badge){
+                    if (d.unread_count && d.unread_count > 0){ badge.textContent = d.unread_count; badge.style.display='inline-block'; }
+                    else badge.style.display = 'none';
+                }
+                // Optionally refresh cached dropdown items if open
+                if (window._notif_latest !== undefined) window._notif_latest = d.notifications || [];
+            }).catch(()=>{});
+        }
+    })
+    .catch(err=>{ confirmOk.disabled=false; closeConfirm(); console.error('Clear all read failed', err); });
 });
 
 // auto-refresh every 60s

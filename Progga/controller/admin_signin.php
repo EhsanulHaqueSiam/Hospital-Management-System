@@ -20,25 +20,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: notice_controller.php');
         exit;
     } else {
-        $error = 'Invalid admin credentials.';
-    // Use admins.json for admin accounts
-    $adminsFile = __DIR__ . '/../models/admins.json';
-    if (!file_exists($adminsFile)) {
-        $default = [
-            [
-                'username' => 'admin',
-                'email' => 'admin@hospital.com',
-                'password' => 'admin123'
-            ]
-        ];
-        file_put_contents($adminsFile, json_encode($default, JSON_PRETTY_PRINT));
-    }
+        // fallback: check admins.json for additional admin accounts
+        $adminsFile = __DIR__ . '/../models/admins.json';
+        if (!file_exists($adminsFile)) {
+            $default = [
+                [
+                    'username' => 'admin',
+                    'email' => 'admin@hospital.com',
+                    'password' => 'admin123'
+                ]
+            ];
+            file_put_contents($adminsFile, json_encode($default, JSON_PRETTY_PRINT));
+        }
 
-    $admins = json_decode(file_get_contents($adminsFile), true) ?: [];
-
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $user = $_POST['user'] ?? '';
-        $password = $_POST['password'] ?? '';
+        $admins = json_decode(file_get_contents($adminsFile), true) ?: [];
 
         $found = false;
         foreach ($admins as $a) {
@@ -59,4 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    require_once('../view/admin_signin.php');
+}
+
+// show signin view
+require_once('../view/admin_signin.php');
