@@ -43,13 +43,13 @@ if (!isset($_SESSION['role'])) {
             <td><?php echo date("d M Y", strtotime($notice['created_at'])); ?></td>
             <td><?php echo $notice['is_important'] ? 'YES' : 'NO'; ?></td>
             <td>
-                <a href="../../controller/notice_controller.php?action=details&id=<?=$notice['id']?>">Read</a>
+                <a href="notice_controller.php?action=details&id=<?=$notice['id']?>">Read</a>
 
                 <?php if ($_SESSION['role'] === 'Admin') { ?>
                     |
-                    <a href="../../controller/notice_controller.php?action=edit&id=<?=$notice['id']?>">Edit</a>
+                    <a href="notice_controller.php?action=edit&id=<?=$notice['id']?>">Edit</a>
                     |
-                    <a href="../../controller/notice_controller.php?action=delete&id=<?=$notice['id']?>"
+                    <a href="notice_controller.php?action=delete&id=<?=$notice['id']?>"
                        onclick="return confirm('Delete this notice?')">Delete</a>
                 <?php } ?>
             </td>

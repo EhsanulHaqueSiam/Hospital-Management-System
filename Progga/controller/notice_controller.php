@@ -18,11 +18,25 @@ if ($action == 'index') {
         'expiry_date' => $_POST['expiry_date'],
         'created_by' => $_SESSION['user_id']
     ];
-    insertNotice($notice);
+    createNotice($notice);
     header("Location: notice_controller.php");
 } elseif ($action == 'details') {
     $notice = getNoticeById($_GET['id']);
     require_once('../view/notice/details.php');
+} elseif ($action == 'edit') {
+    $notice = getNoticeById($_GET['id']);
+    require_once('../view/notice/edit.php');
+} elseif ($action == 'update') {
+    $notice = [
+        'id' => $_POST['id'],
+        'title' => $_POST['title'],
+        'content' => $_POST['content'],
+        'category' => $_POST['category'],
+        'is_important' => isset($_POST['is_important']) ? 1 : 0,
+        'expiry_date' => $_POST['expiry_date']
+    ];
+    updateNotice($notice);
+    header("Location: notice_controller.php");
 } elseif ($action == 'delete') {
     deleteNotice($_GET['id']);
     header("Location: notice_controller.php");
