@@ -22,7 +22,7 @@ $departments = getAllDepartments();
 </head>
 
 <body>
-    <!-- Navbar -->
+
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
         <?php if ($role == 'admin'): ?>
@@ -68,8 +68,9 @@ $departments = getAllDepartments();
                     <tr>
                         <td>Department:</td>
                         <td>
-                            <select name="department_id" id="department_id">
-                                <option value="">-- Select Department --</option>
+                            <select name="department_id" id="department_id"
+                                onchange="loadDoctorsByDepartment(this.value, 'doctor_id');">
+                                <option value="">-- Select Department (Optional) --</option>
                                 <?php foreach ($departments as $dept): ?>
                                     <option value="<?php echo $dept['id']; ?>"><?php echo $dept['department_name']; ?>
                                     </option>
@@ -80,24 +81,26 @@ $departments = getAllDepartments();
                     <tr>
                         <td>Doctor:</td>
                         <td>
-                            <select name="doctor_id" required>
+                            <select name="doctor_id" id="doctor_id" required onchange="updateTimeSlots();">
                                 <option value="">-- Select Doctor --</option>
                                 <?php foreach ($doctors as $d): ?>
                                     <?php $d_user = getUserById($d['user_id']); ?>
                                     <option value="<?php echo $d['id']; ?>"><?php echo $d_user['full_name']; ?> -
-                                        <?php echo $d['specialization']; ?></option>
+                                        <?php echo $d['specialization']; ?>
+                                    </option>
                                 <?php endforeach; ?>
                             </select>
                         </td>
                     </tr>
                     <tr>
                         <td>Date:</td>
-                        <td><input type="date" name="appointment_date" required></td>
+                        <td><input type="date" name="appointment_date" id="appointment_date"
+                                onchange="updateTimeSlots();" required></td>
                     </tr>
                     <tr>
                         <td>Time:</td>
                         <td>
-                            <select name="appointment_time" required>
+                            <select name="appointment_time" id="appointment_time" required>
                                 <option value="">-- Select Time --</option>
                                 <option value="09:00:00">09:00 AM</option>
                                 <option value="09:30:00">09:30 AM</option>
@@ -139,6 +142,17 @@ $departments = getAllDepartments();
             </div>
         </form>
     </div>
+
+    <script src="../assets/js/ajax.js"></script>
+    <script>
+        function updateTimeSlots() {
+            var doctorId = document.getElementById('doctor_id').value;
+            var date = document.getElementById('appointment_date').value;
+            if (doctorId && date) {
+                loadAvailableSlots(doctorId, date, 'appointment_time');
+            }
+        }
+    </script>
 </body>
 
 </html>
