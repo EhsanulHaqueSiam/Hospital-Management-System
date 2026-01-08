@@ -1,16 +1,25 @@
 <?php
 session_start();
 require_once('../model/userModel.php');
+require_once('../model/validationHelper.php');
 
 if (isset($_POST['submit'])) {
     $user_id = $_SESSION['user_id'];
-    $full_name = $_POST['full_name'];
-    $email = $_POST['email'];
-    $phone = $_POST['phone'];
-    $address = isset($_POST['address']) ? $_POST['address'] : '';
+    $full_name = trim($_POST['full_name']);
+    $email = trim($_POST['email']);
+    $phone = trim($_POST['phone']);
+    $address = isset($_POST['address']) ? trim($_POST['address']) : '';
 
-    if ($full_name == "" || $email == "" || $phone == "") {
-        echo "All fields are required";
+    $errors = [];
+    if ($err = validateRequired($full_name, 'Full Name'))
+        $errors[] = $err;
+    if ($err = validateEmail($email))
+        $errors[] = $err;
+    if ($err = validatePhone($phone))
+        $errors[] = $err;
+
+    if (count($errors) > 0) {
+        echo "Validation errors:<br>" . implode("<br>", $errors);
         echo "<br><a href='../view/profile_edit.php'>Go Back</a>";
         exit;
     } else {

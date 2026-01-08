@@ -21,7 +21,6 @@ require_once('../controller/sessionCheck.php');
         } elseif ($_SESSION['role'] == 'patient') {
             $dashboard_link = 'dashboard_patient.php';
         } else {
-            // Undefined role - redirect to logout
             header('location: ../controller/logout.php');
             exit;
         }
@@ -41,50 +40,47 @@ require_once('../controller/sessionCheck.php');
         $user = getUserById($_SESSION['user_id']);
         ?>
 
-        <form method="POST" action="../controller/edit_profile.php" onsubmit="return validateEditProfile()">
+        <form method="POST" action="../controller/edit_profile.php" onsubmit="return validateForm(this)">
             <fieldset>
                 <legend>Update Information</legend>
                 <table>
                     <tr>
                         <td>Full Name:</td>
-                        <td><input type="text" name="full_name" value="<?php echo htmlspecialchars($user['full_name']); ?>"
-                                onblur="validateProfileNameBlur()" required></td>
+                        <td><input type="text" name="full_name"
+                                value="<?php echo htmlspecialchars($user['full_name']); ?>"
+                                onblur="validateRequiredBlur(this, 'Full Name')" required></td>
                     </tr>
-                    <tr>
-                        <td></td>
-                        <td><span class="error-message" id="fullname-error"></span></td>
-                    </tr>
+
                     <tr>
                         <td>Email:</td>
-                        <td><input type="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required></td>
+                        <td><input type="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>"
+                                required onblur="validateEmailBlur(this)"></td>
                     </tr>
                     <tr>
                         <td>Phone:</td>
-                        <td><input type="tel" name="phone" value="<?php echo htmlspecialchars($user['phone']); ?>" onblur="validateProfilePhoneBlur()"
-                                required></td>
+                        <td><input type="tel" name="phone" value="<?php echo htmlspecialchars($user['phone']); ?>"
+                                onblur="validateRequiredBlur(this, 'Phone')" required></td>
                     </tr>
-                    <tr>
-                        <td></td>
-                        <td><span class="error-message" id="phone-error"></span></td>
-                    </tr>
+
                     <tr>
                         <td>Address:</td>
-                        <td><input type="text" name="address" value="<?php echo htmlspecialchars($user['address'] ?? ''); ?>"></td>
+                        <td><input type="text" name="address"
+                                value="<?php echo htmlspecialchars($user['address'] ?? ''); ?>" required
+                                onblur="validateRequiredBlur(this, 'Address')"></td>
                     </tr>
 
                     <?php if ($_SESSION['role'] == 'doctor'): ?>
-                    <tr class="doctor-only-field">
-                        <td>Specialization:</td>
-                        <td><input type="text" name="specialization" value=""></td>
-                    </tr>
-                    <tr class="doctor-only-field">
-                        <td></td>
-                        <td><span class="error-message" id="specialization-error"></span></td>
-                    </tr>
-                    <tr class="doctor-only-field">
-                        <td>Bio:</td>
-                        <td><textarea name="bio" rows="4" cols="30"></textarea></td>
-                    </tr>
+                        <tr class="doctor-only-field">
+                            <td>Specialization:</td>
+                            <td><input type="text" name="specialization" value=""
+                                    onblur="validateRequiredBlur(this, 'Specialization')"></td>
+                        </tr>
+
+                        <tr class="doctor-only-field">
+                            <td>Bio:</td>
+                            <td><textarea name="bio" rows="4" cols="30"
+                                    onblur="validateRequiredBlur(this, 'Bio')"></textarea></td>
+                        </tr>
                     <?php endif; ?>
 
                     <tr>
@@ -99,6 +95,7 @@ require_once('../controller/sessionCheck.php');
         </form>
     </div>
 
+    <script src="../assets/js/validation-common.js"></script>
     <script src="../assets/js/profile.js"></script>
 </body>
 

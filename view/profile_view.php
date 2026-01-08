@@ -1,8 +1,6 @@
 <?php
 require_once('../controller/sessionCheck.php');
 require_once('../model/userModel.php');
-
-// Fetch logged-in user's data
 $user = getUserById($_SESSION['user_id']);
 ?>
 <!DOCTYPE html>
@@ -25,7 +23,6 @@ $user = getUserById($_SESSION['user_id']);
         } elseif ($_SESSION['role'] == 'patient') {
             $dashboard_link = 'dashboard_patient.php';
         } else {
-            // Undefined role - redirect to logout
             header('location: ../controller/logout.php');
             exit;
         }

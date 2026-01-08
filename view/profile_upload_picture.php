@@ -21,7 +21,6 @@ require_once('../controller/sessionCheck.php');
         } elseif ($_SESSION['role'] == 'patient') {
             $dashboard_link = 'dashboard_patient.php';
         } else {
-            // Undefined role - redirect to logout
             header('location: ../controller/logout.php');
             exit;
         }
@@ -37,13 +36,15 @@ require_once('../controller/sessionCheck.php');
 
         <span class="success-message" id="success-message"></span>
 
-        <form method="POST" action="../controller/upload_picture.php" enctype="multipart/form-data">
+        <form method="POST" action="../controller/upload_picture.php" enctype="multipart/form-data"
+            onsubmit="return validatePicture()">
             <fieldset>
                 <legend>Profile Picture</legend>
                 <table>
                     <tr>
                         <td>Image:</td>
-                        <td><input type="file" name="myfile" accept=".jpg,.jpeg,.png,.gif,image/*" /></td>
+                        <td><input type="file" id="file-input" name="myfile" accept=".jpg,.jpeg,.png,.gif,image/*"
+                                onchange="validatePicture()" /></td>
                     </tr>
                     <tr>
                         <td></td>

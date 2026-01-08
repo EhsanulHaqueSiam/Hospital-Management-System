@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once('../model/userModel.php');
+require_once('../model/validationHelper.php');
 
 if (isset($_POST['submit'])) {
     $user_id = $_SESSION['user_id'];
@@ -8,14 +9,17 @@ if (isset($_POST['submit'])) {
     $new_password = $_POST['new_password'];
     $confirm_password = $_POST['confirm_password'];
 
-    if ($old_password == "" || $new_password == "" || $confirm_password == "") {
-        echo "All fields are required";
-    } else if ($new_password != $confirm_password) {
-        echo "Passwords do not match";
-    } else if (strlen($new_password) < 8) {
-        echo "Password must be at least 8 characters";
+    $errors = [];
+    if ($err = validateRequired($old_password, 'Old Password'))
+        $errors[] = $err;
+    if ($err = validatePassword($new_password))
+        $errors[] = $err;
+    if ($new_password != $confirm_password)
+        $errors[] = "Passwords do not match";
+
+    if (count($errors) > 0) {
+        echo "Validation errors:<br>" . implode("<br>", $errors);
     } else {
-        // Verify old password
         $user = getUserById($user_id);
 
         if ($user && $user['password'] == $old_password) {

@@ -21,7 +21,6 @@ require_once('../controller/sessionCheck.php');
         } elseif ($_SESSION['role'] == 'patient') {
             $dashboard_link = 'dashboard_patient.php';
         } else {
-            // Undefined role - redirect to logout
             header('location: ../controller/logout.php');
             exit;
         }

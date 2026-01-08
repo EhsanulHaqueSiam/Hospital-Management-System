@@ -8,8 +8,6 @@ if (isset($_POST['submit'])) {
     if (isset($_FILES['myfile']) && $_FILES['myfile']['error'] == 0) {
         $src = $_FILES['myfile']['tmp_name'];
         $original_filename = $_FILES['myfile']['name'];
-
-        // Use pathinfo to reliably get extension
         $file_ext = strtolower(pathinfo($original_filename, PATHINFO_EXTENSION));
 
         $target_dir = "../assets/uploads/profiles/";
