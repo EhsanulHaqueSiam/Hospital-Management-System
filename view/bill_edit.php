@@ -4,7 +4,7 @@ require_once('../model/billModel.php');
 require_once('../model/patientModel.php');
 require_once('../model/userModel.php');
 
-$id = $_REQUEST['id'];
+$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $bill = getBillById($id);
 $items = getBillItems($id);
 $patients = getAllPatients();
@@ -14,13 +14,12 @@ if (!$bill) {
     exit;
 }
 ?>
-<!DOCTYPE html>
-<html lang="en">
+
+<html>
 
 <head>
     <title>Edit Bill - Hospital Management System</title>
     <link rel="stylesheet" href="../assets/css/style.css">
-    <script src="../assets/js/bill.js"></script>
 </head>
 
 <body onload="calcBillTotal()">
@@ -34,7 +33,7 @@ if (!$bill) {
     <div class="main-container">
         <h2>Edit Bill #<?php echo $bill['id']; ?></h2>
 
-        <form method="POST" action="../controller/edit_bill.php">
+        <form method="POST" action="../controller/edit_bill.php" onsubmit="return validateForm(this)">
             <input type="hidden" name="id" value="<?php echo $bill['id']; ?>">
             <fieldset>
                 <legend>Patient Details</legend>
@@ -67,11 +66,13 @@ if (!$bill) {
                     <?php foreach ($items as $item): ?>
                         <tr>
                             <td><input type="text" name="item_description[]"
-                                    value="<?php echo $item['item_description']; ?>" required></td>
+                                    value="<?php echo $item['item_description']; ?>" required
+                                    onblur="validateRequiredBlur(this, 'Description')"></td>
                             <td><input type="number" name="quantity[]" value="<?php echo $item['quantity']; ?>" min="1"
-                                    onchange="calcBillTotal()"></td>
+                                    onchange="calcBillTotal()" onblur="validateIntegerBlur(this, 'Quantity', 1)"></td>
                             <td><input type="number" name="unit_price[]" step="0.01"
-                                    value="<?php echo $item['unit_price']; ?>" onchange="calcBillTotal()"></td>
+                                    value="<?php echo $item['unit_price']; ?>" min="0" onchange="calcBillTotal()"
+                                    onblur="validatePositiveNumberBlur(this, 'Price')"></td>
                             <td><span class="subtotal">0.00</span></td>
                             <td><button type="button" onclick="removeBillItem(this)">Remove</button></td>
                         </tr>
@@ -89,12 +90,13 @@ if (!$bill) {
                     <tr>
                         <td>Discount (%):</td>
                         <td><input type="number" id="discount" name="discount" value="<?php echo $bill['discount']; ?>"
-                                onchange="calcBillTotal()"></td>
+                                min="0" onchange="calcBillTotal()"
+                                onblur="validatePositiveNumberBlur(this, 'Discount')"></td>
                     </tr>
                     <tr>
                         <td>Tax (%):</td>
-                        <td><input type="number" id="tax" name="tax" value="<?php echo $bill['tax']; ?>"
-                                onchange="calcBillTotal()"></td>
+                        <td><input type="number" id="tax" name="tax" value="<?php echo $bill['tax']; ?>" min="0"
+                                onchange="calcBillTotal()" onblur="validatePositiveNumberBlur(this, 'Tax')"></td>
                     </tr>
                     <tr>
                         <td><strong>Grand Total:</strong></td>
@@ -109,6 +111,8 @@ if (!$bill) {
             <a href="bill_view.php?id=<?php echo $bill['id']; ?>"><button type="button">Cancel</button></a>
         </form>
     </div>
+    <script src="../assets/js/validation-common.js"></script>
+    <script src="../assets/js/bill.js"></script>
 </body>
 
 </html>

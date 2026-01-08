@@ -1,20 +1,24 @@
 <?php
 require_once('adminCheck.php');
 require_once('../model/billModel.php');
+require_once('../model/validationHelper.php');
 
 if (isset($_POST['update'])) {
-    $id = $_POST['id'];
-    $notes = $_POST['notes'];
-    $discount = $_POST['discount'];
-    $tax = $_POST['tax'];
-
+    $id = intval($_POST['id']);
+    $notes = trim($_POST['notes']);
+    $discount = floatval($_POST['discount']);
+    $tax = floatval($_POST['tax']);
 
     $descriptions = $_POST['item_description'];
     $quantities = $_POST['quantity'];
     $prices = $_POST['unit_price'];
 
-    if (empty($descriptions) || count($descriptions) == 0) {
-        echo "At least one item is required";
+    $errors = [];
+    if (empty($descriptions) || count($descriptions) == 0)
+        $errors[] = "At least one item is required";
+
+    if (count($errors) > 0) {
+        echo "Validation errors:<br>" . implode("<br>", $errors);
         exit;
     }
 

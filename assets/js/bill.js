@@ -7,9 +7,9 @@ function addBillItem() {
     var cell4 = row.insertCell(3);
     var cell5 = row.insertCell(4);
 
-    cell1.innerHTML = '<input type="text" name="item_description[]" required>';
-    cell2.innerHTML = '<input type="number" name="quantity[]" value="1" min="1" onchange="calcBillTotal()">';
-    cell3.innerHTML = '<input type="number" name="unit_price[]" step="0.01" value="0.00" onchange="calcBillTotal()">';
+    cell1.innerHTML = '<input type="text" name="item_description[]" required onblur="validateRequiredBlur(this, \'Description\')">';
+    cell2.innerHTML = '<input type="number" name="quantity[]" value="1" min="1" onchange="calcBillTotal()" onblur="validateIntegerBlur(this, \'Quantity\', 1)">';
+    cell3.innerHTML = '<input type="number" name="unit_price[]" step="0.01" value="0.00" onchange="calcBillTotal()" onblur="validatePositiveNumberBlur(this, \'Price\')">';
     cell4.innerHTML = '<span class="subtotal">0.00</span>';
     cell5.innerHTML = '<button type="button" onclick="removeBillItem(this)">Remove</button>';
 }

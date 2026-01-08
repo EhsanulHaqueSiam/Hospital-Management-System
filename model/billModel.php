@@ -4,11 +4,11 @@ require_once('db.php');
 function createBill($bill)
 {
     $con = getConnection();
-    $patient_id = $bill['patient_id'];
-    $appointment_id = $bill['appointment_id'] ? "'{$bill['appointment_id']}'" : "NULL";
-    $total = $bill['total_amount'];
-    $discount = $bill['discount'];
-    $tax = $bill['tax'];
+    $patient_id = intval($bill['patient_id']);
+    $appointment_id = $bill['appointment_id'] ? intval($bill['appointment_id']) : "NULL";
+    $total = floatval($bill['total_amount']);
+    $discount = floatval($bill['discount']);
+    $tax = floatval($bill['tax']);
     $notes = mysqli_real_escape_string($con, $bill['notes']);
 
     $sql = "INSERT INTO bills (patient_id, appointment_id, total_amount, discount, tax, notes) 
@@ -24,10 +24,10 @@ function createBill($bill)
 function addBillItem($item)
 {
     $con = getConnection();
-    $bill_id = $item['bill_id'];
+    $bill_id = intval($item['bill_id']);
     $desc = mysqli_real_escape_string($con, $item['item_description']);
-    $qty = $item['quantity'];
-    $price = $item['unit_price'];
+    $qty = intval($item['quantity']);
+    $price = floatval($item['unit_price']);
 
     $sql = "INSERT INTO bill_items (bill_id, item_description, quantity, unit_price) 
             VALUES ('{$bill_id}', '{$desc}', '{$qty}', '{$price}')";
@@ -55,6 +55,7 @@ function getAllBills()
 function getBillsByPatientId($patient_id)
 {
     $con = getConnection();
+    $patient_id = intval($patient_id);
     $sql = "SELECT b.*, u.full_name as patient_name 
             FROM bills b 
             JOIN patients p ON b.patient_id = p.id 
@@ -73,6 +74,7 @@ function getBillsByPatientId($patient_id)
 function getBillById($id)
 {
     $con = getConnection();
+    $id = intval($id);
     $sql = "SELECT b.*, u.full_name as patient_name, u.phone, u.address 
             FROM bills b 
             JOIN patients p ON b.patient_id = p.id 
@@ -86,6 +88,7 @@ function getBillById($id)
 function getBillItems($bill_id)
 {
     $con = getConnection();
+    $bill_id = intval($bill_id);
     $sql = "SELECT * FROM bill_items WHERE bill_id='{$bill_id}'";
     $result = mysqli_query($con, $sql);
 
@@ -99,6 +102,8 @@ function getBillItems($bill_id)
 function updateBillPaidAmount($bill_id, $amount)
 {
     $con = getConnection();
+    $bill_id = intval($bill_id);
+    $amount = floatval($amount);
     $sql = "UPDATE bills SET paid_amount = paid_amount + {$amount} WHERE id='{$bill_id}'";
     return mysqli_query($con, $sql);
 }
@@ -106,12 +111,9 @@ function updateBillPaidAmount($bill_id, $amount)
 function deleteBill($id)
 {
     $con = getConnection();
-
+    $id = intval($id);
     mysqli_query($con, "DELETE FROM bill_items WHERE bill_id='{$id}'");
-
     mysqli_query($con, "DELETE FROM payments WHERE bill_id='{$id}'");
-
-
     $sql = "DELETE FROM bills WHERE id='{$id}'";
     return mysqli_query($con, $sql);
 }
@@ -119,16 +121,17 @@ function deleteBill($id)
 function deleteBillItems($bill_id)
 {
     $con = getConnection();
+    $bill_id = intval($bill_id);
     return mysqli_query($con, "DELETE FROM bill_items WHERE bill_id='{$bill_id}'");
 }
 
 function updateBill($bill)
 {
     $con = getConnection();
-    $id = $bill['id'];
-    $total = $bill['total_amount'];
-    $discount = $bill['discount'];
-    $tax = $bill['tax'];
+    $id = intval($bill['id']);
+    $total = floatval($bill['total_amount']);
+    $discount = floatval($bill['discount']);
+    $tax = floatval($bill['tax']);
     $notes = mysqli_real_escape_string($con, $bill['notes']);
 
     $sql = "UPDATE bills SET total_amount='{$total}', discount='{$discount}', tax='{$tax}', notes='{$notes}' WHERE id='{$id}'";
@@ -139,6 +142,7 @@ function updateBill($bill)
 function countBillsByPatient($patient_id)
 {
     $con = getConnection();
+    $patient_id = intval($patient_id);
     $sql = "SELECT COUNT(*) as count FROM bills WHERE patient_id='{$patient_id}'";
     $result = mysqli_query($con, $sql);
     $row = mysqli_fetch_assoc($result);
