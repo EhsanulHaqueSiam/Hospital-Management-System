@@ -5,8 +5,8 @@ require_once('../model/roomModel.php');
 $rooms = getAllRooms();
 $assignments = getActiveAssignments();
 ?>
-<!DOCTYPE html>
-<html lang="en">
+
+<html>
 
 <head>
     <title>Room Management - Hospital Management System</title>
@@ -14,7 +14,7 @@ $assignments = getActiveAssignments();
 </head>
 
 <body>
-    <!-- Navbar -->
+ 
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
         <a href="dashboard_admin.php" class="navbar-link">Dashboard</a>
@@ -33,7 +33,7 @@ $assignments = getActiveAssignments();
 
         <br>
 
-        <!-- Rooms Table -->
+     
         <fieldset>
             <legend>All Rooms</legend>
             <table border="1" cellpadding="8" width="100%">
@@ -85,6 +85,7 @@ $assignments = getActiveAssignments();
                                 <?php echo $room['facilities']; ?>
                             </td>
                             <td>
+                                <a href="room_view.php?id=<?php echo $room['id']; ?>"><button>View</button></a>
                                 <a href="room_edit.php?id=<?php echo $room['id']; ?>"><button>Edit</button></a>
                                 <a href="../controller/delete_room.php?id=<?php echo $room['id']; ?>"
                                     onclick="return confirm('Delete this room?');"><button>Delete</button></a>
@@ -101,7 +102,7 @@ $assignments = getActiveAssignments();
 
         <br>
 
-        <!-- Assignments Table -->
+
         <fieldset>
             <legend>Active Room Assignments</legend>
             <table border="1" cellpadding="8" width="100%">

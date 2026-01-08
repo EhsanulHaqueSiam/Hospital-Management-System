@@ -1,8 +1,8 @@
 <?php
 require_once('../controller/adminCheck.php');
 ?>
-<!DOCTYPE html>
-<html lang="en">
+
+<html>
 
 <head>
     <title>Add Room - Hospital Management System</title>
@@ -10,7 +10,7 @@ require_once('../controller/adminCheck.php');
 </head>
 
 <body>
-    <!-- Navbar -->
+
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
         <a href="dashboard_admin.php" class="navbar-link">Dashboard</a>
@@ -23,11 +23,12 @@ require_once('../controller/adminCheck.php');
 
         <fieldset>
             <legend>Room Details</legend>
-            <form method="POST" action="../controller/add_room.php">
+            <form method="POST" action="../controller/add_room.php" onsubmit="return validateForm(this)">
                 <table cellpadding="5">
                     <tr>
                         <td>Room Number:</td>
-                        <td><input type="text" name="room_number" required></td>
+                        <td><input type="text" name="room_number" required
+                                onblur="validateRequiredBlur(this, 'Room Number')"></td>
                     </tr>
                     <tr>
                         <td>Room Type:</td>
@@ -44,15 +45,18 @@ require_once('../controller/adminCheck.php');
                     </tr>
                     <tr>
                         <td>Floor:</td>
-                        <td><input type="text" name="floor"></td>
+                        <td><input type="number" name="floor" min="0" onblur="validateIntegerBlur(this, 'Floor', 0)">
+                        </td>
                     </tr>
                     <tr>
                         <td>Capacity:</td>
-                        <td><input type="number" name="capacity" value="1" min="1"></td>
+                        <td><input type="number" name="capacity" value="1" min="1"
+                                onblur="validateIntegerBlur(this, 'Capacity', 1)"></td>
                     </tr>
                     <tr>
                         <td>Price Per Day:</td>
-                        <td><input type="number" step="0.01" name="price" required></td>
+                        <td><input type="number" step="0.01" name="price" required
+                                onblur="validatePositiveNumberBlur(this, 'Price')"></td>
                     </tr>
                     <tr>
                         <td>Facilities:</td>
@@ -72,6 +76,7 @@ require_once('../controller/adminCheck.php');
             </form>
         </fieldset>
     </div>
+    <script src="../assets/js/validation-common.js"></script>
 </body>
 
 </html>

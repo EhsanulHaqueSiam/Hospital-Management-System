@@ -17,7 +17,17 @@ function getAllRooms()
 function getRoomById($id)
 {
     $con = getConnection();
+    $id = intval($id);
     $sql = "SELECT * FROM rooms WHERE id='{$id}'";
+    $result = mysqli_query($con, $sql);
+    return mysqli_fetch_assoc($result);
+}
+
+function getRoomByNumber($room_number)
+{
+    $con = getConnection();
+    $number = mysqli_real_escape_string($con, $room_number);
+    $sql = "SELECT * FROM rooms WHERE room_number='{$number}'";
     $result = mysqli_query($con, $sql);
     return mysqli_fetch_assoc($result);
 }
@@ -28,8 +38,8 @@ function addRoom($room)
     $number = mysqli_real_escape_string($con, $room['room_number']);
     $type = mysqli_real_escape_string($con, $room['room_type']);
     $floor = mysqli_real_escape_string($con, $room['floor']);
-    $capacity = $room['capacity'];
-    $price = $room['price_per_day'];
+    $capacity = intval($room['capacity']);
+    $price = floatval($room['price_per_day']);
     $facilities = mysqli_real_escape_string($con, $room['facilities']);
     $desc = mysqli_real_escape_string($con, $room['description']);
     $status = 'Available';
@@ -47,12 +57,12 @@ function addRoom($room)
 function updateRoom($room)
 {
     $con = getConnection();
-    $id = $room['id'];
+    $id = intval($room['id']);
     $number = mysqli_real_escape_string($con, $room['room_number']);
     $type = mysqli_real_escape_string($con, $room['room_type']);
     $floor = mysqli_real_escape_string($con, $room['floor']);
-    $capacity = $room['capacity'];
-    $price = $room['price_per_day'];
+    $capacity = intval($room['capacity']);
+    $price = floatval($room['price_per_day']);
     $facilities = mysqli_real_escape_string($con, $room['facilities']);
     $desc = mysqli_real_escape_string($con, $room['description']);
 
@@ -72,6 +82,7 @@ function updateRoom($room)
 function deleteRoom($id)
 {
     $con = getConnection();
+    $id = intval($id);
     mysqli_query($con, "DELETE FROM room_assignments WHERE room_id='{$id}'");
     $sql = "DELETE FROM rooms WHERE id='{$id}'";
     return mysqli_query($con, $sql);
@@ -80,12 +91,12 @@ function deleteRoom($id)
 function assignPatientToRoom($assignment)
 {
     $con = getConnection();
-    $patient_id = $assignment['patient_id'];
-    $room_id = $assignment['room_id'];
-    $admission_date = $assignment['admission_date'];
-    $expected = $assignment['expected_discharge_date'];
+    $patient_id = intval($assignment['patient_id']);
+    $room_id = intval($assignment['room_id']);
+    $admission_date = mysqli_real_escape_string($con, $assignment['admission_date']);
+    $expected = mysqli_real_escape_string($con, $assignment['expected_discharge_date']);
     $notes = mysqli_real_escape_string($con, $assignment['admission_notes']);
-    $assigned_by = $assignment['assigned_by'];
+    $assigned_by = intval($assignment['assigned_by']);
 
     $sql = "INSERT INTO room_assignments (patient_id, room_id, admission_date, expected_discharge_date, admission_notes, assigned_by) 
             VALUES ('{$patient_id}', '{$room_id}', '{$admission_date}', '{$expected}', '{$notes}', '{$assigned_by}')";
@@ -134,6 +145,9 @@ function getActiveAssignments()
 function dischargePatient($assignment_id, $room_id, $date)
 {
     $con = getConnection();
+    $assignment_id = intval($assignment_id);
+    $room_id = intval($room_id);
+    $date = mysqli_real_escape_string($con, $date);
     $sql = "UPDATE room_assignments SET discharge_date='{$date}' WHERE id='{$assignment_id}'";
     if (mysqli_query($con, $sql)) {
 
@@ -155,6 +169,7 @@ function dischargePatient($assignment_id, $room_id, $date)
 function getRoomOccupancy($room_id)
 {
     $con = getConnection();
+    $room_id = intval($room_id);
     $sql = "SELECT COUNT(*) as count FROM room_assignments WHERE room_id='{$room_id}' AND discharge_date IS NULL";
     $result = mysqli_query($con, $sql);
     $row = mysqli_fetch_assoc($result);

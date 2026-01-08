@@ -2,7 +2,7 @@
 require_once('../controller/adminCheck.php');
 require_once('../model/roomModel.php');
 
-$id = $_REQUEST['id'];
+$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $room = getRoomById($id);
 
 if (!$room) {
@@ -10,8 +10,8 @@ if (!$room) {
     exit;
 }
 ?>
-<!DOCTYPE html>
-<html lang="en">
+
+<html>
 
 <head>
     <title>Edit Room - Hospital Management System</title>
@@ -19,7 +19,7 @@ if (!$room) {
 </head>
 
 <body>
-    <!-- Navbar -->
+  
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
         <a href="dashboard_admin.php" class="navbar-link">Dashboard</a>
@@ -32,12 +32,13 @@ if (!$room) {
 
         <fieldset>
             <legend>Edit Information</legend>
-            <form method="POST" action="../controller/edit_room.php">
+            <form method="POST" action="../controller/edit_room.php" onsubmit="return validateForm(this)">
                 <input type="hidden" name="id" value="<?php echo $room['id']; ?>">
                 <table cellpadding="5">
                     <tr>
                         <td>Room Number:</td>
-                        <td><input type="text" name="room_number" value="<?php echo $room['room_number']; ?>" required>
+                        <td><input type="text" name="room_number" value="<?php echo $room['room_number']; ?>" required
+                                onblur="validateRequiredBlur(this, 'Room Number')">
                         </td>
                     </tr>
                     <tr>
@@ -47,8 +48,8 @@ if (!$room) {
                                 <option value="General Ward" <?php if ($room['room_type'] == 'General Ward')
                                     echo 'selected'; ?>>General Ward</option>
                                 <option value="Private" <?php if ($room['room_type'] == 'Private')
-                                    echo 'selected'; ?>
-                                    >Private</option>
+                                    echo 'selected'; ?>>
+                                    Private</option>
                                 <option value="Semi-Private" <?php if ($room['room_type'] == 'Semi-Private')
                                     echo 'selected'; ?>>Semi-Private</option>
                                 <option value="ICU" <?php if ($room['room_type'] == 'ICU')
@@ -65,16 +66,18 @@ if (!$room) {
                     </tr>
                     <tr>
                         <td>Floor:</td>
-                        <td><input type="text" name="floor" value="<?php echo $room['floor']; ?>"></td>
+                        <td><input type="number" name="floor" value="<?php echo $room['floor']; ?>" min="0"
+                                onblur="validateIntegerBlur(this, 'Floor', 0)"></td>
                     </tr>
                     <tr>
                         <td>Capacity:</td>
-                        <td><input type="number" name="capacity" value="<?php echo $room['capacity']; ?>" min="1"></td>
+                        <td><input type="number" name="capacity" value="<?php echo $room['capacity']; ?>" min="1"
+                                onblur="validateIntegerBlur(this, 'Capacity', 1)"></td>
                     </tr>
                     <tr>
                         <td>Price Per Day:</td>
                         <td><input type="number" step="0.01" name="price" value="<?php echo $room['price_per_day']; ?>"
-                                required></td>
+                                required onblur="validatePositiveNumberBlur(this, 'Price')"></td>
                     </tr>
                     <tr>
                         <td>Facilities:</td>
@@ -94,6 +97,7 @@ if (!$room) {
             </form>
         </fieldset>
     </div>
+    <script src="../assets/js/validation-common.js"></script>
 </body>
 
 </html>
