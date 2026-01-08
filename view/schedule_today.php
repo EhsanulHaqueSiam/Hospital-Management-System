@@ -7,26 +7,17 @@ require_once('../model/userModel.php');
 
 $role = $_SESSION['role'];
 $user_id = $_SESSION['user_id'];
-
-// Only doctor and admin can access this page
 if ($role != 'doctor' && $role != 'admin') {
     header('location: dashboard_patient.php');
     exit;
 }
-
-// Get today's date
 $today = date('Y-m-d');
-
-// Fetch appointments based on role
 if ($role == 'admin') {
     $all_appointments = getAllAppointments();
 } else {
-    // Get doctor for current user
     $doctor = getDoctorByUserId($user_id);
     $all_appointments = $doctor ? getAppointmentsByDoctor($doctor['id']) : [];
 }
-
-// Filter for today's appointments
 $appointments = [];
 foreach ($all_appointments as $apt) {
     if ($apt['appointment_date'] == $today) {
