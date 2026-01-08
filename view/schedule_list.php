@@ -8,20 +8,33 @@ require_once('../model/userModel.php');
 $role = $_SESSION['role'];
 $user_id = $_SESSION['user_id'];
 
-// Only doctor and admin can access this page
 if ($role != 'doctor' && $role != 'admin') {
     header('location: dashboard_patient.php');
     exit;
 }
 
-// Fetch appointments based on role
+$date_from = isset($_GET['date_from']) ? $_GET['date_from'] : '';
+$date_to = isset($_GET['date_to']) ? $_GET['date_to'] : '';
+$filter_status = isset($_GET['status']) ? $_GET['status'] : '';
+
 if ($role == 'admin') {
     $appointments = getAllAppointments();
 } else {
-    // Get doctor for current user
     $doctor = getDoctorByUserId($user_id);
     $appointments = $doctor ? getAppointmentsByDoctor($doctor['id']) : [];
 }
+
+$filtered = [];
+foreach ($appointments as $apt) {
+    if ($date_from && $apt['appointment_date'] < $date_from)
+        continue;
+    if ($date_to && $apt['appointment_date'] > $date_to)
+        continue;
+    if ($filter_status && $apt['status'] != $filter_status)
+        continue;
+    $filtered[] = $apt;
+}
+$appointments = $filtered;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -77,19 +90,23 @@ if ($role == 'admin') {
                 <table>
                     <tr>
                         <td>
-                            From: <input type="date" name="date_from" value="">
+                            From: <input type="date" name="date_from" value="<?php echo $date_from; ?>">
                         </td>
                         <td>
-                            To: <input type="date" name="date_to" value="">
+                            To: <input type="date" name="date_to" value="<?php echo $date_to; ?>">
                         </td>
                         <td>
                             Status:
                             <select name="status">
                                 <option value="">All</option>
-                                <option value="pending">Pending</option>
-                                <option value="confirmed">Confirmed</option>
-                                <option value="completed">Completed</option>
-                                <option value="cancelled">Cancelled</option>
+                                <option value="pending" <?php echo $filter_status == 'pending' ? 'selected' : ''; ?>>
+                                    Pending</option>
+                                <option value="confirmed" <?php echo $filter_status == 'confirmed' ? 'selected' : ''; ?>>
+                                    Confirmed</option>
+                                <option value="completed" <?php echo $filter_status == 'completed' ? 'selected' : ''; ?>>
+                                    Completed</option>
+                                <option value="cancelled" <?php echo $filter_status == 'cancelled' ? 'selected' : ''; ?>>
+                                    Cancelled</option>
                             </select>
                         </td>
                         <td>
