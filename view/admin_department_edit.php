@@ -29,7 +29,7 @@ if (!$department) {
     <div class="main-container">
         <h2>Edit Department</h2>
 
-        <form method="POST" action="../controller/edit_department.php">
+        <form method="POST" action="../controller/edit_department.php" onsubmit="return validateForm(this)">
             <input type="hidden" name="id" value="<?php echo $department['id']; ?>">
 
             <fieldset>
@@ -42,7 +42,9 @@ if (!$department) {
                     <tr>
                         <td>Department Name:</td>
                         <td><input type="text" name="department_name"
-                                value="<?php echo $department['department_name']; ?>" required></td>
+                                value="<?php echo $department['department_name']; ?>" required
+                                onblur="validateRequiredBlur(this, 'Department Name')"
+                                onchange="validateRequiredBlur(this, 'Department Name')"></td>
                     </tr>
                     <tr>
                         <td>Description:</td>
@@ -60,6 +62,7 @@ if (!$department) {
             </fieldset>
         </form>
     </div>
+    <script src="../assets/js/validation-common.js"></script>
 </body>
 
 </html>

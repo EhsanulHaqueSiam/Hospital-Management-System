@@ -1,13 +1,18 @@
 <?php
 require_once('adminCheck.php');
 require_once('../model/departmentModel.php');
+require_once('../model/validationHelper.php');
 
 if (isset($_POST['submit'])) {
-    $department_name = $_POST['department_name'];
-    $description = isset($_POST['description']) ? $_POST['description'] : '';
+    $department_name = trim($_POST['department_name']);
+    $description = isset($_POST['description']) ? trim($_POST['description']) : '';
 
-    if ($department_name == "") {
-        echo "Department name is required";
+    $errors = [];
+    if ($err = validateRequired($department_name, 'Department Name'))
+        $errors[] = $err;
+
+    if (count($errors) > 0) {
+        echo "Validation errors:<br>" . implode("<br>", $errors);
         echo "<br><a href='../view/admin_department_add.php'>Go Back</a>";
         exit;
     }

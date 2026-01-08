@@ -4,7 +4,7 @@ require_once('../model/departmentModel.php');
 require_once('../model/doctorModel.php');
 
 if (isset($_GET['id'])) {
-    $id = $_GET['id'];
+    $id = intval($_GET['id']);
 
     $doctors = getDoctorsByDepartment($id);
     if (count($doctors) > 0) {

@@ -5,6 +5,7 @@ require_once('db.php');
 function getDepartmentById($id)
 {
     $con = getConnection();
+    $id = intval($id);
     $sql = "SELECT * FROM departments WHERE id='{$id}'";
     $result = mysqli_query($con, $sql);
 
@@ -73,6 +74,7 @@ function addDepartment($department)
 function deleteDepartment($id)
 {
     $con = getConnection();
+    $id = intval($id);
     $sql = "DELETE FROM departments WHERE id='{$id}'";
 
     if (mysqli_query($con, $sql)) {
@@ -90,7 +92,7 @@ function updateDepartment($department)
     $department_name = mysqli_real_escape_string($con, $department['department_name']);
     $description = mysqli_real_escape_string($con, $department['description']);
 
-    $sql = "UPDATE departments SET department_name='{$department_name}', description='{$description}' WHERE id='{$department['id']}'";
+    $sql = "UPDATE departments SET department_name='{$department_name}', description='{$description}' WHERE id='" . intval($department['id']) . "'";
 
     if (mysqli_query($con, $sql)) {
         return true;
