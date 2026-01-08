@@ -10,19 +10,19 @@ function hasMinLength(value, minLen) {
     return value.trim().length >= minLen;
 }
 
-// Check if character is a letter using charCodeAt
+
 function isLetter(char) {
     var code = char.charCodeAt(0);
     return (code >= 65 && code <= 90) || (code >= 97 && code <= 122);
 }
 
-// Check if character is a digit using charCodeAt
+
 function isDigit(char) {
     var code = char.charCodeAt(0);
     return code >= 48 && code <= 57;
 }
 
-// Check if character is alphanumeric
+
 function isAlphaNumeric(char) {
     return isLetter(char) || isDigit(char);
 }

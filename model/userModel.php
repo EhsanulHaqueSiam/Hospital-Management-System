@@ -21,6 +21,7 @@ function login($credentials)
 function getUserById($id)
 {
     $con = getConnection();
+    $id = intval($id);
     $sql = "SELECT * FROM users WHERE id='{$id}'";
     $result = mysqli_query($con, $sql);
 
@@ -108,6 +109,7 @@ function updateUser($user)
 function updatePassword($user_id, $password)
 {
     $con = getConnection();
+    $user_id = intval($user_id);
     $password = mysqli_real_escape_string($con, $password);
     $sql = "UPDATE users SET password='{$password}' WHERE id='{$user_id}'";
 
@@ -121,6 +123,7 @@ function updatePassword($user_id, $password)
 function updateProfilePicture($user_id, $picture_path)
 {
     $con = getConnection();
+    $user_id = intval($user_id);
     $picture_path = mysqli_real_escape_string($con, $picture_path);
     $sql = "UPDATE users SET profile_picture='{$picture_path}' WHERE id='{$user_id}'";
 
@@ -134,6 +137,7 @@ function updateProfilePicture($user_id, $picture_path)
 function updateProfilePictureWithOriginal($user_id, $picture_path, $original_filename)
 {
     $con = getConnection();
+    $user_id = intval($user_id);
     $picture_path = mysqli_real_escape_string($con, $picture_path);
     $original_filename = mysqli_real_escape_string($con, $original_filename);
     $sql = "UPDATE users SET profile_picture='{$picture_path}', original_picture_name='{$original_filename}' WHERE id='{$user_id}'";
@@ -149,6 +153,7 @@ function updateProfilePictureWithOriginal($user_id, $picture_path, $original_fil
 function deleteUser($id)
 {
     $con = getConnection();
+    $id = intval($id);
     $sql = "DELETE FROM users WHERE id='{$id}'";
 
     if (mysqli_query($con, $sql)) {

@@ -2,7 +2,6 @@
 
 function getConnection()
 {
-    // Load configuration from XML
     $xml = simplexml_load_file('../config.xml');
 
     if ($xml === false) {
