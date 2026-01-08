@@ -14,8 +14,6 @@ if ($role == 'admin' || $role == 'doctor') {
     $patient = getPatientByUserId($user_id);
     $records = $patient ? getMedicalRecordsByPatient($patient['id']) : [];
 }
-
-// Filter by type if selected
 if ($type_filter != '') {
     $filtered = [];
     foreach ($records as $record) {

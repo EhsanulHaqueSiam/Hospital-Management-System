@@ -5,6 +5,7 @@ require_once('db.php');
 function getMedicalRecordById($id)
 {
     $con = getConnection();
+    $id = intval($id);
     $sql = "SELECT * FROM medical_records WHERE id='{$id}'";
     $result = mysqli_query($con, $sql);
 
@@ -34,6 +35,7 @@ function getAllMedicalRecords()
 function getMedicalRecordsByPatient($patient_id)
 {
     $con = getConnection();
+    $patient_id = intval($patient_id);
     $sql = "SELECT * FROM medical_records WHERE patient_id='{$patient_id}' ORDER BY record_date DESC";
     $result = mysqli_query($con, $sql);
 
@@ -68,6 +70,7 @@ function getMedicalRecordsByType($record_type)
 function getMedicalRecordsByUploader($user_id)
 {
     $con = getConnection();
+    $user_id = intval($user_id);
     $sql = "SELECT * FROM medical_records WHERE uploaded_by='{$user_id}' ORDER BY record_date DESC";
     $result = mysqli_query($con, $sql);
 
@@ -91,7 +94,7 @@ function addMedicalRecord($record)
     $record_date = mysqli_real_escape_string($con, $record['record_date']);
 
     $sql = "INSERT INTO medical_records (patient_id, record_type, description, file_path, record_date, uploaded_by) 
-            VALUES ('{$record['patient_id']}', '{$record_type}', '{$description}', '{$file_path}', '{$record_date}', '{$record['uploaded_by']}')";
+            VALUES ('" . intval($record['patient_id']) . "', '{$record_type}', '{$description}', '{$file_path}', '{$record_date}', '" . intval($record['uploaded_by']) . "')";
 
     if (mysqli_query($con, $sql)) {
         return mysqli_insert_id($con);
@@ -103,6 +106,7 @@ function addMedicalRecord($record)
 function deleteMedicalRecord($id)
 {
     $con = getConnection();
+    $id = intval($id);
     $sql = "DELETE FROM medical_records WHERE id='{$id}'";
 
     if (mysqli_query($con, $sql)) {
@@ -121,13 +125,11 @@ function updateMedicalRecord($record)
     $record_date = mysqli_real_escape_string($con, $record['record_date']);
 
     $sql = "UPDATE medical_records SET record_type='{$record_type}', description='{$description}', 
-            record_date='{$record_date}' WHERE id='{$record['id']}'";
-
-    // If new file path is provided, update it
+            record_date='{$record_date}' WHERE id='" . intval($record['id']) . "'";
     if (isset($record['file_path'])) {
         $file_path = mysqli_real_escape_string($con, $record['file_path']);
         $sql = "UPDATE medical_records SET record_type='{$record_type}', description='{$description}', 
-                record_date='{$record_date}', file_path='{$file_path}' WHERE id='{$record['id']}'";
+                record_date='{$record_date}', file_path='{$file_path}' WHERE id='" . intval($record['id']) . "'";
     }
 
     if (mysqli_query($con, $sql)) {

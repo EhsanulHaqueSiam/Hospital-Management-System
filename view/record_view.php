@@ -5,18 +5,12 @@ require_once('../model/patientModel.php');
 require_once('../model/userModel.php');
 
 $role = $_SESSION['role'];
-
-// Get record ID from URL
 $record_id = isset($_GET['id']) ? $_GET['id'] : 0;
-
-// Fetch record data
 $record = getMedicalRecordById($record_id);
 if (!$record) {
     header('location: record_list.php');
     exit;
 }
-
-// Fetch patient and uploader data
 $patient = getPatientById($record['patient_id']);
 $patient_user = $patient ? getUserById($patient['user_id']) : null;
 

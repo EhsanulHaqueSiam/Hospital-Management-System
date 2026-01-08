@@ -1,8 +1,8 @@
 <?php
 session_start();
 require_once('../model/medicalRecordModel.php');
+require_once('../model/validationHelper.php');
 
-// Check if logged in and has permission
 if (!isset($_SESSION['user_id'])) {
     header('location: ../view/auth_signin.php');
     exit;
@@ -15,18 +15,16 @@ if ($role != 'admin' && $role != 'doctor') {
 }
 
 if (isset($_POST['submit'])) {
-    $patient_id = $_POST['patient_id'];
-    $record_type = $_POST['record_type'];
+    $patient_id = intval($_POST['patient_id']);
+    $record_type = trim($_POST['record_type']);
     $record_date = $_POST['record_date'];
-    $description = $_POST['description'];
+    $description = trim($_POST['description']);
     $uploaded_by = $_SESSION['user_id'];
 
-    // Handle file
     $file_path = '';
     if (isset($_FILES['record_file']) && $_FILES['record_file']['error'] == 0) {
         $upload_dir = '../uploads/records/';
 
-        // Create directory if it doesn't exist
         if (!is_dir($upload_dir)) {
             mkdir($upload_dir, 0777, true);
         }
@@ -40,8 +38,18 @@ if (isset($_POST['submit'])) {
         }
     }
 
-    if ($patient_id == "" || $record_type == "" || $record_date == "" || $description == "") {
-        echo "All required fields must be filled";
+    $errors = [];
+    if ($patient_id < 1)
+        $errors[] = "Patient is required";
+    if ($err = validateRequired($record_type, 'Record Type'))
+        $errors[] = $err;
+    if ($err = validateDate($record_date, 'Record Date'))
+        $errors[] = $err;
+    if ($err = validateRequired($description, 'Description'))
+        $errors[] = $err;
+
+    if (count($errors) > 0) {
+        echo "Validation errors:<br>" . implode("<br>", $errors);
     } else {
         $record = [
             'patient_id' => $patient_id,

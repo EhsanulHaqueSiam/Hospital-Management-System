@@ -4,14 +4,10 @@ require_once('../model/patientModel.php');
 require_once('../model/userModel.php');
 
 $role = $_SESSION['role'];
-
-// Only admin and doctor can add records
 if ($role != 'admin' && $role != 'doctor') {
     header('location: record_list.php');
     exit;
 }
-
-// Fetch all patients for dropdown
 $patients = getAllPatients();
 ?>
 <!DOCTYPE html>
@@ -39,14 +35,15 @@ $patients = getAllPatients();
     <div class="main-container">
         <h2>Upload Medical Record</h2>
 
-        <form method="POST" action="../controller/add_record.php" enctype="multipart/form-data">
+        <form method="POST" action="../controller/add_record.php" enctype="multipart/form-data"
+            onsubmit="return validateForm(this)">
             <fieldset>
                 <legend>Record Information</legend>
                 <table cellpadding="8" width="100%">
                     <tr>
                         <td>Patient:</td>
                         <td>
-                            <select name="patient_id" required>
+                            <select name="patient_id" required onchange="validateSelectBlur(this, 'Patient')">
                                 <option value="">-- Select Patient --</option>
                                 <?php foreach ($patients as $p): ?>
                                     <?php $p_user = getUserById($p['user_id']); ?>
@@ -58,7 +55,7 @@ $patients = getAllPatients();
                     <tr>
                         <td>Record Type:</td>
                         <td>
-                            <select name="record_type" required>
+                            <select name="record_type" required onchange="validateSelectBlur(this, 'Record Type')">
                                 <option value="">-- Select Type --</option>
                                 <option value="Lab Report">Lab Report</option>
                                 <option value="X-Ray">X-Ray</option>
@@ -72,11 +69,13 @@ $patients = getAllPatients();
                     </tr>
                     <tr>
                         <td>Record Date:</td>
-                        <td><input type="date" name="record_date" value="<?php echo date('Y-m-d'); ?>" required></td>
+                        <td><input type="date" name="record_date" value="<?php echo date('Y-m-d'); ?>" required
+                                onchange="validateDateBlur(this, 'Record Date')"></td>
                     </tr>
                     <tr>
                         <td>Description:</td>
-                        <td><textarea name="description" rows="4" cols="50" required></textarea></td>
+                        <td><textarea name="description" rows="4" cols="50" required
+                                onblur="validateRequiredBlur(this, 'Description')"></textarea></td>
                     </tr>
                     <tr>
                         <td>Upload File:</td>
@@ -96,6 +95,7 @@ $patients = getAllPatients();
             </div>
         </form>
     </div>
+    <script src="../assets/js/validation-common.js"></script>
 </body>
 
 </html>
