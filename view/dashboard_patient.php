@@ -2,12 +2,9 @@
 require_once('../controller/patientCheck.php');
 require_once('../model/patientModel.php');
 require_once('../model/appointmentModel.php');
-
-// Get logged-in patient's info
 $patient = getPatientByUserId($_SESSION['user_id']);
 
 if ($patient) {
-    // Get appointments for this patient
     $appointments = getAppointmentsByPatient($patient['id']);
 } else {
     $appointments = array();

@@ -2,12 +2,9 @@
 require_once('../controller/doctorCheck.php');
 require_once('../model/doctorModel.php');
 require_once('../model/appointmentModel.php');
-
-// Get logged-in doctor's info
 $doctor = getDoctorByUserId($_SESSION['user_id']);
 
 if ($doctor) {
-    // Get appointments for this doctor
     $appointments = getAppointmentsByDoctor($doctor['id']);
 } else {
     $appointments = array();

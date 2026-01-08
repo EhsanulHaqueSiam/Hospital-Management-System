@@ -3,8 +3,6 @@ require_once('../controller/adminCheck.php');
 require_once('../model/patientModel.php');
 require_once('../model/doctorModel.php');
 require_once('../model/appointmentModel.php');
-
-// Fetch real statistics
 $patients = getAllPatients();
 $doctors = getAllDoctors();
 $appointments = getAllAppointments();
@@ -103,8 +101,6 @@ $totalAppointments = count($appointments);
             </table>
         </fieldset>
     </div>
-
-    <script src="../assets/js/dashboard.js"></script>
 </body>
 
 </html>
