@@ -2,7 +2,7 @@
 require_once('../controller/adminCheck.php');
 require_once('../model/medicineModel.php');
 
-$id = $_REQUEST['id'];
+$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $medicine = getMedicineById($id);
 
 if (!$medicine) {
@@ -10,8 +10,8 @@ if (!$medicine) {
     exit;
 }
 ?>
-<!DOCTYPE html>
-<html lang="en">
+
+<html>
 
 <head>
     <title>Edit Medicine - Hospital Management System</title>
@@ -32,13 +32,13 @@ if (!$medicine) {
 
         <fieldset>
             <legend>Edit Information</legend>
-            <form method="POST" action="../controller/edit_medicine.php" onsubmit="return validateMedicineForm(this)">
+            <form method="POST" action="../controller/edit_medicine.php" onsubmit="return validateForm(this)">
                 <input type="hidden" name="id" value="<?php echo $medicine['id']; ?>">
                 <table cellpadding="5">
                     <tr>
                         <td>Medicine Name:</td>
                         <td><input type="text" name="medicine_name" value="<?php echo $medicine['medicine_name']; ?>"
-                                required></td>
+                                required onblur="validateRequiredBlur(this, 'Medicine Name')"></td>
                     </tr>
                     <tr>
                         <td>Generic Name:</td>
@@ -48,7 +48,7 @@ if (!$medicine) {
                     <tr>
                         <td>Category:</td>
                         <td>
-                            <select name="category">
+                            <select name="category" required onchange="validateSelectBlur(this, 'Category')">
                                 <option value="Painkiller" <?php if ($medicine['category'] == 'Painkiller')
                                     echo 'selected'; ?>>Painkiller</option>
                                 <option value="Antibiotic" <?php if ($medicine['category'] == 'Antibiotic')
@@ -80,12 +80,14 @@ if (!$medicine) {
                     <tr>
                         <td>Unit Price (Tk):</td>
                         <td><input type="number" step="0.01" name="unit_price"
-                                value="<?php echo $medicine['unit_price']; ?>" required></td>
+                                value="<?php echo $medicine['unit_price']; ?>" required min="0"
+                                onblur="validatePositiveNumberBlur(this, 'Price')"></td>
                     </tr>
                     <tr>
                         <td>Stock Quantity:</td>
                         <td><input type="number" name="stock_quantity"
-                                value="<?php echo $medicine['stock_quantity']; ?>" required></td>
+                                value="<?php echo $medicine['stock_quantity']; ?>" required min="0"
+                                onblur="validateIntegerBlur(this, 'Stock Quantity', 0)"></td>
                     </tr>
                     <tr>
                         <td>Reorder Level:</td>
@@ -107,7 +109,7 @@ if (!$medicine) {
         </fieldset>
     </div>
 
-    <script src="../assets/js/validation-medicine.js"></script>
+    <script src="../assets/js/validation-common.js"></script>
 </body>
 
 </html>
