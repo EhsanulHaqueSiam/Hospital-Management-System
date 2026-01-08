@@ -1,6 +1,7 @@
 <?php
 require_once('adminCheck.php');
 require_once('../model/roomModel.php');
+require_once('../model/validationHelper.php');
 
 function getRoomByNumber($room_number)
 {
@@ -12,17 +13,23 @@ function getRoomByNumber($room_number)
 }
 
 if (isset($_POST['update'])) {
-    $id = $_POST['id'];
-    $room_number = $_POST['room_number'];
+    $id = intval($_POST['id']);
+    $room_number = trim($_POST['room_number']);
     $room_type = $_POST['room_type'];
-    $floor = $_POST['floor'];
+    $floor = trim($_POST['floor']);
     $capacity = $_POST['capacity'];
     $price = $_POST['price'];
-    $facilities = $_POST['facilities'];
-    $description = $_POST['description'];
+    $facilities = trim($_POST['facilities']);
+    $description = trim($_POST['description']);
 
-    if ($room_number == "" || $price == "") {
-        echo "Room Number and Price are required";
+    $errors = [];
+    if ($err = validateRequired($room_number, 'Room Number'))
+        $errors[] = $err;
+    if ($err = validatePositiveNumber($price, 'Price'))
+        $errors[] = $err;
+
+    if (count($errors) > 0) {
+        echo "Validation errors:<br>" . implode("<br>", $errors);
         echo "<br><a href='../view/room_edit.php?id=" . $id . "'>Go Back</a>";
     } else {
         $existingRoom = getRoomByNumber($room_number);
