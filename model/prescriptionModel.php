@@ -5,6 +5,7 @@ require_once('db.php');
 function getPrescriptionById($id)
 {
     $con = getConnection();
+    $id = intval($id);
     $sql = "SELECT * FROM prescriptions WHERE id='{$id}'";
     $result = mysqli_query($con, $sql);
 
@@ -34,6 +35,7 @@ function getAllPrescriptions()
 function getPrescriptionsByPatient($patient_id)
 {
     $con = getConnection();
+    $patient_id = intval($patient_id);
     $sql = "SELECT * FROM prescriptions WHERE patient_id='{$patient_id}' ORDER BY created_date DESC";
     $result = mysqli_query($con, $sql);
 
@@ -50,6 +52,7 @@ function getPrescriptionsByPatient($patient_id)
 function getPrescriptionsByDoctor($doctor_id)
 {
     $con = getConnection();
+    $doctor_id = intval($doctor_id);
     $sql = "SELECT * FROM prescriptions WHERE doctor_id='{$doctor_id}' ORDER BY created_date DESC";
     $result = mysqli_query($con, $sql);
 
@@ -66,6 +69,7 @@ function getPrescriptionsByDoctor($doctor_id)
 function getPrescriptionsByAppointment($appointment_id)
 {
     $con = getConnection();
+    $appointment_id = intval($appointment_id);
     $sql = "SELECT * FROM prescriptions WHERE appointment_id='{$appointment_id}'";
     $result = mysqli_query($con, $sql);
 
@@ -86,7 +90,7 @@ function addPrescription($prescription)
     $appointment_id = isset($prescription['appointment_id']) ? mysqli_real_escape_string($con, $prescription['appointment_id']) : null;
 
     $sql = "INSERT INTO prescriptions (patient_id, doctor_id, appointment_id, diagnosis, instructions, follow_up_date) 
-            VALUES ('{$prescription['patient_id']}', '{$prescription['doctor_id']}', " .
+            VALUES ('" . intval($prescription['patient_id']) . "', '" . intval($prescription['doctor_id']) . "', " .
         ($appointment_id ? "'{$appointment_id}'" : "NULL") . ", '{$diagnosis}', '{$instructions}', " .
         ($follow_up_date ? "'{$follow_up_date}'" : "NULL") . ")";
 
@@ -100,11 +104,10 @@ function addPrescription($prescription)
 function deletePrescription($id)
 {
     $con = getConnection();
-
+    $id = intval($id);
 
     $sql = "DELETE FROM prescription_medicines WHERE prescription_id='{$id}'";
     mysqli_query($con, $sql);
-
 
     $sql = "DELETE FROM prescriptions WHERE id='{$id}'";
 
@@ -125,7 +128,7 @@ function updatePrescription($prescription)
 
     $sql = "UPDATE prescriptions SET diagnosis='{$diagnosis}', instructions='{$instructions}', 
             follow_up_date=" . ($follow_up_date ? "'{$follow_up_date}'" : "NULL") . " 
-            WHERE id='{$prescription['id']}'";
+            WHERE id='" . intval($prescription['id']) . "'";
 
     if (mysqli_query($con, $sql)) {
         return true;
@@ -140,6 +143,7 @@ function updatePrescription($prescription)
 function getPrescriptionMedicines($prescription_id)
 {
     $con = getConnection();
+    $prescription_id = intval($prescription_id);
     $sql = "SELECT * FROM prescription_medicines WHERE prescription_id='{$prescription_id}'";
     $result = mysqli_query($con, $sql);
 
@@ -163,7 +167,7 @@ function addPrescriptionMedicine($medicine)
     $duration = mysqli_real_escape_string($con, $medicine['duration']);
 
     $sql = "INSERT INTO prescription_medicines (prescription_id, medicine_name, dosage, frequency, duration) 
-            VALUES ('{$medicine['prescription_id']}', '{$medicine_name}', '{$dosage}', '{$frequency}', '{$duration}')";
+            VALUES ('" . intval($medicine['prescription_id']) . "', '{$medicine_name}', '{$dosage}', '{$frequency}', '{$duration}')";
 
     if (mysqli_query($con, $sql)) {
         return true;
@@ -175,6 +179,7 @@ function addPrescriptionMedicine($medicine)
 function deletePrescriptionMedicines($prescription_id)
 {
     $con = getConnection();
+    $prescription_id = intval($prescription_id);
     $sql = "DELETE FROM prescription_medicines WHERE prescription_id='{$prescription_id}'";
 
     if (mysqli_query($con, $sql)) {
@@ -187,6 +192,7 @@ function deletePrescriptionMedicines($prescription_id)
 function countPrescriptionsByDoctor($doctor_id)
 {
     $con = getConnection();
+    $doctor_id = intval($doctor_id);
     $sql = "SELECT COUNT(*) as count FROM prescriptions WHERE doctor_id='{$doctor_id}'";
     $result = mysqli_query($con, $sql);
     $row = mysqli_fetch_assoc($result);
@@ -196,6 +202,7 @@ function countPrescriptionsByDoctor($doctor_id)
 function countPrescriptionsByPatient($patient_id)
 {
     $con = getConnection();
+    $patient_id = intval($patient_id);
     $sql = "SELECT COUNT(*) as count FROM prescriptions WHERE patient_id='{$patient_id}'";
     $result = mysqli_query($con, $sql);
     $row = mysqli_fetch_assoc($result);

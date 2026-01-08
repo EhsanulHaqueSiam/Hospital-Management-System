@@ -2,36 +2,42 @@
 session_start();
 require_once('../model/prescriptionModel.php');
 require_once('../model/doctorModel.php');
+require_once('../model/validationHelper.php');
 
-// Check if logged in
 if (!isset($_SESSION['user_id'])) {
     header('location: ../view/auth_signin.php');
     exit;
 }
 
 $role = $_SESSION['role'];
-// Only admin and doctor can add prescriptions
 if ($role != 'admin' && $role != 'doctor') {
     header('location: ../view/prescription_list.php');
     exit;
 }
 
 if (isset($_POST['submit'])) {
-    $patient_id = $_POST['patient_id'];
-    $doctor_id = $_POST['doctor_id'];
-    $diagnosis = $_POST['diagnosis'];
-    $instructions = $_POST['instructions'];
+    $patient_id = intval($_POST['patient_id']);
+    $doctor_id = intval($_POST['doctor_id']);
+    $diagnosis = trim($_POST['diagnosis']);
+    $instructions = trim($_POST['instructions']);
     $follow_up_date = $_POST['follow_up_date'];
-    $appointment_id = isset($_POST['appointment_id']) && $_POST['appointment_id'] != '' ? $_POST['appointment_id'] : null;
+    $appointment_id = isset($_POST['appointment_id']) && $_POST['appointment_id'] != '' ? intval($_POST['appointment_id']) : null;
 
-    // Medicine arrays
     $medicine_names = $_POST['medicine_name'];
     $dosages = $_POST['dosage'];
     $frequencies = $_POST['frequency'];
     $durations = $_POST['duration'];
 
-    if ($patient_id == "" || $doctor_id == "" || $diagnosis == "") {
-        echo "All required fields must be filled";
+    $errors = [];
+    if ($patient_id < 1)
+        $errors[] = "Patient is required";
+    if ($doctor_id < 1)
+        $errors[] = "Doctor is required";
+    if ($err = validateRequired($diagnosis, 'Diagnosis'))
+        $errors[] = $err;
+
+    if (count($errors) > 0) {
+        echo "Validation errors:<br>" . implode("<br>", $errors);
     } else {
         $prescription = [
             'patient_id' => $patient_id,
@@ -45,7 +51,6 @@ if (isset($_POST['submit'])) {
         $prescription_id = addPrescription($prescription);
 
         if ($prescription_id) {
-            // Add medicines to prescription
             for ($i = 0; $i < count($medicine_names); $i++) {
                 if (!empty($medicine_names[$i])) {
                     $medicine = [

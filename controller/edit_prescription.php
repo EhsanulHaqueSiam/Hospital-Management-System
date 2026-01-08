@@ -2,7 +2,7 @@
 session_start();
 require_once('../model/prescriptionModel.php');
 require_once('../model/doctorModel.php');
-
+require_once('../model/validationHelper.php');
 
 if (!isset($_SESSION['user_id'])) {
     header('location: ../view/auth_signin.php');
@@ -13,15 +13,20 @@ $role = $_SESSION['role'];
 $user_id = $_SESSION['user_id'];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
-    $prescription_id = $_POST['prescription_id'];
-    $patient_id = $_POST['patient_id'];
-    $doctor_id = $_POST['doctor_id'];
-    $diagnosis = $_POST['diagnosis'];
-    $instructions = $_POST['instructions'];
+    $prescription_id = intval($_POST['prescription_id']);
+    $patient_id = intval($_POST['patient_id']);
+    $doctor_id = intval($_POST['doctor_id']);
+    $diagnosis = trim($_POST['diagnosis']);
+    $instructions = trim($_POST['instructions']);
     $follow_up_date = $_POST['follow_up_date'];
 
+    $errors = [];
+    if ($patient_id < 1)
+        $errors[] = "Patient is required";
+    if ($err = validateRequired($diagnosis, 'Diagnosis'))
+        $errors[] = $err;
 
-    if (empty($prescription_id) || empty($patient_id) || empty($diagnosis)) {
+    if (count($errors) > 0) {
         header('location: ../view/prescription_edit.php?id=' . $prescription_id);
         exit;
     }

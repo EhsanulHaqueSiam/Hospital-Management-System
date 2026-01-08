@@ -1,23 +1,24 @@
 <?php
-require_once('../controller/doctorCheck.php');
+require_once('../controller/sessionCheck.php');
 require_once('../model/patientModel.php');
 require_once('../model/doctorModel.php');
 require_once('../model/userModel.php');
 require_once('../model/appointmentModel.php');
+if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'doctor' && $_SESSION['role'] !== 'admin')) {
+    header('location: ../view/auth_signin.php');
+    exit;
+}
 
 $user_id = $_SESSION['user_id'];
-
-// Get doctor for current user
-$doctor = getDoctorByUserId($user_id);
-
-// Fetch all patients for dropdown
+$role = $_SESSION['role'];
+$current_doctor = null;
+if ($role == 'doctor') {
+    $current_doctor = getDoctorByUserId($user_id);
+}
 $patients = getAllPatients();
-
-// Check if coming from an appointment
+$doctors = getAllDoctors();
 $selected_patient_id = isset($_GET['patient_id']) ? $_GET['patient_id'] : '';
 $selected_appointment_id = isset($_GET['appointment_id']) ? $_GET['appointment_id'] : '';
-
-// If appointment_id provided then fetch appointment details
 $selected_appointment = null;
 if ($selected_appointment_id) {
     $selected_appointment = getAppointmentById($selected_appointment_id);
@@ -35,7 +36,11 @@ if ($selected_appointment_id) {
 
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
-        <a href="dashboard_doctor.php" class="navbar-link">Dashboard</a>
+        <?php if ($role == 'admin'): ?>
+            <a href="dashboard_admin.php" class="navbar-link">Dashboard</a>
+        <?php else: ?>
+            <a href="dashboard_doctor.php" class="navbar-link">Dashboard</a>
+        <?php endif; ?>
         <a href="profile_view.php" class="navbar-link">My Profile</a>
         <a href="../controller/logout.php" class="navbar-link">Logout</a>
     </div>
@@ -53,17 +58,36 @@ if ($selected_appointment_id) {
             <br>
         <?php endif; ?>
 
-        <form method="POST" action="../controller/add_prescription.php">
-            <input type="hidden" name="doctor_id" value="<?php echo $doctor['id']; ?>">
+        <form method="POST" action="../controller/add_prescription.php" onsubmit="return validateForm(this)">
             <input type="hidden" name="appointment_id" value="<?php echo $selected_appointment_id; ?>">
 
             <fieldset>
-                <legend>Patient Information</legend>
+                <legend>Prescription Details</legend>
                 <table cellpadding="8" width="100%">
+                    <!-- Doctor Selection (Admin Only) or Hidden (Doctor) -->
+                    <?php if ($role == 'admin'): ?>
+                        <tr>
+                            <td>Doctor:</td>
+                            <td>
+                                <select name="doctor_id" required onchange="validateSelectBlur(this, 'Doctor')">
+                                    <option value="">-- Select Doctor --</option>
+                                    <?php foreach ($doctors as $d): ?>
+                                        <?php $d_user = getUserById($d['user_id']); ?>
+                                        <option value="<?php echo $d['id']; ?>">
+                                            <?php echo $d_user['full_name']; ?> - <?php echo $d['specialization']; ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </td>
+                        </tr>
+                    <?php else: ?>
+                        <input type="hidden" name="doctor_id" value="<?php echo $current_doctor['id']; ?>">
+                    <?php endif; ?>
+
                     <tr>
                         <td>Patient:</td>
                         <td>
-                            <select name="patient_id" required>
+                            <select name="patient_id" required onchange="validateSelectBlur(this, 'Patient')">
                                 <option value="">-- Select Patient --</option>
                                 <?php foreach ($patients as $p): ?>
                                     <?php $p_user = getUserById($p['user_id']); ?>
@@ -84,7 +108,8 @@ if ($selected_appointment_id) {
                 <table cellpadding="8" width="100%">
                     <tr>
                         <td>Diagnosis:</td>
-                        <td><textarea name="diagnosis" rows="3" cols="50" required></textarea></td>
+                        <td><textarea name="diagnosis" rows="3" cols="50" required
+                                onblur="validateRequiredBlur(this, 'Diagnosis')"></textarea></td>
                     </tr>
                     <tr>
                         <td>Instructions:</td>
@@ -154,6 +179,7 @@ if ($selected_appointment_id) {
             </div>
         </form>
     </div>
+    <script src="../assets/js/validation-common.js"></script>
 </body>
 
 </html>

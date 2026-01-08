@@ -7,18 +7,12 @@ require_once('../model/userModel.php');
 
 $role = $_SESSION['role'];
 $user_id = $_SESSION['user_id'];
-
-// Get prescription ID from URL
-$prescription_id = isset($_GET['id']) ? $_GET['id'] : 0;
-
-// Fetch prescription data
+$prescription_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $prescription = getPrescriptionById($prescription_id);
 if (!$prescription) {
     header('location: prescription_list.php');
     exit;
 }
-
-// Check permission - only admin or the doctor who created it can edit
 $canEdit = false;
 if ($role == 'admin') {
     $canEdit = true;
@@ -33,18 +27,12 @@ if (!$canEdit) {
     header('location: prescription_list.php');
     exit;
 }
-
-// Fetch patient and doctor data
 $patient = getPatientById($prescription['patient_id']);
 $patient_user = $patient ? getUserById($patient['user_id']) : null;
 
 $doctor = getDoctorById($prescription['doctor_id']);
 $doctor_user = $doctor ? getUserById($doctor['user_id']) : null;
-
-// Fetch all patients for dropdown
 $patients = getAllPatients();
-
-// Fetch medicines for this prescription
 $medicines = getPrescriptionMedicines($prescription_id);
 ?>
 <!DOCTYPE html>
@@ -80,7 +68,7 @@ $medicines = getPrescriptionMedicines($prescription_id);
 
         <br>
 
-        <form method="POST" action="../controller/edit_prescription.php">
+        <form method="POST" action="../controller/edit_prescription.php" onsubmit="return validateForm(this)">
             <input type="hidden" name="prescription_id" value="<?php echo $prescription['id']; ?>">
             <input type="hidden" name="doctor_id" value="<?php echo $prescription['doctor_id']; ?>">
 
@@ -90,7 +78,7 @@ $medicines = getPrescriptionMedicines($prescription_id);
                     <tr>
                         <td>Patient:</td>
                         <td>
-                            <select name="patient_id" required>
+                            <select name="patient_id" required onchange="validateSelectBlur(this, 'Patient')">
                                 <option value="">-- Select Patient --</option>
                                 <?php foreach ($patients as $p): ?>
                                     <?php $p_user = getUserById($p['user_id']); ?>
@@ -111,8 +99,9 @@ $medicines = getPrescriptionMedicines($prescription_id);
                 <table cellpadding="8" width="100%">
                     <tr>
                         <td>Diagnosis:</td>
-                        <td><textarea name="diagnosis" rows="3" cols="50"
-                                required><?php echo htmlspecialchars($prescription['diagnosis']); ?></textarea></td>
+                        <td><textarea name="diagnosis" rows="3" cols="50" required
+                                onblur="validateRequiredBlur(this, 'Diagnosis')"><?php echo htmlspecialchars($prescription['diagnosis']); ?></textarea>
+                        </td>
                     </tr>
                     <tr>
                         <td>Instructions:</td>
@@ -142,7 +131,6 @@ $medicines = getPrescriptionMedicines($prescription_id);
                             <th>Duration</th>
                         </tr>
                         <?php
-                        // Ensure we have at least 5 rows
                         $medicine_count = count($medicines);
                         for ($i = 0; $i < 5; $i++):
                             $med = isset($medicines[$i]) ? $medicines[$i] : null;
@@ -171,6 +159,7 @@ $medicines = getPrescriptionMedicines($prescription_id);
             </div>
         </form>
     </div>
+    <script src="../assets/js/validation-common.js"></script>
 </body>
 
 </html>

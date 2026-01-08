@@ -7,15 +7,11 @@ require_once('../model/userModel.php');
 
 $role = $_SESSION['role'];
 $user_id = $_SESSION['user_id'];
-
-// Get current doctor ID if role is doctor
 $current_doctor_id = null;
 if ($role == 'doctor') {
     $current_doctor = getDoctorByUserId($user_id);
     $current_doctor_id = $current_doctor ? $current_doctor['id'] : null;
 }
-
-// Fetch prescriptions based on role
 if ($role == 'admin') {
     $prescriptions = getAllPrescriptions();
 } elseif ($role == 'doctor') {
@@ -53,18 +49,18 @@ if ($role == 'admin') {
         <h2>Prescription Management</h2>
 
 
-        <fieldset>
-            <legend>Actions</legend>
-            <table>
-                <tr>
-                    <?php if ($role == 'doctor'): ?>
+        <?php if ($role == 'doctor' || $role == 'admin'): ?>
+            <fieldset>
+                <legend>Actions</legend>
+                <table>
+                    <tr>
                         <td>
                             <a href="prescription_add.php"><button type="button">Create Prescription</button></a>
                         </td>
-                    <?php endif; ?>
-                </tr>
-            </table>
-        </fieldset>
+                    </tr>
+                </table>
+            </fieldset>
+        <?php endif; ?>
 
         <br>
 
@@ -88,8 +84,6 @@ if ($role == 'admin') {
 
                         $presc_doctor = getDoctorById($prescription['doctor_id']);
                         $doctor_user = $presc_doctor ? getUserById($presc_doctor['user_id']) : null;
-
-                        // Check if current doctor owns this prescription
                         $isOwnPrescription = ($role == 'doctor' && $current_doctor_id == $prescription['doctor_id']);
                         ?>
                         <tr>

@@ -7,28 +7,18 @@ require_once('../model/userModel.php');
 
 $role = $_SESSION['role'];
 $user_id = $_SESSION['user_id'];
-
-// Get prescription ID from URL
 $prescription_id = isset($_GET['id']) ? $_GET['id'] : 0;
-
-// Fetch prescription data
 $prescription = getPrescriptionById($prescription_id);
 if (!$prescription) {
     header('location: prescription_list.php');
     exit;
 }
-
-// Fetch patient and doctor data
 $patient = getPatientById($prescription['patient_id']);
 $patient_user = $patient ? getUserById($patient['user_id']) : null;
 
 $doctor = getDoctorById($prescription['doctor_id']);
 $doctor_user = $doctor ? getUserById($doctor['user_id']) : null;
-
-// Fetch medicines for this prescription
 $medicines = getPrescriptionMedicines($prescription_id);
-
-// Check if current doctor owns this prescription
 $current_doctor_id = null;
 $isOwnPrescription = false;
 if ($role == 'doctor') {
