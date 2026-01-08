@@ -2,33 +2,44 @@
 session_start();
 require_once('../model/userModel.php');
 require_once('../model/patientModel.php');
+require_once('../model/validationHelper.php');
 
 if (isset($_POST['submit'])) {
-    // User data
-    $full_name = $_POST['full_name'];
-    $email = $_POST['email'];
-    $phone = $_POST['phone'];
-    $username = $_POST['username'];
+    $full_name = trim($_POST['full_name']);
+    $email = trim($_POST['email']);
+    $phone = trim($_POST['phone']);
+    $username = trim($_POST['username']);
     $password = $_POST['password'];
 
-    // Patient data
     $date_of_birth = isset($_POST['date_of_birth']) ? $_POST['date_of_birth'] : '';
     $gender = $_POST['gender'];
     $blood_group = isset($_POST['blood_group']) ? $_POST['blood_group'] : '';
-    $address = isset($_POST['address']) ? $_POST['address'] : '';
-    $emergency_contact = isset($_POST['emergency_contact']) ? $_POST['emergency_contact'] : '';
+    $address = isset($_POST['address']) ? trim($_POST['address']) : '';
+    $emergency_contact = isset($_POST['emergency_contact']) ? trim($_POST['emergency_contact']) : '';
 
-    if ($full_name == "" || $email == "" || $phone == "" || $username == "" || $password == "" || $gender == "") {
-        echo "All required fields must be filled";
+    $errors = [];
+    if ($err = validateRequired($full_name, 'Full Name'))
+        $errors[] = $err;
+    if ($err = validateEmail($email))
+        $errors[] = $err;
+    if ($err = validatePhone($phone))
+        $errors[] = $err;
+    if ($err = validateUsername($username))
+        $errors[] = $err;
+    if ($err = validatePassword($password))
+        $errors[] = $err;
+    if ($err = validateRequired($gender, 'Gender'))
+        $errors[] = $err;
+
+    if (count($errors) > 0) {
+        echo "Validation errors:<br>" . implode("<br>", $errors);
         echo "<br><a href='../view/patient_add.php'>Go Back</a>";
     } else {
-        // Check if username already exists
         $existingUser = getUserByUsername($username);
         if ($existingUser) {
             echo "Username already exists. Please use a different username.";
             echo "<br><a href='../view/patient_add.php'>Go Back</a>";
         } else {
-            // Create user first
             $user = [
                 'full_name' => $full_name,
                 'email' => $email,
@@ -42,7 +53,6 @@ if (isset($_POST['submit'])) {
             $new_user_id = addUser($user);
 
             if ($new_user_id) {
-                // Create patient record
                 $patient = [
                     'user_id' => $new_user_id,
                     'date_of_birth' => $date_of_birth,

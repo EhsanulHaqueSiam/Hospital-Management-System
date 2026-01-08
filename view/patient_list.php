@@ -80,7 +80,6 @@ if ($search != '') {
                 <?php if (count($patients) > 0): ?>
                     <?php foreach ($patients as $patient): ?>
                         <?php
-                        // Fetch user info
                         $user = getUserById($patient['user_id']);
                         ?>
                         <tr>

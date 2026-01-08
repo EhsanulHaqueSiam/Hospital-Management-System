@@ -2,18 +2,12 @@
 require_once('../controller/adminCheck.php');
 require_once('../model/patientModel.php');
 require_once('../model/userModel.php');
-
-// Get patient ID from URL
 $patient_id = isset($_GET['id']) ? $_GET['id'] : 0;
-
-// Fetch patient data
 $patient = getPatientById($patient_id);
 if (!$patient) {
     header('location: patient_list.php');
     exit;
 }
-
-// Fetch user data
 $user = getUserById($patient['user_id']);
 ?>
 <!DOCTYPE html>
@@ -37,7 +31,7 @@ $user = getUserById($patient['user_id']);
     <div class="main-container">
         <h2>Edit Patient Information</h2>
 
-        <form method="POST" action="../controller/edit_patient.php" onsubmit="return validatePatientEditForm(this)">
+        <form method="POST" action="../controller/edit_patient.php" onsubmit="return validateForm(this)">
             <input type="hidden" name="patient_id" value="<?php echo $patient['id']; ?>">
             <input type="hidden" name="user_id" value="<?php echo $patient['user_id']; ?>">
 
@@ -47,12 +41,12 @@ $user = getUserById($patient['user_id']);
                     <tr>
                         <td>Full Name:</td>
                         <td><input type="text" name="full_name" value="<?php echo $user['full_name']; ?>" required
-                                onblur="validateName(this)"></td>
+                                onblur="validateRequiredBlur(this, 'Full Name')"></td>
                     </tr>
                     <tr>
                         <td>Gender:</td>
                         <td>
-                            <select name="gender" required>
+                            <select name="gender" required onchange="validateSelectBlur(this, 'Gender')">
                                 <option value="Male" <?php echo $patient['gender'] == 'Male' ? 'selected' : ''; ?>>Male
                                 </option>
                                 <option value="Female" <?php echo $patient['gender'] == 'Female' ? 'selected' : ''; ?>>
@@ -65,7 +59,7 @@ $user = getUserById($patient['user_id']);
                     <tr>
                         <td>Blood Group:</td>
                         <td>
-                            <select name="blood_group">
+                            <select name="blood_group" required onchange="validateSelectBlur(this, 'Blood Group')">
                                 <option value="">-- Select --</option>
                                 <option value="A+" <?php echo $patient['blood_group'] == 'A+' ? 'selected' : ''; ?>>A+
                                 </option>
@@ -97,16 +91,17 @@ $user = getUserById($patient['user_id']);
                     <tr>
                         <td>Email:</td>
                         <td><input type="email" name="email" value="<?php echo $user['email']; ?>" required
-                                onblur="validateEmail(this)"></td>
+                                onblur="validateRequiredBlur(this, 'Email')"></td>
                     </tr>
                     <tr>
                         <td>Phone:</td>
                         <td><input type="tel" name="phone" value="<?php echo $user['phone']; ?>" required
-                                onblur="validatePhone(this)"></td>
+                                onblur="validateRequiredBlur(this, 'Phone')"></td>
                     </tr>
                     <tr>
                         <td>Address:</td>
-                        <td><textarea name="address" rows="3" cols="40"><?php echo $patient['address']; ?></textarea>
+                        <td><textarea name="address" rows="3" cols="40" required
+                                onblur="validateRequiredBlur(this, 'Address')"><?php echo $patient['address']; ?></textarea>
                         </td>
                     </tr>
                     <tr>
@@ -129,9 +124,7 @@ $user = getUserById($patient['user_id']);
             </div>
         </form>
     </div>
-    <script src="../assets/js/validation-helpers.js"></script>
-    <script src="../assets/js/validation-fields.js"></script>
-    <script src="../assets/js/validation-patient.js"></script>
+    <script src="../assets/js/validation-common.js"></script>
 </body>
 
 </html>

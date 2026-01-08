@@ -2,24 +2,31 @@
 session_start();
 require_once('../model/userModel.php');
 require_once('../model/patientModel.php');
+require_once('../model/validationHelper.php');
 
 if (isset($_POST['submit'])) {
-    $patient_id = $_POST['patient_id'];
-    $user_id = $_POST['user_id'];
+    $patient_id = intval($_POST['patient_id']);
+    $user_id = intval($_POST['user_id']);
 
-
-    $full_name = $_POST['full_name'];
-    $email = $_POST['email'];
-    $phone = $_POST['phone'];
-
+    $full_name = trim($_POST['full_name']);
+    $email = trim($_POST['email']);
+    $phone = trim($_POST['phone']);
 
     $gender = $_POST['gender'];
     $blood_group = $_POST['blood_group'];
-    $address = $_POST['address'];
-    $emergency_contact = $_POST['emergency_contact'];
+    $address = trim($_POST['address']);
+    $emergency_contact = trim($_POST['emergency_contact']);
 
-    if ($full_name == "" || $email == "" || $phone == "") {
-        echo "All required fields must be filled";
+    $errors = [];
+    if ($err = validateRequired($full_name, 'Full Name'))
+        $errors[] = $err;
+    if ($err = validateEmail($email))
+        $errors[] = $err;
+    if ($err = validatePhone($phone))
+        $errors[] = $err;
+
+    if (count($errors) > 0) {
+        echo "Validation errors:<br>" . implode("<br>", $errors);
     } else {
 
         $user = [

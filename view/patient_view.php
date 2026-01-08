@@ -4,24 +4,16 @@ require_once('../model/patientModel.php');
 require_once('../model/userModel.php');
 
 $role = $_SESSION['role'];
-
-// Only admin and doctor can access this page
 if ($role != 'admin' && $role != 'doctor') {
     header('location: dashboard_patient.php');
     exit;
 }
-
-// Get patient ID from URL
 $patient_id = isset($_GET['id']) ? $_GET['id'] : 0;
-
-// Fetch patient data
 $patient = getPatientById($patient_id);
 if (!$patient) {
     header('location: patient_list.php');
     exit;
 }
-
-// Fetch user data
 $user = getUserById($patient['user_id']);
 ?>
 <!DOCTYPE html>

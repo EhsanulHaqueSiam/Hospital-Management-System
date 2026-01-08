@@ -22,30 +22,32 @@ require_once('../controller/adminCheck.php');
     <div class="main-container">
         <h2>Add New Patient</h2>
 
-        <form method="POST" action="../controller/add_patient.php" onsubmit="return validatePatientForm(this)">
+        <form method="POST" action="../controller/add_patient.php" onsubmit="return validateForm(this)">
             <fieldset>
                 <legend>Personal Information</legend>
                 <table cellpadding="5">
                     <tr>
                         <td>Full Name:</td>
-                        <td><input type="text" name="full_name" required onblur="validateName(this)"></td>
+                        <td><input type="text" name="full_name" required
+                                onblur="validateRequiredBlur(this, 'Full Name')"></td>
                     </tr>
                     <tr>
                         <td>Email:</td>
-                        <td><input type="email" name="email" required onblur="validateEmail(this)"></td>
+                        <td><input type="email" name="email" required onblur="validateEmailBlur(this)"></td>
                     </tr>
                     <tr>
                         <td>Phone:</td>
-                        <td><input type="tel" name="phone" required onblur="validatePhone(this)"></td>
+                        <td><input type="tel" name="phone" required onblur="validatePhoneBlur(this)"></td>
                     </tr>
                     <tr>
                         <td>Date of Birth:</td>
-                        <td><input type="date" name="date_of_birth" required onblur="validateDOB(this)"></td>
+                        <td><input type="date" name="date_of_birth" required
+                                onchange="validatePastDateBlur(this, 'Date of Birth')"></td>
                     </tr>
                     <tr>
                         <td>Gender:</td>
                         <td>
-                            <select name="gender" required>
+                            <select name="gender" required onchange="validateSelectBlur(this, 'Gender')">
                                 <option value="">-- Select --</option>
                                 <option value="Male">Male</option>
                                 <option value="Female">Female</option>
@@ -95,11 +97,11 @@ require_once('../controller/adminCheck.php');
                 <table cellpadding="5">
                     <tr>
                         <td>Username:</td>
-                        <td><input type="text" name="username" required onblur="validateUsername(this)"></td>
+                        <td><input type="text" name="username" required onblur="validateUsernameBlur(this)"></td>
                     </tr>
                     <tr>
                         <td>Password:</td>
-                        <td><input type="password" name="password" required onblur="validatePassword(this)"></td>
+                        <td><input type="password" name="password" required onblur="validatePasswordBlur(this)"></td>
                     </tr>
                 </table>
             </fieldset>
@@ -112,9 +114,7 @@ require_once('../controller/adminCheck.php');
             </div>
         </form>
     </div>
-    <script src="../assets/js/validation-helpers.js"></script>
-    <script src="../assets/js/validation-fields.js"></script>
-    <script src="../assets/js/validation-patient.js"></script>
+    <script src="../assets/js/validation-common.js"></script>
 </body>
 
 </html>

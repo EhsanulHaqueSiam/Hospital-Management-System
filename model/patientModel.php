@@ -5,6 +5,7 @@ require_once('db.php');
 function getPatientById($id)
 {
     $con = getConnection();
+    $id = intval($id);
     $sql = "SELECT * FROM patients WHERE id='{$id}'";
     $result = mysqli_query($con, $sql);
 
@@ -18,6 +19,7 @@ function getPatientById($id)
 function getPatientByUserId($user_id)
 {
     $con = getConnection();
+    $user_id = intval($user_id);
     $sql = "SELECT * FROM patients WHERE user_id='{$user_id}'";
     $result = mysqli_query($con, $sql);
 
@@ -74,7 +76,7 @@ function addPatient($patient)
     $medical_history = mysqli_real_escape_string($con, $patient['medical_history']);
 
     $sql = "INSERT INTO patients (user_id, date_of_birth, gender, blood_group, address, emergency_contact, medical_history) 
-            VALUES ('{$patient['user_id']}', '{$date_of_birth}', '{$gender}', '{$blood_group}', '{$address}', '{$emergency_contact}', '{$medical_history}')";
+            VALUES ('" . intval($patient['user_id']) . "', '{$date_of_birth}', '{$gender}', '{$blood_group}', '{$address}', '{$emergency_contact}', '{$medical_history}')";
 
     if (mysqli_query($con, $sql)) {
         return true;
@@ -86,6 +88,7 @@ function addPatient($patient)
 function deletePatient($id)
 {
     $con = getConnection();
+    $id = intval($id);
     $sql = "DELETE FROM patients WHERE id='{$id}'";
 
     if (mysqli_query($con, $sql)) {
@@ -107,7 +110,7 @@ function updatePatient($patient)
     $medical_history = mysqli_real_escape_string($con, $patient['medical_history']);
 
     $sql = "UPDATE patients SET date_of_birth='{$date_of_birth}', gender='{$gender}', blood_group='{$blood_group}', address='{$address}', 
-            emergency_contact='{$emergency_contact}', medical_history='{$medical_history}' WHERE id='{$patient['id']}'";
+            emergency_contact='{$emergency_contact}', medical_history='{$medical_history}' WHERE id='" . intval($patient['id']) . "'";
 
     if (mysqli_query($con, $sql)) {
         return true;

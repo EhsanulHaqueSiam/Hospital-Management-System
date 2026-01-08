@@ -7,7 +7,7 @@ require_once('../model/prescriptionModel.php');
 require_once('../model/billModel.php');
 
 if (isset($_GET['id'])) {
-    $id = $_GET['id'];
+    $id = intval($_GET['id']);
 
     $patient = getPatientById($id);
     if (!$patient) {
