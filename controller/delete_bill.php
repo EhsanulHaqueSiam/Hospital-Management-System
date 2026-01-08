@@ -3,7 +3,7 @@ require_once('adminCheck.php');
 require_once('../model/billModel.php');
 
 if (isset($_GET['id'])) {
-    $id = $_GET['id'];
+    $id = intval($_GET['id']);
     $status = deleteBill($id);
 
     if ($status) {

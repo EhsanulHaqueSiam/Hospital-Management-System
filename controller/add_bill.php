@@ -1,25 +1,29 @@
 <?php
 require_once('adminCheck.php');
 require_once('../model/billModel.php');
+require_once('../model/validationHelper.php');
 
 if (isset($_POST['submit'])) {
-    $patient_id = $_POST['patient_id'];
-    $appointment_id = isset($_POST['appointment_id']) ? $_POST['appointment_id'] : '';
-    $notes = $_POST['notes'];
-    $discount = $_POST['discount'];
-    $tax = $_POST['tax'];
+    $patient_id = intval($_POST['patient_id']);
+    $appointment_id = isset($_POST['appointment_id']) ? intval($_POST['appointment_id']) : 0;
+    $notes = trim($_POST['notes']);
+    $discount = floatval($_POST['discount']);
+    $tax = floatval($_POST['tax']);
 
-    // Items arrays
     $descriptions = $_POST['item_description'];
     $quantities = $_POST['quantity'];
     $prices = $_POST['unit_price'];
 
-    if (empty($descriptions) || count($descriptions) == 0) {
-        echo "At least one item is required";
+    $errors = [];
+    if ($patient_id < 1)
+        $errors[] = "Patient is required";
+    if (empty($descriptions) || count($descriptions) == 0)
+        $errors[] = "At least one item is required";
+
+    if (count($errors) > 0) {
+        echo "Validation errors:<br>" . implode("<br>", $errors);
         exit;
     }
-
-    // Calculate total
     $subtotal = 0;
     for ($i = 0; $i < count($descriptions); $i++) {
         $qty = $quantities[$i];
@@ -44,7 +48,6 @@ if (isset($_POST['submit'])) {
     $bill_id = createBill($bill);
 
     if ($bill_id) {
-        // Add items
         for ($i = 0; $i < count($descriptions); $i++) {
             if (!empty($descriptions[$i])) {
                 $item = [

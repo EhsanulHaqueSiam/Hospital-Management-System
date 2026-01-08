@@ -4,8 +4,8 @@ require_once('../model/paymentModel.php');
 
 $payments = getAllPayments();
 ?>
-<!DOCTYPE html>
-<html lang="en">
+
+<html>
 
 <head>
     <title>Payment History - Hospital Management System</title>
@@ -13,7 +13,7 @@ $payments = getAllPayments();
 </head>
 
 <body>
-    <!-- Navbar -->
+
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
         <a href="dashboard_admin.php" class="navbar-link">Dashboard</a>
@@ -70,7 +70,7 @@ $payments = getAllPayments();
                                 <?php echo $pay['payment_date']; ?>
                             </td>
                             <td>
-                                <?php echo $pay['received_by']; // This is just ID, ideally name but OK for now ?>
+                                <?php echo $pay['received_by']; ?>
                             </td>
                             <td>
                                 <a href="payment_edit.php?id=<?php echo $pay['id']; ?>"><button>Edit</button></a>

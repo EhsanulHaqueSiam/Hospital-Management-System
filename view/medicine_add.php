@@ -1,8 +1,8 @@
 <?php
 require_once('../controller/adminCheck.php');
 ?>
-<!DOCTYPE html>
-<html lang="en">
+
+<html>
 
 <head>
     <title>Add Medicine - Hospital Management System</title>
@@ -10,7 +10,7 @@ require_once('../controller/adminCheck.php');
 </head>
 
 <body>
-    <!-- Navbar -->
+
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
         <a href="dashboard_admin.php" class="navbar-link">Dashboard</a>
@@ -23,11 +23,12 @@ require_once('../controller/adminCheck.php');
 
         <fieldset>
             <legend>Medicine Information</legend>
-            <form method="POST" action="../controller/add_medicine.php" onsubmit="return validateMedicineForm(this)">
+            <form method="POST" action="../controller/add_medicine.php" onsubmit="return validateForm(this)">
                 <table cellpadding="5">
                     <tr>
                         <td>Medicine Name:</td>
-                        <td><input type="text" name="medicine_name" required></td>
+                        <td><input type="text" name="medicine_name" required
+                                onblur="validateRequiredBlur(this, 'Medicine Name')"></td>
                     </tr>
                     <tr>
                         <td>Generic Name:</td>
@@ -36,7 +37,7 @@ require_once('../controller/adminCheck.php');
                     <tr>
                         <td>Category:</td>
                         <td>
-                            <select name="category">
+                            <select name="category" onchange="validateSelectBlur(this, 'Category')">
                                 <option value="Painkiller">Painkiller</option>
                                 <option value="Antibiotic">Antibiotic</option>
                                 <option value="Antiviral">Antiviral</option>
@@ -53,15 +54,18 @@ require_once('../controller/adminCheck.php');
                     </tr>
                     <tr>
                         <td>Manufacturer:</td>
-                        <td><input type="text" name="manufacturer"></td>
+                        <td><input type="text" name="manufacturer" required
+                                onblur="validateRequiredBlur(this, 'Manufacturer')"></td>
                     </tr>
                     <tr>
                         <td>Unit Price (Tk):</td>
-                        <td><input type="number" step="0.01" name="unit_price" required></td>
+                        <td><input type="number" step="0.01" name="unit_price" required
+                                onblur="validatePositiveNumberBlur(this, 'Unit Price')"></td>
                     </tr>
                     <tr>
                         <td>Stock Quantity:</td>
-                        <td><input type="number" name="stock_quantity" required></td>
+                        <td><input type="number" name="stock_quantity" required
+                                onblur="validateIntegerBlur(this, 'Stock Quantity', 0)"></td>
                     </tr>
                     <tr>
                         <td>Reorder Level:</td>
@@ -69,7 +73,8 @@ require_once('../controller/adminCheck.php');
                     </tr>
                     <tr>
                         <td>Expiry Date:</td>
-                        <td><input type="date" name="expiry_date"></td>
+                        <td><input type="date" name="expiry_date" required
+                                onchange="validateFutureDateBlur(this, 'Expiry Date')"></td>
                     </tr>
                     <tr>
                         <td colspan="2" align="right">
@@ -82,7 +87,7 @@ require_once('../controller/adminCheck.php');
         </fieldset>
     </div>
 
-    <script src="../assets/js/validation-medicine.js"></script>
+    <script src="../assets/js/validation-common.js"></script>
 </body>
 
 </html>

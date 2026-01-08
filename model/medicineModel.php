@@ -19,6 +19,7 @@ function getAllMedicines()
 function getMedicineById($id)
 {
     $con = getConnection();
+    $id = intval($id);
     $sql = "SELECT * FROM medicines WHERE id='{$id}'";
     $result = mysqli_query($con, $sql);
 
@@ -55,7 +56,7 @@ function addMedicine($medicine)
 function updateMedicine($medicine)
 {
     $con = getConnection();
-    $id = $medicine['id'];
+    $id = intval($medicine['id']);
     $name = mysqli_real_escape_string($con, $medicine['medicine_name']);
     $generic = mysqli_real_escape_string($con, $medicine['generic_name']);
     $category = mysqli_real_escape_string($con, $medicine['category']);
@@ -88,6 +89,7 @@ function updateMedicine($medicine)
 function deleteMedicine($id)
 {
     $con = getConnection();
+    $id = intval($id);
     $sql = "DELETE FROM medicines WHERE id='{$id}'";
 
     if (mysqli_query($con, $sql)) {

@@ -4,12 +4,12 @@ require_once('db.php');
 function addPayment($payment)
 {
     $con = getConnection();
-    $bill_id = $payment['bill_id'];
-    $amount = $payment['payment_amount'];
+    $bill_id = intval($payment['bill_id']);
+    $amount = floatval($payment['payment_amount']);
     $method = mysqli_real_escape_string($con, $payment['payment_method']);
     $trx_id = mysqli_real_escape_string($con, $payment['transaction_id']);
     $notes = mysqli_real_escape_string($con, $payment['payment_notes']);
-    $received_by = $payment['received_by'];
+    $received_by = intval($payment['received_by']);
 
     $sql = "INSERT INTO payments (bill_id, payment_amount, payment_method, transaction_id, payment_notes, received_by) 
             VALUES ('{$bill_id}', '{$amount}', '{$method}', '{$trx_id}', '{$notes}', '{$received_by}')";
@@ -24,6 +24,7 @@ function addPayment($payment)
 function getPaymentsByBillId($bill_id)
 {
     $con = getConnection();
+    $bill_id = intval($bill_id);
     $sql = "SELECT p.*, u.full_name as received_by_name 
             FROM payments p 
             JOIN users u ON p.received_by = u.id 
@@ -59,6 +60,7 @@ function getAllPayments()
 function getPaymentById($id)
 {
     $con = getConnection();
+    $id = intval($id);
     $sql = "SELECT * FROM payments WHERE id='{$id}'";
     $result = mysqli_query($con, $sql);
     return mysqli_fetch_assoc($result);
@@ -67,6 +69,7 @@ function getPaymentById($id)
 function deletePayment($id)
 {
     $con = getConnection();
+    $id = intval($id);
     $sql = "DELETE FROM payments WHERE id='{$id}'";
     return mysqli_query($con, $sql);
 }
@@ -74,8 +77,8 @@ function deletePayment($id)
 function updatePayment($payment)
 {
     $con = getConnection();
-    $id = $payment['id'];
-    $amount = $payment['payment_amount'];
+    $id = intval($payment['id']);
+    $amount = floatval($payment['payment_amount']);
     $method = mysqli_real_escape_string($con, $payment['payment_method']);
     $trx_id = mysqli_real_escape_string($con, $payment['transaction_id']);
     $notes = mysqli_real_escape_string($con, $payment['payment_notes']);

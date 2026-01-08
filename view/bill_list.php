@@ -4,8 +4,8 @@ require_once('../model/billModel.php');
 
 $bills = getAllBills();
 ?>
-<!DOCTYPE html>
-<html lang="en">
+
+<html>
 
 <head>
     <title>Billing List - Hospital Management System</title>

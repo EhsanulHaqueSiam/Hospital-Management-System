@@ -4,7 +4,7 @@ require_once('../model/paymentModel.php');
 require_once('../model/billModel.php');
 
 if (isset($_GET['id'])) {
-    $id = $_GET['id'];
+    $id = intval($_GET['id']);
     $payment = getPaymentById($id);
 
     if ($payment) {

@@ -4,8 +4,8 @@ require_once('../model/medicineModel.php');
 
 $medicines = getAllMedicines();
 ?>
-<!DOCTYPE html>
-<html lang="en">
+
+<html>
 
 <head>
     <title>Medicine List - Hospital Management System</title>
@@ -14,7 +14,6 @@ $medicines = getAllMedicines();
 </head>
 
 <body>
-    <!-- Navbar -->
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
         <a href="dashboard_admin.php" class="navbar-link">Dashboard</a>
@@ -22,18 +21,17 @@ $medicines = getAllMedicines();
         <a href="../controller/logout.php" class="navbar-link">Logout</a>
     </div>
 
-    <!-- Medicine List -->
     <div class="main-container">
         <h2>Medicine Inventory</h2>
 
-        <!-- Actions -->
+
         <fieldset>
             <legend>Actions</legend>
             <table>
                 <tr>
                     <td>
                         Search: <input type="text" name="search" placeholder="Type Name or Generic..."
-                            onkeyup="ajaxSearch('../controller/search_medicine.php', this.value, 'medicine_table_body')">
+                            onkeyup="ajaxSearchMedicine(this.value, 'medicine_table_body')">
                     </td>
                     <td>
                         <a href="medicine_add.php"><button type="button">Add Medicine</button></a>
@@ -44,7 +42,6 @@ $medicines = getAllMedicines();
 
         <br>
 
-        <!-- Medicine Table -->
         <fieldset>
             <legend>All Medicines</legend>
             <table border="1" cellpadding="8" width="100%">
@@ -91,6 +88,7 @@ $medicines = getAllMedicines();
                                     <?php echo $medicine['expiry_date']; ?>
                                 </td>
                                 <td>
+                                    <a href="medicine_view.php?id=<?php echo $medicine['id']; ?>"><button>View</button></a>
                                     <a href="medicine_edit.php?id=<?php echo $medicine['id']; ?>"><button>Edit</button></a>
                                     <a href="../controller/delete_medicine.php?id=<?php echo $medicine['id']; ?>"
                                         onclick="return confirm('Are you sure you want to delete this medicine?');"><button>Delete</button></a>
@@ -106,7 +104,6 @@ $medicines = getAllMedicines();
             </table>
 
             <?php
-            // Low stock warning (Initial Load)
             $low_stock = false;
             foreach ($medicines as $m) {
                 if ($m['stock_quantity'] <= $m['reorder_level']) {

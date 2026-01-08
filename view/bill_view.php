@@ -9,7 +9,7 @@ if (!isset($_SESSION['status'])) {
     exit;
 }
 
-$id = $_REQUEST['id'];
+$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $bill = getBillById($id);
 $items = getBillItems($id);
 $payments = getPaymentsByBillId($id);
@@ -38,8 +38,8 @@ $discount_amount = ($subtotal * $bill['discount']) / 100;
 $after_discount = $subtotal - $discount_amount;
 $tax_amount = ($after_discount * $bill['tax']) / 100;
 ?>
-<!DOCTYPE html>
-<html lang="en">
+
+<html>
 
 <head>
     <title>Invoice #<?php echo $bill['id']; ?> - Hospital Management System</title>
