@@ -19,7 +19,7 @@
                 <table>
                     <tr>
                         <td>Username:</td>
-                        <td><input type="text" name="username" value="" required></td>
+                        <td><input type="text" name="username" value="" required onblur="validateSigninUser()"></td>
                     </tr>
                     <tr>
                         <td></td>
@@ -27,7 +27,7 @@
                     </tr>
                     <tr>
                         <td>Password:</td>
-                        <td><input type="password" name="password" required></td>
+                        <td><input type="password" name="password" required onblur="validateSigninPass()"></td>
                     </tr>
                     <tr>
                         <td></td>

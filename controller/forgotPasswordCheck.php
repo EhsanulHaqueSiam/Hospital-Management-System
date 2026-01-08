@@ -1,20 +1,25 @@
 <?php
 require_once('../model/userModel.php');
+require_once('../model/validationHelper.php');
 
 session_start();
 
 if (isset($_POST['reset_password'])) {
 
-    $username = $_POST['username'];
+    $username = trim($_POST['username']);
     $new_password = $_POST['new_password'];
     $confirm_password = $_POST['confirm_password'];
 
-    if ($username == "" || $new_password == "" || $confirm_password == "") {
-        echo "All fields are required";
-    } else if ($new_password != $confirm_password) {
-        echo "Passwords do not match";
-    } else if (strlen($new_password) < 8) {
-        echo "Password must be at least 8 characters long";
+    $errors = [];
+    if ($err = validateRequired($username, 'Username'))
+        $errors[] = $err;
+    if ($err = validatePassword($new_password))
+        $errors[] = $err;
+    if ($new_password != $confirm_password)
+        $errors[] = "Passwords do not match";
+
+    if (count($errors) > 0) {
+        echo "Validation errors:<br>" . implode("<br>", $errors);
     } else {
         $user = getUserByUsername($username);
 

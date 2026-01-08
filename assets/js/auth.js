@@ -61,7 +61,6 @@ function clearError(id) {
     if (el) el.textContent = '';
 }
 
-// Onblur validation functions
 function validateNameBlur() {
     var val = document.getElementsByName('full_name')[0].value.trim();
     if (!val) { showError('fullname-error', 'Name required'); return false; }
@@ -111,6 +110,22 @@ function validateConfirmPasswordBlur() {
     if (!conf) { showError('repassword-error', 'Please confirm password'); return false; }
     if (pass !== conf) { showError('repassword-error', 'Passwords do not match'); return false; }
     clearError('repassword-error');
+    return true;
+}
+
+function validateSigninUser() {
+    var val = document.getElementsByName('username')[0].value.trim();
+    if (!val) { showError('user-error', 'Username required'); return false; }
+    if (val.length < 3) { showError('user-error', 'Username must be at least 3 characters'); return false; }
+    clearError('user-error');
+    return true;
+}
+
+function validateSigninPass() {
+    var val = document.getElementsByName('password')[0].value;
+    if (!val) { showError('password-error', 'Password required'); return false; }
+    if (val.length < 4) { showError('password-error', 'Password must be at least 4 characters'); return false; }
+    clearError('password-error');
     return true;
 }
 
