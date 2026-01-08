@@ -3,11 +3,7 @@ require_once('../controller/adminCheck.php');
 require_once('../model/doctorModel.php');
 require_once('../model/userModel.php');
 require_once('../model/departmentModel.php');
-
-// Get doctor ID from URL
 $doctor_id = isset($_GET['id']) ? $_GET['id'] : 0;
-
-// Fetch doctor info
 $doctor = getDoctorById($doctor_id);
 
 if ($doctor) {

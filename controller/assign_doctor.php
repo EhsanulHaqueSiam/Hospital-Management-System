@@ -1,24 +1,28 @@
 <?php
 session_start();
 require_once('../model/doctorModel.php');
+require_once('../model/validationHelper.php');
 
-// Check if admin
 if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
     header('location: ../view/auth_signin.php');
     exit;
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['submit'])) {
-    $doctor_id = $_POST['doctor_id'];
-    $department_id = $_POST['department_id'];
+    $doctor_id = intval($_POST['doctor_id']);
+    $department_id = intval($_POST['department_id']);
 
-    // Validate inputs
-    if (empty($doctor_id) || empty($department_id)) {
+    $errors = [];
+    if ($doctor_id < 1)
+        $errors[] = "Doctor is required";
+    if ($department_id < 1)
+        $errors[] = "Department is required";
+
+    if (count($errors) > 0) {
         header('location: ../view/admin_doctor_list.php');
         exit;
     }
 
-    // Update doctor's department
     $result = updateDoctorDepartment($doctor_id, $department_id);
 
     if ($result) {

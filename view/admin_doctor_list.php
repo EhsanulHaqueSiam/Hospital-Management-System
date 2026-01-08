@@ -69,7 +69,6 @@ if ($search != '') {
                 <?php if (count($doctors) > 0): ?>
                     <?php foreach ($doctors as $doctor): ?>
                         <?php
-                        // Fetch user and department info separately
                         $user = getUserById($doctor['user_id']);
                         $dept = $doctor['department_id'] ? getDepartmentById($doctor['department_id']) : null;
                         ?>

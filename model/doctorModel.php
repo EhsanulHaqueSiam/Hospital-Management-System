@@ -5,6 +5,7 @@ require_once('db.php');
 function getDoctorById($id)
 {
     $con = getConnection();
+    $id = intval($id);
     $sql = "SELECT * FROM doctors WHERE id='{$id}'";
     $result = mysqli_query($con, $sql);
 
@@ -18,6 +19,7 @@ function getDoctorById($id)
 function getDoctorByUserId($user_id)
 {
     $con = getConnection();
+    $user_id = intval($user_id);
     $sql = "SELECT * FROM doctors WHERE user_id='{$user_id}'";
     $result = mysqli_query($con, $sql);
 
@@ -65,6 +67,7 @@ function searchDoctors($term)
 function getDoctorsByDepartment($department_id)
 {
     $con = getConnection();
+    $department_id = intval($department_id);
     $sql = "SELECT * FROM doctors WHERE department_id='{$department_id}' ORDER BY id ASC";
     $result = mysqli_query($con, $sql);
 
@@ -86,7 +89,7 @@ function addDoctor($doctor)
     $bio = mysqli_real_escape_string($con, $doctor['bio']);
 
     $sql = "INSERT INTO doctors (user_id, department_id, specialization, bio) 
-            VALUES ('{$doctor['user_id']}', '{$doctor['department_id']}', '{$specialization}', '{$bio}')";
+            VALUES ('" . intval($doctor['user_id']) . "', '" . intval($doctor['department_id']) . "', '{$specialization}', '{$bio}')";
 
     if (mysqli_query($con, $sql)) {
         return true;
@@ -98,6 +101,7 @@ function addDoctor($doctor)
 function deleteDoctor($id)
 {
     $con = getConnection();
+    $id = intval($id);
     $sql = "DELETE FROM doctors WHERE id='{$id}'";
 
     if (mysqli_query($con, $sql)) {
@@ -114,8 +118,8 @@ function updateDoctor($doctor)
     $specialization = mysqli_real_escape_string($con, $doctor['specialization']);
     $bio = mysqli_real_escape_string($con, $doctor['bio']);
 
-    $sql = "UPDATE doctors SET department_id='{$doctor['department_id']}', specialization='{$specialization}', bio='{$bio}' 
-            WHERE id='{$doctor['id']}'";
+    $sql = "UPDATE doctors SET department_id='" . intval($doctor['department_id']) . "', specialization='{$specialization}', bio='{$bio}' 
+            WHERE id='" . intval($doctor['id']) . "'";
 
     if (mysqli_query($con, $sql)) {
         return true;
@@ -127,8 +131,8 @@ function updateDoctor($doctor)
 function updateDoctorDepartment($doctor_id, $department_id)
 {
     $con = getConnection();
-    $doctor_id = mysqli_real_escape_string($con, $doctor_id);
-    $department_id = mysqli_real_escape_string($con, $department_id);
+    $doctor_id = intval($doctor_id);
+    $department_id = intval($department_id);
 
     $sql = "UPDATE doctors SET department_id='{$department_id}' WHERE id='{$doctor_id}'";
 

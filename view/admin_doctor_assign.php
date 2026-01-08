@@ -3,24 +3,14 @@ require_once('../controller/adminCheck.php');
 require_once('../model/doctorModel.php');
 require_once('../model/departmentModel.php');
 require_once('../model/userModel.php');
-
-// Get doctor ID from URL
 $doctor_id = isset($_GET['id']) ? $_GET['id'] : 0;
-
-// Fetch doctor data
 $doctor = getDoctorById($doctor_id);
 if (!$doctor) {
     header('location: admin_doctor_list.php');
     exit;
 }
-
-// Fetch user data
 $user = getUserById($doctor['user_id']);
-
-// Fetch all departments
 $departments = getAllDepartments();
-
-// Get current department
 $current_dept = $doctor['department_id'] ? getDepartmentById($doctor['department_id']) : null;
 ?>
 <!DOCTYPE html>
@@ -84,13 +74,14 @@ $current_dept = $doctor['department_id'] ? getDepartmentById($doctor['department
 
         <fieldset>
             <legend>Assign to Department</legend>
-            <form method="POST" action="../controller/assign_doctor.php">
+            <form method="POST" action="../controller/assign_doctor.php" onsubmit="return validateForm(this)">
                 <input type="hidden" name="doctor_id" value="<?php echo $doctor['id']; ?>">
                 <table cellpadding="8">
                     <tr>
                         <td><label for="department_id">Select Department:</label></td>
                         <td>
-                            <select name="department_id" id="department_id" required>
+                            <select name="department_id" id="department_id" required
+                                onchange="validateSelectBlur(this, 'Department')">
                                 <option value="">-- Select Department --</option>
                                 <?php foreach ($departments as $dept): ?>
                                     <option value="<?php echo $dept['id']; ?>" <?php echo ($doctor['department_id'] == $dept['id']) ? 'selected' : ''; ?>>
@@ -111,6 +102,7 @@ $current_dept = $doctor['department_id'] ? getDepartmentById($doctor['department
             </form>
         </fieldset>
     </div>
+    <script src="../assets/js/validation-common.js"></script>
 </body>
 
 </html>

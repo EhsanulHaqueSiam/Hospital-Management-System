@@ -6,7 +6,7 @@ require_once('../model/appointmentModel.php');
 require_once('../model/prescriptionModel.php');
 
 if (isset($_GET['id'])) {
-    $id = $_GET['id'];
+    $id = intval($_GET['id']);
 
     $doctor = getDoctorById($id);
     if (!$doctor) {

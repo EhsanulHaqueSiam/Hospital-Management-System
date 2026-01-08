@@ -2,22 +2,36 @@
 session_start();
 require_once('../model/userModel.php');
 require_once('../model/doctorModel.php');
+require_once('../model/validationHelper.php');
 
 if (isset($_POST['submit'])) {
 
-    $full_name = $_POST['full_name'];
-    $email = $_POST['email'];
-    $phone = $_POST['phone'];
-    $username = $_POST['username'];
+    $full_name = trim($_POST['full_name']);
+    $email = trim($_POST['email']);
+    $phone = trim($_POST['phone']);
+    $username = trim($_POST['username']);
     $password = $_POST['password'];
 
-
     $department_id = $_POST['department_id'];
-    $specialization = $_POST['specialization'];
-    $bio = isset($_POST['bio']) ? $_POST['bio'] : '';
+    $specialization = trim($_POST['specialization']);
+    $bio = isset($_POST['bio']) ? trim($_POST['bio']) : '';
 
-    if ($full_name == "" || $email == "" || $phone == "" || $username == "" || $password == "" || $specialization == "") {
-        echo "All required fields must be filled";
+    $errors = [];
+    if ($err = validateRequired($full_name, 'Full Name'))
+        $errors[] = $err;
+    if ($err = validateEmail($email))
+        $errors[] = $err;
+    if ($err = validatePhone($phone))
+        $errors[] = $err;
+    if ($err = validateUsername($username))
+        $errors[] = $err;
+    if ($err = validatePassword($password))
+        $errors[] = $err;
+    if ($err = validateRequired($specialization, 'Specialization'))
+        $errors[] = $err;
+
+    if (count($errors) > 0) {
+        echo "Validation errors:<br>" . implode("<br>", $errors);
         echo "<br><a href='../view/admin_doctor_add.php'>Go Back</a>";
     } else {
 
