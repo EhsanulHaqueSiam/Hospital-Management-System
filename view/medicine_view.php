@@ -10,8 +10,13 @@ if (!$medicine) {
     exit;
 }
 ?>
+<<<<<<< Updated upstream
 
 <html>
+=======
+<!DOCTYPE html>
+<html lang="en">
+>>>>>>> Stashed changes
 
 <head>
     <title>View Medicine - Hospital Management System</title>
