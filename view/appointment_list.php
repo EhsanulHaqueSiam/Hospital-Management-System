@@ -18,8 +18,6 @@ if ($role == 'admin') {
     $patient = getPatientByUserId($user_id);
     $appointments = $patient ? getAppointmentsByPatient($patient['id']) : [];
 }
-
-// Filter by status if selected
 if ($status_filter != '') {
     $filtered = [];
     foreach ($appointments as $apt) {
@@ -110,7 +108,6 @@ if ($status_filter != '') {
                 <?php if (count($appointments) > 0): ?>
                     <?php foreach ($appointments as $appointment): ?>
                         <?php
-                        // Fetch patient and doctor info
                         $appt_patient = getPatientById($appointment['patient_id']);
                         $patient_user = $appt_patient ? getUserById($appt_patient['user_id']) : null;
 

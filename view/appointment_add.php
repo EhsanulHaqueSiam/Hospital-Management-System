@@ -7,8 +7,6 @@ require_once('../model/userModel.php');
 
 $role = $_SESSION['role'];
 $user_id = $_SESSION['user_id'];
-
-// Fetch all patients and doctors for dropdowns
 $patients = getAllPatients();
 $doctors = getAllDoctors();
 $departments = getAllDepartments();
@@ -40,7 +38,7 @@ $departments = getAllDepartments();
     <div class="main-container">
         <h2>Book New Appointment</h2>
 
-        <form method="POST" action="../controller/add_appointment.php">
+        <form method="POST" action="../controller/add_appointment.php" onsubmit="return validateForm(this)">
             <fieldset>
                 <legend>Appointment Details</legend>
                 <table cellpadding="8" width="100%">
@@ -55,7 +53,8 @@ $departments = getAllDepartments();
                                 <input type="hidden" name="patient_id" value="<?php echo $patient['id']; ?>">
                                 <input type="text" value="<?php echo $patient_user['full_name']; ?>" disabled>
                             <?php else: ?>
-                                <select name="patient_id" required>
+                                <select name="patient_id" required onchange="validateSelectBlur(this, 'Patient')"
+                                    onblur="validateSelectBlur(this, 'Patient')">
                                     <option value="">-- Select Patient --</option>
                                     <?php foreach ($patients as $p): ?>
                                         <?php $p_user = getUserById($p['user_id']); ?>
@@ -81,7 +80,9 @@ $departments = getAllDepartments();
                     <tr>
                         <td>Doctor:</td>
                         <td>
-                            <select name="doctor_id" id="doctor_id" required onchange="updateTimeSlots();">
+                            <select name="doctor_id" id="doctor_id" required
+                                onchange="updateTimeSlots(); validateSelectBlur(this, 'Doctor')"
+                                onblur="validateSelectBlur(this, 'Doctor')">
                                 <option value="">-- Select Doctor --</option>
                                 <?php foreach ($doctors as $d): ?>
                                     <?php $d_user = getUserById($d['user_id']); ?>
@@ -95,12 +96,14 @@ $departments = getAllDepartments();
                     <tr>
                         <td>Date:</td>
                         <td><input type="date" name="appointment_date" id="appointment_date"
-                                onchange="updateTimeSlots();" required></td>
+                                onchange="updateTimeSlots(); validateFutureDateBlur(this, 'Date');"
+                                onblur="validateFutureDateBlur(this, 'Date')" required></td>
                     </tr>
                     <tr>
                         <td>Time:</td>
                         <td>
-                            <select name="appointment_time" id="appointment_time" required>
+                            <select name="appointment_time" id="appointment_time" required
+                                onchange="validateSelectBlur(this, 'Time')" onblur="validateSelectBlur(this, 'Time')">
                                 <option value="">-- Select Time --</option>
                                 <option value="09:00:00">09:00 AM</option>
                                 <option value="09:30:00">09:30 AM</option>
@@ -128,7 +131,8 @@ $departments = getAllDepartments();
                 <table cellpadding="8" width="100%">
                     <tr>
                         <td>Reason:</td>
-                        <td><textarea name="reason" rows="3" cols="50"
+                        <td><textarea name="reason" rows="3" cols="50" required
+                                onblur="validateRequiredBlur(this, 'Reason')"
                                 placeholder="Describe symptoms or reason for visit"></textarea></td>
                     </tr>
                 </table>
@@ -143,6 +147,7 @@ $departments = getAllDepartments();
         </form>
     </div>
 
+    <script src="../assets/js/validation-common.js"></script>
     <script src="../assets/js/ajax.js"></script>
     <script>
         function updateTimeSlots() {

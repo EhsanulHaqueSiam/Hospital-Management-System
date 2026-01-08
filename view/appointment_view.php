@@ -7,25 +7,17 @@ require_once('../model/userModel.php');
 
 $role = $_SESSION['role'];
 $user_id = $_SESSION['user_id'];
-
-// Get appointment ID from URL
 $appointment_id = isset($_GET['id']) ? $_GET['id'] : 0;
-
-// Fetch appointment data
 $appointment = getAppointmentById($appointment_id);
 if (!$appointment) {
     header('location: appointment_list.php');
     exit;
 }
-
-// Fetch patient and doctor data
 $patient = getPatientById($appointment['patient_id']);
 $patient_user = $patient ? getUserById($patient['user_id']) : null;
 
 $doctor = getDoctorById($appointment['doctor_id']);
 $doctor_user = $doctor ? getUserById($doctor['user_id']) : null;
-
-// Check if patient can cancel
 $canCancel = false;
 if ($role == 'patient') {
     $current_patient = getPatientByUserId($user_id);
@@ -33,8 +25,6 @@ if ($role == 'patient') {
         $canCancel = true;
     }
 }
-
-// Check if doctor can add prescription
 $canAddPrescription = false;
 if ($role == 'doctor') {
     $current_doctor = getDoctorByUserId($user_id);
@@ -194,9 +184,10 @@ if ($role == 'doctor') {
             <br>
             <fieldset>
                 <legend>Update Status</legend>
-                <form method="POST" action="../controller/update_appointment_status.php">
+                <form method="POST" action="../controller/update_appointment_status.php"
+                    onsubmit="return validateForm(this)">
                     <input type="hidden" name="appointment_id" value="<?php echo $appointment['id']; ?>">
-                    <select name="status" required>
+                    <select name="status" required onchange="validateSelectBlur(this, 'Status')">
                         <option value="pending" <?php echo $appointment['status'] == 'pending' ? 'selected' : ''; ?>>Pending
                         </option>
                         <option value="confirmed" <?php echo $appointment['status'] == 'confirmed' ? 'selected' : ''; ?>>
@@ -211,6 +202,7 @@ if ($role == 'doctor') {
             </fieldset>
         <?php endif; ?>
     </div>
+    <script src="../assets/js/validation-common.js"></script>
 </body>
 
 </html>

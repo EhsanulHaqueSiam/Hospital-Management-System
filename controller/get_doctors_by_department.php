@@ -3,13 +3,14 @@ session_start();
 require_once('../model/doctorModel.php');
 require_once('../model/userModel.php');
 
-// Check if logged in
+header('Content-Type: application/json');
+
 if (!isset($_SESSION['user_id'])) {
-    echo '<option value="">Please login</option>';
+    echo json_encode(['error' => 'Not authenticated']);
     exit;
 }
 
-$department_id = isset($_GET['department_id']) ? $_GET['department_id'] : 0;
+$department_id = isset($_GET['department_id']) ? intval($_GET['department_id']) : 0;
 
 if ($department_id) {
     $doctors = getDoctorsByDepartment($department_id);
@@ -17,12 +18,17 @@ if ($department_id) {
     $doctors = getAllDoctors();
 }
 
-echo '<option value="">-- Select Doctor --</option>';
-
+$result = [];
 foreach ($doctors as $doctor) {
     $user = getUserById($doctor['user_id']);
     if ($user) {
-        echo '<option value="' . $doctor['id'] . '">' . $user['full_name'] . ' - ' . $doctor['specialization'] . '</option>';
+        $result[] = [
+            'id' => $doctor['id'],
+            'name' => $user['full_name'],
+            'specialization' => $doctor['specialization']
+        ];
     }
 }
+
+echo json_encode(['success' => true, 'doctors' => $result]);
 ?>

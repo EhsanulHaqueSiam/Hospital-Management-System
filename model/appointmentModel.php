@@ -5,6 +5,7 @@ require_once('db.php');
 function getAppointmentById($id)
 {
     $con = getConnection();
+    $id = intval($id);
     $sql = "SELECT * FROM appointments WHERE id='{$id}'";
     $result = mysqli_query($con, $sql);
 
@@ -34,6 +35,7 @@ function getAllAppointments()
 function getAppointmentsByPatient($patient_id)
 {
     $con = getConnection();
+    $patient_id = intval($patient_id);
     $sql = "SELECT * FROM appointments WHERE patient_id='{$patient_id}' ORDER BY appointment_date DESC";
     $result = mysqli_query($con, $sql);
 
@@ -50,6 +52,7 @@ function getAppointmentsByPatient($patient_id)
 function getAppointmentsByDoctor($doctor_id)
 {
     $con = getConnection();
+    $doctor_id = intval($doctor_id);
     $sql = "SELECT * FROM appointments WHERE doctor_id='{$doctor_id}' ORDER BY appointment_date DESC";
     $result = mysqli_query($con, $sql);
 
@@ -92,7 +95,7 @@ function addAppointment($appointment)
     $notes = mysqli_real_escape_string($con, $appointment['notes']);
 
     $sql = "INSERT INTO appointments (patient_id, doctor_id, appointment_date, appointment_time, status, reason, notes) 
-            VALUES ('{$appointment['patient_id']}', '{$appointment['doctor_id']}', '{$appointment_date}', '{$appointment_time}', '{$status}', '{$reason}', '{$notes}')";
+            VALUES ('" . intval($appointment['patient_id']) . "', '" . intval($appointment['doctor_id']) . "', '{$appointment_date}', '{$appointment_time}', '{$status}', '{$reason}', '{$notes}')";
 
     if (mysqli_query($con, $sql)) {
         return true;
@@ -104,6 +107,7 @@ function addAppointment($appointment)
 function deleteAppointment($id)
 {
     $con = getConnection();
+    $id = intval($id);
     $sql = "DELETE FROM appointments WHERE id='{$id}'";
 
     if (mysqli_query($con, $sql)) {
@@ -122,9 +126,9 @@ function updateAppointment($appointment)
     $reason = mysqli_real_escape_string($con, $appointment['reason']);
     $notes = mysqli_real_escape_string($con, $appointment['notes']);
 
-    $sql = "UPDATE appointments SET patient_id='{$appointment['patient_id']}', doctor_id='{$appointment['doctor_id']}', 
+    $sql = "UPDATE appointments SET patient_id='" . intval($appointment['patient_id']) . "', doctor_id='" . intval($appointment['doctor_id']) . "', 
             appointment_date='{$appointment_date}', status='{$status}', reason='{$reason}', notes='{$notes}' 
-            WHERE id='{$appointment['id']}'";
+            WHERE id='" . intval($appointment['id']) . "'";
 
     if (mysqli_query($con, $sql)) {
         return true;
@@ -136,6 +140,7 @@ function updateAppointment($appointment)
 function updateAppointmentStatus($id, $status)
 {
     $con = getConnection();
+    $id = intval($id);
     $status = mysqli_real_escape_string($con, $status);
 
     $sql = "UPDATE appointments SET status='{$status}' WHERE id='{$id}'";
@@ -150,6 +155,7 @@ function updateAppointmentStatus($id, $status)
 function countAppointmentsByDoctor($doctor_id)
 {
     $con = getConnection();
+    $doctor_id = intval($doctor_id);
     $sql = "SELECT COUNT(*) as count FROM appointments WHERE doctor_id='{$doctor_id}'";
     $result = mysqli_query($con, $sql);
     $row = mysqli_fetch_assoc($result);
@@ -159,6 +165,7 @@ function countAppointmentsByDoctor($doctor_id)
 function countAppointmentsByPatient($patient_id)
 {
     $con = getConnection();
+    $patient_id = intval($patient_id);
     $sql = "SELECT COUNT(*) as count FROM appointments WHERE patient_id='{$patient_id}'";
     $result = mysqli_query($con, $sql);
     $row = mysqli_fetch_assoc($result);

@@ -4,22 +4,14 @@ require_once('../model/appointmentModel.php');
 require_once('../model/patientModel.php');
 require_once('../model/doctorModel.php');
 require_once('../model/userModel.php');
-
-// Get appointment ID from URL
-$appointment_id = isset($_GET['id']) ? $_GET['id'] : 0;
-
-// Fetch appointment data
+$appointment_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $appointment = getAppointmentById($appointment_id);
 if (!$appointment) {
     header('location: appointment_list.php');
     exit;
 }
-
-// Fetch all for dropdowns
 $patients = getAllPatients();
 $doctors = getAllDoctors();
-
-// Fetch current data
 $current_patient = getPatientById($appointment['patient_id']);
 $current_patient_user = $current_patient ? getUserById($current_patient['user_id']) : null;
 
@@ -47,7 +39,7 @@ $current_doctor_user = $current_doctor ? getUserById($current_doctor['user_id'])
     <div class="main-container">
         <h2>Edit Appointment</h2>
 
-        <form method="POST" action="../controller/edit_appointment.php">
+        <form method="POST" action="../controller/edit_appointment.php" onsubmit="return validateForm(this)">
             <input type="hidden" name="appointment_id" value="<?php echo $appointment['id']; ?>">
 
             <fieldset>
@@ -56,7 +48,7 @@ $current_doctor_user = $current_doctor ? getUserById($current_doctor['user_id'])
                     <tr>
                         <td>Patient:</td>
                         <td>
-                            <select name="patient_id" required>
+                            <select name="patient_id" required onchange="validateSelectBlur(this, 'Patient')">
                                 <?php foreach ($patients as $p): ?>
                                     <?php $p_user = getUserById($p['user_id']); ?>
                                     <option value="<?php echo $p['id']; ?>" <?php echo $p['id'] == $appointment['patient_id'] ? 'selected' : ''; ?>>
@@ -69,7 +61,7 @@ $current_doctor_user = $current_doctor ? getUserById($current_doctor['user_id'])
                     <tr>
                         <td>Doctor:</td>
                         <td>
-                            <select name="doctor_id" required>
+                            <select name="doctor_id" required onchange="validateSelectBlur(this, 'Doctor')">
                                 <?php foreach ($doctors as $d): ?>
                                     <?php $d_user = getUserById($d['user_id']); ?>
                                     <option value="<?php echo $d['id']; ?>" <?php echo $d['id'] == $appointment['doctor_id'] ? 'selected' : ''; ?>>
@@ -82,12 +74,13 @@ $current_doctor_user = $current_doctor ? getUserById($current_doctor['user_id'])
                     <tr>
                         <td>Date:</td>
                         <td><input type="date" name="appointment_date"
-                                value="<?php echo $appointment['appointment_date']; ?>" required></td>
+                                value="<?php echo $appointment['appointment_date']; ?>" required
+                                onchange="validateFutureDateBlur(this, 'Appointment Date')"></td>
                     </tr>
                     <tr>
                         <td>Time:</td>
                         <td>
-                            <select name="appointment_time" required>
+                            <select name="appointment_time" required onchange="validateSelectBlur(this, 'Time')">
                                 <option value="09:00:00" <?php echo $appointment['appointment_time'] == '09:00:00' ? 'selected' : ''; ?>>09:00 AM</option>
                                 <option value="09:30:00" <?php echo $appointment['appointment_time'] == '09:30:00' ? 'selected' : ''; ?>>09:30 AM</option>
                                 <option value="10:00:00" <?php echo $appointment['appointment_time'] == '10:00:00' ? 'selected' : ''; ?>>10:00 AM</option>
@@ -107,7 +100,7 @@ $current_doctor_user = $current_doctor ? getUserById($current_doctor['user_id'])
                     <tr>
                         <td>Status:</td>
                         <td>
-                            <select name="status" required>
+                            <select name="status" required onchange="validateSelectBlur(this, 'Status')">
                                 <option value="pending" <?php echo $appointment['status'] == 'pending' ? 'selected' : ''; ?>>Pending</option>
                                 <option value="confirmed" <?php echo $appointment['status'] == 'confirmed' ? 'selected' : ''; ?>>Confirmed</option>
                                 <option value="completed" <?php echo $appointment['status'] == 'completed' ? 'selected' : ''; ?>>Completed</option>
@@ -145,6 +138,7 @@ $current_doctor_user = $current_doctor ? getUserById($current_doctor['user_id'])
             </div>
         </form>
     </div>
+    <script src="../assets/js/validation-common.js"></script>
 </body>
 
 </html>

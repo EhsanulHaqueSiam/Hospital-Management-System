@@ -2,21 +2,21 @@
 session_start();
 require_once('../model/appointmentModel.php');
 
-// Check if logged in
+header('Content-Type: application/json');
+
 if (!isset($_SESSION['user_id'])) {
-    echo '<option value="">Please login</option>';
+    echo json_encode(['error' => 'Not authenticated']);
     exit;
 }
 
-$doctor_id = isset($_GET['doctor_id']) ? $_GET['doctor_id'] : 0;
+$doctor_id = isset($_GET['doctor_id']) ? intval($_GET['doctor_id']) : 0;
 $date = isset($_GET['date']) ? $_GET['date'] : '';
 
 if (!$doctor_id || !$date) {
-    echo '<option value="">-- Select Time --</option>';
+    echo json_encode(['success' => false, 'message' => 'Doctor and date required']);
     exit;
 }
 
-// Get all appointments for this doctor on this date
 $appointments = getAppointmentsByDoctor($doctor_id);
 $booked_times = [];
 
@@ -26,7 +26,6 @@ foreach ($appointments as $apt) {
     }
 }
 
-// Available time slots
 $all_slots = [
     '09:00:00' => '09:00 AM',
     '09:30:00' => '09:30 AM',
@@ -43,13 +42,14 @@ $all_slots = [
     '16:30:00' => '04:30 PM'
 ];
 
-echo '<option value="">-- Select Time --</option>';
-
+$slots = [];
 foreach ($all_slots as $value => $label) {
-    if (!in_array($value, $booked_times)) {
-        echo '<option value="' . $value . '">' . $label . '</option>';
-    } else {
-        echo '<option value="' . $value . '" disabled>' . $label . ' (Booked)</option>';
-    }
+    $slots[] = [
+        'value' => $value,
+        'label' => $label,
+        'available' => !in_array($value, $booked_times)
+    ];
 }
+
+echo json_encode(['success' => true, 'slots' => $slots]);
 ?>
