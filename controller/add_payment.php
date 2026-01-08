@@ -2,13 +2,14 @@
 require_once('adminCheck.php');
 require_once('../model/paymentModel.php');
 require_once('../model/billModel.php');
+require_once('../model/validationHelper.php');
 
 if (isset($_POST['submit'])) {
-    $bill_id = $_POST['bill_id'];
+    $bill_id = intval($_POST['bill_id']);
     $amount = $_POST['amount'];
     $method = $_POST['method'];
-    $trx_id = $_POST['trx_id'];
-    $notes = $_POST['notes'];
+    $trx_id = trim($_POST['trx_id']);
+    $notes = trim($_POST['notes']);
     $received_by = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 
     if (!$received_by) {
@@ -16,8 +17,14 @@ if (isset($_POST['submit'])) {
         exit;
     }
 
-    if ($bill_id == "" || $amount == "") {
-        echo "Bill ID and Amount are required";
+    $errors = [];
+    if ($bill_id < 1)
+        $errors[] = "Bill is required";
+    if ($err = validatePositiveNumber($amount, 'Amount'))
+        $errors[] = $err;
+
+    if (count($errors) > 0) {
+        echo "Validation errors:<br>" . implode("<br>", $errors);
     } else {
         $payment = [
             'bill_id' => $bill_id,

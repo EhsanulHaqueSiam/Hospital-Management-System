@@ -3,7 +3,7 @@ require_once('../controller/adminCheck.php');
 require_once('../model/paymentModel.php');
 require_once('../model/billModel.php');
 
-$id = $_REQUEST['id'];
+$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $payment = getPaymentById($id);
 
 if (!$payment) {
@@ -22,7 +22,7 @@ $bill = getBillById($payment['bill_id']);
 </head>
 
 <body>
-    <!-- Navbar -->
+  
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
         <a href="dashboard_admin.php" class="navbar-link">Dashboard</a>
@@ -35,7 +35,7 @@ $bill = getBillById($payment['bill_id']);
             <?php echo $payment['id']; ?>
         </h2>
 
-        <form method="POST" action="../controller/edit_payment.php">
+        <form method="POST" action="../controller/edit_payment.php" onsubmit="return validateForm(this)">
             <input type="hidden" name="id" value="<?php echo $payment['id']; ?>">
             <input type="hidden" name="bill_id" value="<?php echo $payment['bill_id']; ?>">
 
@@ -57,19 +57,20 @@ $bill = getBillById($payment['bill_id']);
                         <td>Payment Amount:</td>
                         <td>
                             <input type="number" step="0.01" name="amount"
-                                value="<?php echo $payment['payment_amount']; ?>" required>
+                                value="<?php echo $payment['payment_amount']; ?>" required
+                                onblur="validatePositiveNumberBlur(this, 'Amount')">
                         </td>
                     </tr>
                     <tr>
                         <td>Payment Method:</td>
                         <td>
-                            <select name="method" required>
+                            <select name="method" required onchange="validateSelectBlur(this, 'Payment Method')">
                                 <option value="Cash" <?php if ($payment['payment_method'] == 'Cash')
-                                    echo 'selected'; ?>
-                                    >Cash</option>
+                                    echo 'selected'; ?>>
+                                    Cash</option>
                                 <option value="Card" <?php if ($payment['payment_method'] == 'Card')
-                                    echo 'selected'; ?>
-                                    >Card</option>
+                                    echo 'selected'; ?>>
+                                    Card</option>
                                 <option value="Mobile Banking" <?php if ($payment['payment_method'] == 'Mobile Banking')
                                     echo 'selected'; ?>>Mobile Banking</option>
                                 <option value="Bank Transfer" <?php if ($payment['payment_method'] == 'Bank Transfer')
@@ -95,6 +96,7 @@ $bill = getBillById($payment['bill_id']);
             </fieldset>
         </form>
     </div>
+    <script src="../assets/js/validation-common.js"></script>
 </body>
 
 </html>

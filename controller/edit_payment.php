@@ -2,17 +2,22 @@
 require_once('adminCheck.php');
 require_once('../model/paymentModel.php');
 require_once('../model/billModel.php');
+require_once('../model/validationHelper.php');
 
 if (isset($_POST['update'])) {
-    $id = $_POST['id'];
-    $bill_id = $_POST['bill_id'];
+    $id = intval($_POST['id']);
+    $bill_id = intval($_POST['bill_id']);
     $amount = $_POST['amount'];
     $method = $_POST['method'];
-    $trx_id = $_POST['trx_id'];
-    $notes = $_POST['notes'];
+    $trx_id = trim($_POST['trx_id']);
+    $notes = trim($_POST['notes']);
 
-    if ($amount == "") {
-        echo "Amount is required";
+    $errors = [];
+    if ($err = validatePositiveNumber($amount, 'Amount'))
+        $errors[] = $err;
+
+    if (count($errors) > 0) {
+        echo "Validation errors:<br>" . implode("<br>", $errors);
     } else {
 
         $oldPayment = getPaymentById($id);

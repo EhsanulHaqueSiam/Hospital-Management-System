@@ -23,7 +23,7 @@ $bills = getAllBills();
 </head>
 
 <body>
-    <!-- Navbar -->
+
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>
         <a href="dashboard_admin.php" class="navbar-link">Dashboard</a>
@@ -34,19 +34,19 @@ $bills = getAllBills();
     <div class="main-container">
         <h2>Record Payment</h2>
 
-        <form method="POST" action="../controller/add_payment.php">
+        <form method="POST" action="../controller/add_payment.php" onsubmit="return validateForm(this)">
             <fieldset>
                 <legend>Payment Details</legend>
                 <table cellpadding="5">
                     <tr>
                         <td>Select Bill:</td>
                         <td>
-                            <select name="bill_id" id="bill_select" onchange="updateAmount()" required>
+                            <select name="bill_id" id="bill_select" onchange="updateAmount(); validateSelectBlur(this, 'Bill');" onblur="validateSelectBlur(this, 'Bill')" required>
                                 <option value="">-- Select Bill --</option>
                                 <?php foreach ($bills as $b): ?>
                                     <?php 
                                         $balance = $b['total_amount'] - $b['paid_amount']; 
-                                        if ($balance <= 0 && $selected_bill_id != $b['id']) continue; // Skip fully paid unless selected
+                                        if ($balance <= 0 && $selected_bill_id != $b['id']) continue;
                                     ?>
                                     <option value="<?php echo $b['id']; ?>" 
                                         data-balance="<?php echo number_format($balance, 2, '.', ''); ?>"
@@ -60,14 +60,14 @@ $bills = getAllBills();
                     <tr>
                         <td>Payment Amount:</td>
                         <td>
-                            <input type="number" step="0.01" name="amount" id="amount_input" required>
+                            <input type="number" step="0.01" name="amount" id="amount_input" required onblur="validatePositiveNumberBlur(this, 'Amount')">
                             <br><small id="amount_display"></small>
                         </td>
                     </tr>
                     <tr>
                         <td>Payment Method:</td>
                         <td>
-                            <select name="method" required>
+                            <select name="method" required onchange="validateSelectBlur(this, 'Method')" onblur="validateSelectBlur(this, 'Method')">
                                 <option value="Cash">Cash</option>
                                 <option value="Card">Card</option>
                                 <option value="Mobile Banking">Mobile Banking</option>
@@ -97,6 +97,7 @@ $bills = getAllBills();
     <?php if($selected_bill_id): ?>
     <script>updateAmount();</script>
     <?php endif; ?>
+    <script src="../assets/js/validation-common.js"></script>
 </body>
 
 </html>
