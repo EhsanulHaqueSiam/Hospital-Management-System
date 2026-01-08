@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once('../models/notification_model.php');
+require_once(__DIR__ . '/../core/Validator.php');
 
 if (!isset($_SESSION['user_id'])) {
     header('Location: notice_user_controller.php');
@@ -68,13 +69,27 @@ if ($action == 'clear_all_read' && $_SERVER['REQUEST_METHOD'] === 'POST'){
 
 if ($action == 'view') {
     $id = (int)($_GET['id'] ?? 0);
+    if ($id <= 0) {
+        header('Location: notification_controller.php');
+        exit;
+    }
     // mark read then redirect to link if exists
     markNotificationRead($id, $user_id);
     $con = getConnection();
-    $res = mysqli_query($con, "SELECT link FROM notifications WHERE id = $id AND user_id = $user_id");
-    if ($row = mysqli_fetch_assoc($res)){
-        $link = $row['link'];
-        if ($link) header('Location: '.$link);
+    $sql = "SELECT link FROM notifications WHERE id = ? AND user_id = ? LIMIT 1";
+    $stmt = mysqli_prepare($con, $sql);
+    if ($stmt) {
+        mysqli_stmt_bind_param($stmt, 'ii', $id, $user_id);
+        mysqli_stmt_execute($stmt);
+        $res = mysqli_stmt_get_result($stmt);
+        if ($row = mysqli_fetch_assoc($res)){
+            $link = $row['link'];
+            if ($link) {
+                header('Location: '.$link);
+                exit;
+            }
+        }
+        mysqli_stmt_close($stmt);
     }
     header('Location: notification_controller.php');
     exit;
