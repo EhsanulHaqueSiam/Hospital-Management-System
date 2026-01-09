@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('../models/notice_model.php');
+require_once(__DIR__ . '/../models/notice_model.php');
 
 $action = isset($_GET['action']) ? $_GET['action'] : 'list';
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
@@ -37,10 +37,10 @@ if ($action == 'list') {
         $notices[] = $row;
     }
     
-    require_once('../view/notice/notice_board.php');
+    require_once(__DIR__ . '/../view/notice/notice_board.php');
 } elseif ($action == 'view') {
     $notice = getNoticeById($_GET['id']);
-    require_once('../view/notice/notice_view.php');
+    require_once(__DIR__ . '/../view/notice/notice_view.php');
 } elseif ($action == 'search') {
     $key = $_GET['key'] ?? '';
     $con = getConnection();

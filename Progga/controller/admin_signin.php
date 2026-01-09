@@ -1,23 +1,36 @@
 <?php
-session_start();
+require_once(__DIR__ . '/../models/session_helper.php');
+SessionHelper::initSession();
+require_once(__DIR__ . '/../core/validator.php');
 
 // simple admin credentials (hardcoded)
 $adminUsername = 'admin';
 $adminEmail = 'admin@hospital.com';
 $adminPassword = 'admin123';
+$error = '';
+$rememberMe = false;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = $_POST['user'] ?? '';
     $password = $_POST['password'] ?? '';
+    $rememberMe = isset($_POST['remember_me']) && $_POST['remember_me'] === 'on';
 
-    if ((strtolower($user) === strtolower($adminUsername) || strtolower($user) === strtolower($adminEmail)) && $password === $adminPassword) {
-        // set admin session only within Progga
-        $_SESSION['username'] = $adminUsername;
-        $_SESSION['role'] = 'Admin';
-        $_SESSION['user_id'] = 1;
+    // Server-side validation
+    $data = ['user' => $user, 'password' => $password];
+    $rules = [
+        'user' => ['required' => true, 'required_message' => 'Username or Email is required.'],
+        'password' => ['required' => true, 'required_message' => 'Password is required.']
+    ];
+    $errs = Validator::validate($data, $rules);
+    if (!empty($errs)) {
+        $error = implode(' ', $errs);
+    } else {
+        if ((strtolower($user) === strtolower($adminUsername) || strtolower($user) === strtolower($adminEmail)) && $password === $adminPassword) {
+        // Set secure session with optional persistent cookie
+        SessionHelper::setLoginSession($adminUsername, $adminEmail, 'Admin', 1, $rememberMe);
 
         // redirect to admin notice controller (or admin dashboard)
-        header('Location: notice_controller.php');
+        header('Location: ./notice_controller.php');
         exit;
     } else {
         // fallback: check admins.json for additional admin accounts
@@ -36,25 +49,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $admins = json_decode(file_get_contents($adminsFile), true) ?: [];
 
         $found = false;
+        $foundAdmin = null;
         foreach ($admins as $a) {
             if ((strtolower($user) === strtolower($a['username']) || strtolower($user) === strtolower($a['email'])) && $password === $a['password']) {
-                $_SESSION['username'] = $a['username'];
-                $_SESSION['role'] = 'Admin';
-                $_SESSION['user_id'] = 1;
+                $foundAdmin = $a;
                 $found = true;
                 break;
             }
         }
 
         if ($found) {
-            header('Location: notice_controller.php');
+            // Set secure session with optional persistent cookie
+            SessionHelper::setLoginSession($foundAdmin['username'], $foundAdmin['email'], 'Admin', 1, $rememberMe);
+            header('Location: ./notice_controller.php');
             exit;
         } else {
             $error = 'Invalid admin credentials.';
         }
+        }
     }
-
 }
 
 // show signin view
-require_once('../view/admin_signin.php');
+require_once(__DIR__ . '/../view/admin_signin.php');

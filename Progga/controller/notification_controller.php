@@ -1,7 +1,7 @@
 <?php
 session_start();
-require_once('../models/notification_model.php');
-require_once(__DIR__ . '/../core/Validator.php');
+require_once(__DIR__ . '/../models/notification_model.php');
+require_once(__DIR__ . '/../core/validator.php');
 
 if (!isset($_SESSION['user_id'])) {
     header('Location: notice_user_controller.php');
@@ -20,7 +20,7 @@ if ($action == 'list') {
     $total = countNotificationsByUser($user_id, $status);
     $totalPages = ceil($total / $limit);
     $notifications = getNotificationsByUser($user_id, $limit, $offset, $status);
-    require_once('../view/notifications/notifications_list.php');
+    require_once(__DIR__ . '/../view/notifications/notifications_list.php');
     exit;
 }
 

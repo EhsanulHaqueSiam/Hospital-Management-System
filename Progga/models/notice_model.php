@@ -17,42 +17,49 @@ function getAllNotices(){
 
 function getNoticeById($id){
     $con = getConnection();
-    $sql = "SELECT * FROM notices WHERE id = $id";
-    $result = mysqli_query($con, $sql);
-    return mysqli_fetch_assoc($result);
+    $sql = "SELECT * FROM notices WHERE id = ? LIMIT 1";
+    $stmt = mysqli_prepare($con, $sql);
+    if (!$stmt) return null;
+    mysqli_stmt_bind_param($stmt, 'i', $id);
+    mysqli_stmt_execute($stmt);
+    $res = mysqli_stmt_get_result($stmt);
+    $row = mysqli_fetch_assoc($res);
+    mysqli_stmt_close($stmt);
+    return $row;
 }
 
 function createNotice($notice){
     $con = getConnection();
-    $sql = "INSERT INTO notices 
-            VALUES (
-                NULL,
-                '{$notice['title']}',
-                '{$notice['content']}',
-                '{$notice['category']}',
-                {$notice['is_important']},
-                ".($notice['expiry_date'] ? "'{$notice['expiry_date']}'" : "NULL").",
-                {$notice['created_by']},
-                CURRENT_TIMESTAMP
-            )";
-    return mysqli_query($con, $sql);
+    $sql = "INSERT INTO notices (title, content, category, is_important, expiry_date, created_by, created_at) VALUES (?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)";
+    $stmt = mysqli_prepare($con, $sql);
+    if (!$stmt) return false;
+    $expiry = $notice['expiry_date'] ?: null;
+    mysqli_stmt_bind_param($stmt, 'sssisi', $notice['title'], $notice['content'], $notice['category'], $notice['is_important'], $expiry, $notice['created_by']);
+    $ok = mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+    return $ok;
 }
 
 function updateNotice($notice){
     $con = getConnection();
-    $sql = "UPDATE notices SET
-            title = '{$notice['title']}',
-            content = '{$notice['content']}',
-            category = '{$notice['category']}',
-            is_important = {$notice['is_important']},
-            expiry_date = ".($notice['expiry_date'] ? "'{$notice['expiry_date']}'" : "NULL")."
-            WHERE id = {$notice['id']}";
-    return mysqli_query($con, $sql);
+    $sql = "UPDATE notices SET title = ?, content = ?, category = ?, is_important = ?, expiry_date = ? WHERE id = ?";
+    $expiry = $notice['expiry_date'] ?: null;
+    $stmt = mysqli_prepare($con, $sql);
+    if (!$stmt) return false;
+    mysqli_stmt_bind_param($stmt, 'sssisi', $notice['title'], $notice['content'], $notice['category'], $notice['is_important'], $expiry, $notice['id']);
+    $ok = mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+    return $ok;
 }
 
 function deleteNotice($id){
     $con = getConnection();
-    $sql = "DELETE FROM notices WHERE id = $id";
-    return mysqli_query($con, $sql);
+    $sql = "DELETE FROM notices WHERE id = ?";
+    $stmt = mysqli_prepare($con, $sql);
+    if (!$stmt) return false;
+    mysqli_stmt_bind_param($stmt, 'i', $id);
+    $ok = mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+    return $ok;
 }
 ?>
