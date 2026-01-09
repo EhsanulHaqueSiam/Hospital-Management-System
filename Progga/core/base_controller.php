@@ -1,8 +1,5 @@
 <?php
-/**
- * Base Controller Class
- * All controllers should extend this class for consistent functionality
- */
+
 
 class BaseController {
     

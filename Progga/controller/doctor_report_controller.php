@@ -3,7 +3,6 @@ session_start();
 require_once('../models/db.php');
 require_once('../models/doctor_report_model.php');
 
-/* Admin only */
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'Admin') {
     echo "Access denied";
     exit;
@@ -11,7 +10,6 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'Admin') {
 
 $con = getConnection();
 
-/* Filters */
 $filters = [
     'department' => $_POST['department'] ?? 'All',
     'doctor' => $_POST['doctor'] ?? 'All',
@@ -46,7 +44,6 @@ if (isset($_POST['generate'])) {
     }
 }
 
-/* Export XML */
 if (isset($_POST['export_xml'])) {
     header("Content-Type: text/xml");
     header("Content-Disposition: attachment; filename=doctor_report.xml");

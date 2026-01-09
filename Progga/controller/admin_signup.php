@@ -19,20 +19,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['username'] ?? '');
     $email = trim($_POST['email'] ?? '');
     $password = trim($_POST['password'] ?? '');
+    $confirm_password = trim($_POST['confirm_password'] ?? '');
 
-    $error = '';
-    if ($username === '' || $email === '' || $password === '') {
-        $error = 'All fields are required.';
-    } else {
-        foreach ($admins as $a) {
-            if (strtolower($a['username']) === strtolower($username) || strtolower($a['email']) === strtolower($email)) {
-                $error = 'An admin with that username or email already exists.';
-                break;
-            }
-        }
-    }
+    $data = ['username' => $username, 'email' => $email, 'password' => $password, 'confirm_password' => $confirm_password];
+    $rules = [
+        'username' => [
+            'required' => true, 
+            'min' => 3, 
+            'max' => 50, 
+            'alphanumeric' => true,
+            'required_message' => 'Username is required.',
+            'min_message' => 'Username must be at least 3 characters.',
+            'max_message' => 'Username cannot exceed 50 characters.',
+            'alphanumeric_message' => 'Username can only contain letters and numbers.'
+        ],
+        'email' => [
+            'required' => true, 
+            'email' => true, 
+            'required_message' => 'Email is required.',
+            'email_message' => 'Please enter a valid email address.'
+        ],
+        'password' => [
+            'required' => true, 
+            'min' => 6, 
+            'required_message' => 'Password is required.',
+            'min_message' => 'Password must be at least 6 characters.'
+        ],
+        'confirm_password' => [
+            'required' => true,
+            'match' => 'password',
+            'required_message' => 'Password confirmation is required.',
+            'match_message' => 'Passwords do not match.'
+        ]
+    ];
 
-    if ($error === '') {
+    $errors = Validator::validate($data, $rules);
+
+    if (!empty($errors)) {
+        $error = implode(' | ', $errors);
         $admins[] = [
             'username' => $username,
             'email' => $email,
