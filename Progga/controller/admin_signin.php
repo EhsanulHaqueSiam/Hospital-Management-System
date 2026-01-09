@@ -11,7 +11,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = $_POST['user'] ?? '';
     $password = $_POST['password'] ?? '';
 
-    // Server-side validation
     $data = ['user' => $user, 'password' => $password];
     $rules = [
         'user' => [
@@ -29,7 +28,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($errors)) {
         $error = implode(' | ', $errors);
     } else {
-        // Check against hardcoded admin
         if ((strtolower($user) === strtolower($adminUsername) || strtolower($user) === strtolower($adminEmail)) && $password === $adminPassword) {
             $_SESSION['username'] = $adminUsername;
             $_SESSION['role'] = 'Admin';
