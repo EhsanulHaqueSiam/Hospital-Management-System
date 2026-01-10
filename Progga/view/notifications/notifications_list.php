@@ -1,5 +1,4 @@
 <?php
-// $notifications, $totalPages, $page, $status may be provided by controller
 if (!isset($_SESSION)) session_start();
 if (!isset($_SESSION['user_id'])) {
     echo "Please login first.";
@@ -37,7 +36,6 @@ $notifications = isset($notifications) ? $notifications : [];
 
 <div id="successMsg" style="display:none;padding:8px;background:#e6ffed;border:1px solid #b7f0c6;margin:8px 0;color:#114b22;"></div>
 
-<!-- Confirmation Modal -->
 <div id="confirmModal" style="display:none;position:fixed;left:0;top:0;right:0;bottom:0;background:rgba(0,0,0,0.4);align-items:center;justify-content:center;z-index:2000;">
     <div style="background:white;padding:18px;border-radius:6px;max-width:420px;margin:auto;box-shadow:0 8px 24px rgba(0,0,0,0.2);">
         <h3 style="margin-top:0">Delete all read notifications?</h3>
@@ -125,15 +123,10 @@ document.getElementById('list').addEventListener('click', e=>{
         .then(r=>r.json())
         .then(j=>{ 
             if (j.success) {
-                // Update item styling
                 item.classList.remove('unread');
                 item.classList.add('read');
-                
-                // Remove the mark-read button
-                e.target.remove();
-                
-                // Decrement unread badge if was unread (badge in dropdown navbar)
-                if (isUnread && j.unread_count !== undefined) {
+                                e.target.remove();
+                                if (isUnread && j.unread_count !== undefined) {
                     const badge = document.querySelector('#notifBadge');
                     if (badge) {
                         if (j.unread_count > 0) {
@@ -155,22 +148,18 @@ document.getElementById('markAllRead').addEventListener('click', ()=>{
     .then(r=>r.json())
     .then(j=>{ 
         if (j.success) {
-            // Update all items from unread to read
             document.querySelectorAll('.notification-item.unread').forEach(item=>{
                 item.classList.remove('unread');
                 item.classList.add('read');
                 const btn = item.querySelector('.mark-read');
                 if (btn) btn.remove();
             });
-            
-            // Hide badge in dropdown navbar
-            const badge = document.querySelector('#notifBadge');
+                        const badge = document.querySelector('#notifBadge');
             if (badge) badge.style.display = 'none';
         }
     });
 });
 
-// Clear All Read with confirmation modal and AJAX removal
 const confirmModal = document.getElementById('confirmModal');
 const confirmOk = document.getElementById('confirmOk');
 const confirmCancel = document.getElementById('confirmCancel');
@@ -193,17 +182,14 @@ confirmOk.addEventListener('click', ()=>{
         confirmOk.disabled = false;
         closeConfirm();
         if (j.success){
-            // Remove all read items from DOM
             document.querySelectorAll('.notification-item.read').forEach(it=> it.remove());
 
-            // Show success message
             if (successMsg){
                 successMsg.textContent = 'Read notifications cleared!';
                 successMsg.style.display = 'block';
                 setTimeout(()=>{ successMsg.style.display = 'none'; }, 3500);
             }
 
-            // Refresh dropdown/badge if present
             fetch('notification_controller.php?action=dropdown')
             .then(r=>r.json())
             .then(d=>{
@@ -212,7 +198,6 @@ confirmOk.addEventListener('click', ()=>{
                     if (d.unread_count && d.unread_count > 0){ badge.textContent = d.unread_count; badge.style.display='inline-block'; }
                     else badge.style.display = 'none';
                 }
-                // Optionally refresh cached dropdown items if open
                 if (window._notif_latest !== undefined) window._notif_latest = d.notifications || [];
             }).catch(()=>{});
         }
@@ -220,7 +205,6 @@ confirmOk.addEventListener('click', ()=>{
     .catch(err=>{ confirmOk.disabled=false; closeConfirm(); console.error('Clear all read failed', err); });
 });
 
-// auto-refresh every 60s
 setInterval(fetchNotifications, 60000);
 </script>
 
