@@ -22,7 +22,7 @@ if (!isset($_SESSION['role'])) {
     Important: <input type="checkbox" name="is_important" value="1" <?=$notice['is_important'] ? 'checked' : ''?>><br>
     Expiry Date: <input type="date" name="expiry_date" value="<?=$notice['expiry_date']?>"><br>
     <input type="submit" value="Update">
-    <a href="notice_controller.php"><button type="button">Cancel</button></a>
+    <a href="notice_controller.php"><button tSype="button">Cancel</button></a>
 </form>
 
 </body>

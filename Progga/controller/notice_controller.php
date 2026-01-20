@@ -4,7 +4,6 @@ require_once('../models/notice_model.php');
 
 $action = isset($_GET['action']) ? $_GET['action'] : 'index';
 
-// Only allow admins to use this controller. Others go to public board.
 if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role'] !== 'Admin') {
     header('Location: notice_user_controller.php');
     exit;

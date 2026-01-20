@@ -13,7 +13,6 @@ if ($action == 'list') {
     
     $con = getConnection();
     
-    // Build WHERE clause
     $where = "WHERE expiry_date IS NULL OR expiry_date >= CURDATE()";
     if ($category != 'all') {
         $where .= " AND category = '$category'";
@@ -22,7 +21,6 @@ if ($action == 'list') {
         $where .= " AND (title LIKE '%$search%' OR content LIKE '%$search%')";
     }
     
-    // Get total count
     $countSql = "SELECT COUNT(*) as total FROM notices $where";
     $countResult = mysqli_query($con, $countSql);
     $countRow = mysqli_fetch_assoc($countResult);
