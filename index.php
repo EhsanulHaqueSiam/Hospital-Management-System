@@ -183,7 +183,7 @@
     <!-- Main Content -->
     <div class="container">
         <div class="hero">
-            <h1>🏥 Hospital Management System</h1>
+            <h1> Hospital Management System</h1>
             <p>
                 Welcome to our comprehensive Hospital Management System. 
                 Manage staff, schedules, appointments, and patient records efficiently.
