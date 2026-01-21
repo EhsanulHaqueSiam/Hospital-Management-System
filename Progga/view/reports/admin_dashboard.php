@@ -59,20 +59,38 @@ $activeDoctors = $activeDoctors ?? 0;
 <div class="cards">
     <?php
     $reports = [
-        "Patient Reports" => "View patient statistics",
-        "Doctor Reports" => "Doctor activity and availability",
-        "Revenue Reports" => "Financial summaries",
-        "Appointment Reports" => "Appointment analytics",
-        "Medicine Reports" => "Medicine usage",
-        "Room Reports" => "Room occupancy"
+        "Patient Reports" => [
+            "desc" => "View patient statistics",
+            "link" => "../controller/patient_report_controller.php"
+        ],
+        "Doctor Reports" => [
+            "desc" => "Doctor activity and availability",
+            "link" => "../controller/doctor_report_controller.php"
+        ],
+        "Revenue Reports" => [
+            "desc" => "Financial summaries",
+            "link" => "../controller/revenue_report_controller.php"
+        ],
+        "Appointment Reports" => [
+            "desc" => "Appointment analytics",
+            "link" => "../controller/appointment_report_controller.php"
+        ],
+        "Medicine Reports" => [
+            "desc" => "Medicine usage",
+            "link" => "../controller/medicine_report_controller.php"
+        ],
+        "Room Reports" => [
+            "desc" => "Room occupancy",
+            "link" => "../controller/room_report_controller.php"
+        ]
     ];
 
-    foreach ($reports as $name => $desc) {
+    foreach ($reports as $name => $info) {
     ?>
         <div class="card">
             <h4><?= $name ?></h4>
-            <p><?= $desc ?></p>
-            <a href="report_controller.php?type=<?= urlencode($name) ?>">
+            <p><?= $info['desc'] ?></p>
+            <a href="<?= $info['link'] ?>">
                 <button>Generate</button>
             </a>
         </div>
