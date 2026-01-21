@@ -1,18 +1,18 @@
 <?php
 session_start();
-require_once('../models/db.php');
-require_once('../models/patient_model.php');
 
-/* Admin only */
-if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'Admin') {
-    echo "Access denied";
+// Check admin access
+if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role'] !== 'Admin') {
+    header('Location: ./admin_signin.php');
     exit;
 }
 
-$con = getConnection();
+require_once(__DIR__ . '/../core/BaseModel.php');
+require_once(__DIR__ . '/../models/db.php');
 
-/* Default */
-$patients = [];
+$db = Database::connect();
+
+// Initialize variables
 $stats = [
     'total' => 0,
     'male' => 0,
@@ -21,48 +21,51 @@ $stats = [
     'avg_age' => 0
 ];
 
-$filters = [
-    'from_date' => $_POST['from_date'] ?? '',
-    'to_date' => $_POST['to_date'] ?? '',
-    'gender' => $_POST['gender'] ?? 'All',
-    'age_range' => $_POST['age_range'] ?? 'All'
-];
+$patients = [];
 
-if (isset($_POST['generate'])) {
-    $patients = getPatients($con, $filters);
+// Get total patients
+$query = "SELECT COUNT(*) as count FROM users WHERE role = 'Patient' AND deleted = 0";
+$result = $db->query($query);
+if ($result) {
+    $row = $result->fetch_assoc();
+    $stats['total'] = $row['count'] ?? 0;
+}
 
-    if (count($patients) > 0) {
-        $ageSum = 0;
-
-        foreach ($patients as $p) {
-            $stats['total']++;
-
-            if ($p['gender'] === 'Male') $stats['male']++;
-            elseif ($p['gender'] === 'Female') $stats['female']++;
-            else $stats['other']++;
-
-            $ageSum += $p['age'];
+// Get gender statistics
+$query = "SELECT gender, COUNT(*) as count FROM users WHERE role = 'Patient' AND deleted = 0 GROUP BY gender";
+$result = $db->query($query);
+if ($result) {
+    while ($row = $result->fetch_assoc()) {
+        if ($row['gender'] === 'Male') {
+            $stats['male'] = $row['count'];
+        } elseif ($row['gender'] === 'Female') {
+            $stats['female'] = $row['count'];
+        } else {
+            $stats['other'] = $row['count'];
         }
-
-        $stats['avg_age'] = round($ageSum / $stats['total'], 2);
     }
 }
 
-/* Export XML */
-if (isset($_POST['export_xml'])) {
-    header('Content-Type: text/xml');
-    header('Content-Disposition: attachment; filename="patients_report.xml"');
-
-    echo "<patients>";
-    foreach ($patients as $p) {
-        echo "<patient>";
-        foreach ($p as $key => $value) {
-            echo "<$key>$value</$key>";
-        }
-        echo "</patient>";
-    }
-    echo "</patients>";
-    exit;
+// Get average age
+$query = "SELECT AVG(YEAR(CURDATE()) - YEAR(DOB)) as avg_age FROM users WHERE role = 'Patient' AND deleted = 0 AND DOB IS NOT NULL";
+$result = $db->query($query);
+if ($result) {
+    $row = $result->fetch_assoc();
+    $stats['avg_age'] = round($row['avg_age'] ?? 0, 1);
 }
 
-require_once('../view/reports/patient_report.php');
+// Get all patients
+$query = "
+    SELECT u.user_id, u.name, u.email, u.phone, u.gender, 
+           YEAR(CURDATE()) - YEAR(u.DOB) as age
+    FROM users u
+    WHERE u.role = 'Patient' AND u.deleted = 0
+    ORDER BY u.user_id DESC
+";
+$result = $db->query($query);
+if ($result) {
+    $patients = $result->fetch_all(MYSQLI_ASSOC);
+}
+
+include(__DIR__ . '/../view/reports/patient_report.php');
+?>

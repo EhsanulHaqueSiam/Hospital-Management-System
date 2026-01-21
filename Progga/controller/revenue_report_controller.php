@@ -1,23 +1,18 @@
 <?php
 session_start();
-require_once('../models/db.php');
-require_once('../models/revenue_report_model.php');
 
-if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'Admin') {
-    echo "Access denied";
+// Check admin access
+if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role'] !== 'Admin') {
+    header('Location: ./admin_signin.php');
     exit;
 }
 
-$con = getConnection();
+require_once(__DIR__ . '/../core/BaseModel.php');
+require_once(__DIR__ . '/../models/db.php');
 
-/* Filters */
-$filters = [
-    'type' => $_POST['report_type'] ?? 'Daily',
-    'from_date' => $_POST['from_date'] ?? '',
-    'to_date' => $_POST['to_date'] ?? ''
-];
+$db = Database::connect();
 
-$data = [];
+// Initialize variables
 $summary = [
     'total_revenue' => 0,
     'total_bills' => 0,
@@ -26,35 +21,66 @@ $summary = [
     'avg_bill' => 0
 ];
 
-if (isset($_POST['generate'])) {
-    $data = getRevenueData($con, $filters);
+$data = [];
 
-    foreach ($data as $row) {
-        $summary['total_revenue'] += $row['paid_amount'];
-        $summary['total_bills'] += $row['bills_generated'];
-        $summary['unpaid_amount'] += $row['unpaid_amount'];
-    }
+// Get total revenue (paid bills)
+$query = "SELECT SUM(amount) as total FROM payments WHERE status = 'Paid'";
+$result = $db->query($query);
+if ($result) {
+    $row = $result->fetch_assoc();
+    $summary['total_revenue'] = $row['total'] ?? 0;
+}
 
-    if ($summary['total_bills'] > 0) {
-        $summary['avg_bill'] = round($summary['total_revenue'] / $summary['total_bills'], 2);
-        $summary['paid_bills'] = $summary['total_bills']; // simplified
+// Get total bills
+$query = "SELECT COUNT(*) as count FROM bills";
+$result = $db->query($query);
+if ($result) {
+    $row = $result->fetch_assoc();
+    $summary['total_bills'] = $row['count'] ?? 0;
+}
+
+// Get paid bills
+$query = "SELECT COUNT(*) as count FROM payments WHERE status = 'Paid'";
+$result = $db->query($query);
+if ($result) {
+    $row = $result->fetch_assoc();
+    $summary['paid_bills'] = $row['count'] ?? 0;
+}
+
+// Get unpaid amount
+$query = "SELECT SUM(b.amount - COALESCE(SUM(p.amount), 0)) as unpaid
+          FROM bills b
+          LEFT JOIN payments p ON b.bill_id = p.bill_id
+          WHERE b.status = 'Pending'
+          GROUP BY b.bill_id";
+$result = $db->query($query);
+if ($result) {
+    while ($row = $result->fetch_assoc()) {
+        $summary['unpaid_amount'] += $row['unpaid'] ?? 0;
     }
 }
 
-if (isset($_POST['export_xml'])) {
-    header("Content-Type: text/xml");
-    header("Content-Disposition: attachment; filename=revenue_report.xml");
-
-    echo "<revenueReport>";
-    foreach ($data as $row) {
-        echo "<record>";
-        foreach ($row as $key => $value) {
-            echo "<$key>$value</$key>";
-        }
-        echo "</record>";
-    }
-    echo "</revenueReport>";
-    exit;
+// Get average bill amount
+$query = "SELECT AVG(amount) as avg FROM bills";
+$result = $db->query($query);
+if ($result) {
+    $row = $result->fetch_assoc();
+    $summary['avg_bill'] = round($row['avg'] ?? 0, 2);
 }
 
-require_once('../view/reports/revenue_report.php');
+// Get revenue data by month
+$query = "
+    SELECT DATE_FORMAT(payment_date, '%Y-%m') as month, SUM(amount) as revenue
+    FROM payments
+    WHERE status = 'Paid'
+    GROUP BY DATE_FORMAT(payment_date, '%Y-%m')
+    ORDER BY month DESC
+    LIMIT 12
+";
+$result = $db->query($query);
+if ($result) {
+    $data = $result->fetch_all(MYSQLI_ASSOC);
+}
+
+include(__DIR__ . '/../view/reports/revenue_report.php');
+?>
