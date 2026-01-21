@@ -5,6 +5,22 @@
 </head>
 <body>
 
+<?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header('Location: ../admin_signin.php');
+    exit;
+}
+
+$notices = isset($notices) ? $notices : [];
+$totalPages = isset($totalPages) ? $totalPages : 1;
+$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+$category = isset($_GET['category']) ? $_GET['category'] : 'all';
+$search = isset($_GET['search']) ? $_GET['search'] : '';
+?>
+
+<?php include '../partials/navbar.php'; ?>
+
 <h2>Hospital Notice Board</h2>
 
 <p>
@@ -57,7 +73,7 @@
     </table>
 </div>
 
-<?php if ($totalPages > 1) { ?>
+<?php if (isset($totalPages) && $totalPages > 1) { ?>
     <p style="text-align: center; margin-top: 20px;">
         <?php if ($page > 1) { ?>
             <a href="?page=1&category=<?=$category?>&search=<?=$search?>">First</a> |

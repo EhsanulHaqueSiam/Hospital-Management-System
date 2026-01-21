@@ -75,6 +75,7 @@
                        id="user"
                        name="user" 
                        required 
+                       maxlength="100"
                        data-validate="true"
                        data-label="Username or Email"
                        placeholder="Enter username or email"
@@ -87,6 +88,7 @@
                        id="password"
                        name="password" 
                        required 
+                       maxlength="50"
                        data-validate="true"
                        data-label="Password"
                        placeholder="Enter your password"
@@ -103,9 +105,9 @@
 
         <div class="links">
             <p>
-                <a href="../controller/notice_user_controller.php">View Public Notices</a>
+                <a href="admin_signup.php">Create New Account</a>
                 <span style="margin: 0 10px;">|</span>
-                <a href="./admin_signup.php">Create new admin account</a>
+                <a href="admin_staff_list.php">View Staff List</a>
             </p>
         </div>
 

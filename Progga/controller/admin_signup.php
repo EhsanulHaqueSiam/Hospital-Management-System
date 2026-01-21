@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once('../core/Validator.php');
 
 $adminsFile = __DIR__ . '/../models/admins.json';
 if (!file_exists($adminsFile)) {
@@ -55,8 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $errors = Validator::validate($data, $rules);
 
-    if (!empty($errors)) {
-        $error = implode(' | ', $errors);
+    if (empty($errors)) {
         $admins[] = [
             'username' => $username,
             'email' => $email,
@@ -65,6 +65,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         file_put_contents($adminsFile, json_encode($admins, JSON_PRETTY_PRINT));
         header('Location: admin_signin.php?created=1');
         exit;
+    } else {
+        $error = implode(' | ', $errors);
     }
 }
 

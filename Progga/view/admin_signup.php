@@ -83,6 +83,7 @@
                        id="email"
                        name="email" 
                        required 
+                       maxlength="100"
                        data-validate="true"
                        data-label="Email"
                        placeholder="Enter valid email"
@@ -97,6 +98,7 @@
                        name="password" 
                        required 
                        minlength="6"
+                       maxlength="50"
                        data-validate="true"
                        data-label="Password"
                        placeholder="Enter password (min 6 chars)"
@@ -110,6 +112,7 @@
                        id="confirm_password"
                        name="confirm_password" 
                        required 
+                       maxlength="50"
                        data-validate="true"
                        data-label="Confirm Password"
                        data-match="password"

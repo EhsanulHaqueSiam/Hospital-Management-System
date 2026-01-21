@@ -79,7 +79,7 @@ class FormValidator {
         }
 
         // Maximum length validation
-        if (field.maxLength && value.length > field.maxLength) {
+        if (field.maxLength && field.maxLength > 0 && value.length > field.maxLength) {
             this.errors[fieldName] = `${fieldLabel} cannot exceed ${field.maxLength} characters.`;
             this.highlightField(field, true);
             return false;

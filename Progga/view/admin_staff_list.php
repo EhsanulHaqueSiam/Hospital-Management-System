@@ -1,5 +1,5 @@
 <?php
-// Check admin access
+session_start();
 if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role'] !== 'Admin') {
     header('Location: ../controller/admin_signin.php');
     exit;
@@ -20,7 +20,7 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f5f5;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             padding: 20px;
         }
         
@@ -393,6 +393,7 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role
     </style>
 </head>
 <body>
+    <?php include 'partials/navbar.php'; ?>
     <div class="container">
         <div class="staff-header">
             <h1>👥 View Staff List</h1>

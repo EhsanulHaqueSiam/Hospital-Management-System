@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['role'] = 'Admin';
             $_SESSION['user_id'] = 1;
 
-            header('Location: notice_controller.php');
+            header('Location: ../view/dashboard.php');
             exit;
         } else {
             $adminsFile = __DIR__ . '/../models/admins.json';
@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             if ($found) {
-                header('Location: notice_controller.php');
+                header('Location: ../view/dashboard.php');
                 exit;
             } else {
                 $error = 'Invalid admin credentials.';
