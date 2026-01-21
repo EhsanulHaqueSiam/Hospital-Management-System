@@ -58,30 +58,31 @@ $activeDoctors = $activeDoctors ?? 0;
 <!-- Report Categories -->
 <div class="cards">
     <?php
+    $baseUrl = '/Hospital-Management-System/Progga/controller/';
     $reports = [
         "Patient Reports" => [
             "desc" => "View patient statistics",
-            "link" => "../controller/patient_report_controller.php"
+            "link" => $baseUrl . "patient_report_controller.php"
         ],
         "Doctor Reports" => [
             "desc" => "Doctor activity and availability",
-            "link" => "../controller/doctor_report_controller.php"
+            "link" => $baseUrl . "doctor_report_controller.php"
         ],
         "Revenue Reports" => [
             "desc" => "Financial summaries",
-            "link" => "../controller/revenue_report_controller.php"
+            "link" => $baseUrl . "revenue_report_controller.php"
         ],
         "Appointment Reports" => [
             "desc" => "Appointment analytics",
-            "link" => "../controller/appointment_report_controller.php"
+            "link" => $baseUrl . "appointment_report_controller.php"
         ],
         "Medicine Reports" => [
             "desc" => "Medicine usage",
-            "link" => "../controller/medicine_report_controller.php"
+            "link" => $baseUrl . "medicine_report_controller.php"
         ],
         "Room Reports" => [
             "desc" => "Room occupancy",
-            "link" => "../controller/room_report_controller.php"
+            "link" => $baseUrl . "room_report_controller.php"
         ]
     ];
 
