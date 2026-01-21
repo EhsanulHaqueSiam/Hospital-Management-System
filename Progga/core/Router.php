@@ -5,7 +5,7 @@ class Router {
     private $routes = [];
     
    
-    public function register($method, $path, $controller, $action) 
+    public function register($method, $path, $controller, $action) {
         $this->routes[] = [
             'method' => $method,
             'path' => $path,

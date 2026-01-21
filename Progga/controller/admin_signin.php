@@ -68,7 +68,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $error = 'Invalid admin credentials.';
         }
     }
-
 }
 
 require_once('../view/admin_signin.php');
+?>
+

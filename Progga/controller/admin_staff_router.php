@@ -11,11 +11,11 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role
 $action = isset($_GET['action']) ? $_GET['action'] : 'list';
 
 // Load required files
-require_once(__DIR__ . '/../core/base_controller.php');
-require_once(__DIR__ . '/../core/base_model.php');
+require_once(__DIR__ . '/../core/BaseModel.php');
+require_once(__DIR__ . '/../core/validator.php');
 require_once(__DIR__ . '/../models/db.php');
-require_once(__DIR__ . '/../models/staffModel.php');
-require_once(__DIR__ . '/../models/departmentModel.php');
+require_once(__DIR__ . '/../models/staff_model.php');
+require_once(__DIR__ . '/../models/DepartmentModel.php');
 
 // Create instances
 $staffModel = new StaffModel();
