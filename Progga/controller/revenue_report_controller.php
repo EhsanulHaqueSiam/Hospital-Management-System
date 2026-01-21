@@ -48,16 +48,14 @@ if ($result) {
 }
 
 // Get unpaid amount
-$query = "SELECT SUM(b.amount - COALESCE(SUM(p.amount), 0)) as unpaid
+$query = "SELECT SUM(b.amount) - COALESCE(SUM(p.amount), 0) as unpaid
           FROM bills b
           LEFT JOIN payments p ON b.bill_id = p.bill_id
-          WHERE b.status = 'Pending'
-          GROUP BY b.bill_id";
+          WHERE b.status = 'Pending'";
 $result = $db->query($query);
 if ($result) {
-    while ($row = $result->fetch_assoc()) {
-        $summary['unpaid_amount'] += $row['unpaid'] ?? 0;
-    }
+    $row = $result->fetch_assoc();
+    $summary['unpaid_amount'] = $row['unpaid'] ?? 0;
 }
 
 // Get average bill amount

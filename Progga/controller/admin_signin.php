@@ -48,24 +48,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 file_put_contents($adminsFile, json_encode($default, JSON_PRETTY_PRINT));
             }
 
-        $admins = json_decode(file_get_contents($adminsFile), true) ?: [];
+            $admins = json_decode(file_get_contents($adminsFile), true) ?: [];
 
-        $found = false;
-        foreach ($admins as $a) {
-            if ((strtolower($user) === strtolower($a['username']) || strtolower($user) === strtolower($a['email'])) && $password === $a['password']) {
-                $_SESSION['username'] = $a['username'];
-                $_SESSION['role'] = 'Admin';
-                $_SESSION['user_id'] = 1;
-                $found = true;
-                break;
+            $found = false;
+            foreach ($admins as $a) {
+                if ((strtolower($user) === strtolower($a['username']) || strtolower($user) === strtolower($a['email'])) && $password === $a['password']) {
+                    $_SESSION['username'] = $a['username'];
+                    $_SESSION['role'] = 'Admin';
+                    $_SESSION['user_id'] = 1;
+                    $found = true;
+                    break;
+                }
             }
-        }
 
-        if ($found) {
-            header('Location: notice_controller.php');
-            exit;
-        } else {
-            $error = 'Invalid admin credentials.';
+            if ($found) {
+                header('Location: notice_controller.php');
+                exit;
+            } else {
+                $error = 'Invalid admin credentials.';
+            }
         }
     }
 }
