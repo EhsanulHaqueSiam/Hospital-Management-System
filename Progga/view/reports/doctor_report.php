@@ -1,3 +1,8 @@
+<?php
+// Initialize variables if not set
+$overall = $overall ?? ['active_doctors' => 0, 'total_appointments' => 0, 'most_active_doctor' => 'N/A'];
+$doctors = $doctors ?? [];
+?>
 <!DOCTYPE html>
 <html>
 <head>

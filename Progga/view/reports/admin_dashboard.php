@@ -1,3 +1,10 @@
+<?php
+// Initialize variables if not set
+$totalPatients = $totalPatients ?? 0;
+$totalAppointments = $totalAppointments ?? 0;
+$totalRevenue = $totalRevenue ?? 0;
+$activeDoctors = $activeDoctors ?? 0;
+?>
 <!DOCTYPE html>
 <html>
 <head>

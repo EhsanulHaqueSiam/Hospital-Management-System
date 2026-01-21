@@ -1,3 +1,8 @@
+<?php
+// Initialize variables if not set
+$summary = $summary ?? ['total_revenue' => 0, 'total_bills' => 0, 'paid_bills' => 0, 'unpaid_amount' => 0, 'avg_bill' => 0];
+$data = $data ?? [];
+?>
 <!DOCTYPE html>
 <html>
 <head>

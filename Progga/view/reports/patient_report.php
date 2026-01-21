@@ -1,3 +1,8 @@
+<?php
+// Initialize variables if not set
+$stats = $stats ?? ['total' => 0, 'male' => 0, 'female' => 0, 'other' => 0, 'avg_age' => 0];
+$patients = $patients ?? [];
+?>
 <!DOCTYPE html>
 <html>
 <head>
