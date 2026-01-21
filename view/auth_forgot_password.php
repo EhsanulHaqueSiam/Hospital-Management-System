@@ -7,6 +7,7 @@
 </head>
 
 <body>
+    <?php include(__DIR__ . "/partials/navbar.php"); ?>
     <!-- Main Container -->
     <div class="main-container">
         <h2>Forgot Password</h2>

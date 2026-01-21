@@ -7,6 +7,7 @@
 </head>
 
 <body>
+    <?php include(__DIR__ . "/partials/navbar.php"); ?>
     <div class="main-container">
         <h2>Sign Up</h2>
 

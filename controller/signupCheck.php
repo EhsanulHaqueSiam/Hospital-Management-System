@@ -35,13 +35,13 @@ if (isset($_POST['signup'])) {
             $status = addUser($user);
 
             if ($status) {
-                header('location: ../view/auth_signin.php');
+                header('location: ./../view/auth_signin.php');
             } else {
                 echo "Registration failed. Please try again.";
             }
         }
     }
 } else {
-    header('location: ../view/auth_signup.php');
+    header('location: ./../view/auth_signup.php');
 }
 ?>

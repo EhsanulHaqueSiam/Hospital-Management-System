@@ -10,6 +10,7 @@ require_once('../controller/sessionCheck.php');
 </head>
 
 <body>
+    <?php include(__DIR__ . "/partials/navbar.php"); ?>
     <!-- Navbar -->
     <div class="navbar">
         <span class="navbar-title">Hospital Management System</span>

@@ -178,16 +178,7 @@
 </head>
 <body>
     <!-- Navigation Menu -->
-    <nav>
-        <ul>
-            <li><a href="/">🏠 Home</a></li>
-            <li><a href="/controller/admin_signin.php">👤 Admin Login</a></li>
-            <li><a href="/view/admin_staff_list.php">👥 Staff Management</a></li>
-            <li><a href="/view/admin_dashboard.php">📊 Dashboard</a></li>
-            <li><a href="#reports">📈 Reports</a></li>
-            <li><a href="#about">ℹ️ About</a></li>
-        </ul>
-    </nav>
+    <?php include(__DIR__ . '/view/partials/navbar.php'); ?>
 
     <!-- Main Content -->
     <div class="container">

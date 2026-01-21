@@ -27,11 +27,11 @@ if (isset($_POST['signin'])) {
             setcookie('remember_user', $email_username, time() + (86400 * 30), '/');
         }
 
-        header('location: ../view/dashboard_main.php');
+        header('location: ./../view/dashboard_main.php');
     } else {
         echo "Invalid username/email or password";
     }
 } else {
-    header('location: ../view/auth_signin.php');
+    header('location: ./../view/auth_signin.php');
 }
 ?>
